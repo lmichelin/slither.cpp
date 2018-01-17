@@ -1,10 +1,4 @@
-///////////////////////////////////////////////////////////////////
-// Source for Pong Collision Test example                        //
-// http://trederia.blogspot.com/2016/02/2d-physics-101-pong.html //
-// Released into the public domain                               //
-// Example 2                                                     //
-///////////////////////////////////////////////////////////////////
-
+#include <unistd.h>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <math.h>
@@ -196,62 +190,58 @@ void createCircleObjects(std::vector<sf::CircleShape>& shapes)
 //-------main function------//
 int main()
 {
-    //render target
-    sf::RenderWindow window(sf::VideoMode(600, 800), "Pong Collision");
+	sf::RenderWindow window(sf::VideoMode(800, 600), "The IN204 Snake", sf::Style::Close);
+	window.setVerticalSyncEnabled(true);
+	sf::CircleShape shape(20.f);
+	shape.setFillColor(sf::Color::Red);
 
-    //delta time clock
-    sf::Clock frameClock;
+	int x = 0;
+	int y = 0;
+	int speed = 2;
 
-    //vector of static objects
-    std::vector<sf::RectangleShape> solidObjects;
-    createSolidObjects(solidObjects);
+	while (window.isOpen())
+	{
 
-    //get a ref to the paddle shape
-    sf::RectangleShape& paddle = solidObjects.back();
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+			window.close();
 
-    //vector of static circular objects
-    std::vector<sf::CircleShape> circleObjects;
-    createCircleObjects(circleObjects);
+			if (event.type == sf::Event::KeyPressed)
+			{
+				if (event.key.code == sf::Keyboard::Space) {
+					speed = 4;
+				}
+				if (event.key.code == sf::Keyboard::Right) {
+					x=1;
+					y=0;
+				}
+				if (event.key.code == sf::Keyboard::Left) {
+					x=-1;
+					y=0;
+				}
+				if (event.key.code == sf::Keyboard::Up) {
+					x=0;
+					y=-1;
+				}
+				if (event.key.code == sf::Keyboard::Down) {
+					x=0;
+					y=1;
+				}
+			}
+			if (event.type == sf::Event::KeyReleased) {
+				if (event.key.code == sf::Keyboard::Space) {
+					speed = 2;
+				}
+			}
+		}
 
-    //the dynamic object
-    Ball ball(solidObjects, circleObjects);
-    ball.setPosition(300.f, 400.f);
+		shape.move(x * speed, y * speed);
+		window.clear();
+		window.draw(shape);
+		window.display();
+	}
 
-
-    while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-       {
-            if (event.type == sf::Event::Closed)
-            {
-                window.close();
-            }
-            //update the paddle position
-            else if (event.type == sf::Event::MouseMoved)
-            {
-                auto x = std::max(0, std::min(600, event.mouseMove.x));
-                auto position = paddle.getPosition();
-                position.x = static_cast<float>(x);
-                paddle.setPosition(position);
-            }
-        }
-        //update the dynamic object
-        ball.update(frameClock.restart().asSeconds());
-
-        //draw everything
-        window.clear();
-        window.draw(ball);
-        for (const auto& o : solidObjects)
-        {
-            window.draw(o);
-        }
-        for (const auto& o : circleObjects)
-        {
-            window.draw(o);
-        }
-        window.display();
-    }
-
-    return 0;
+	return 0;
 }
