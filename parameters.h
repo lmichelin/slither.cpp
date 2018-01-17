@@ -1,0 +1,9 @@
+#ifndef PARAMETERS_H
+#define PARAMETERS_H
+
+#define WINDOW_SIZE_X 1200
+#define WINDOW_SIZE_Y 600
+
+#define SNAKE_CIRCLE_RADIUS 20
+
+#endif
