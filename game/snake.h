@@ -4,8 +4,7 @@
 #include <string>
 #include <iostream>
 namespace game {
-
-	template <typename C>
+	
 	class Snake {
 		public:
 			// Get name
