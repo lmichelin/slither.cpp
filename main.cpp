@@ -1,7 +1,9 @@
 #include <unistd.h>
 #include <SFML/Graphics.hpp>
 #include "parameters.h"
+#define _USE_MATH_DEFINES
 #include <math.h>
+#include <vector>
 
 int main()
 {
@@ -50,7 +52,7 @@ int main()
 				}
 			}
 		}
-		angular += movingLeft*0.02*M_PI + movingRight*-0.02*M_PI;
+		angular += movingLeft*0.005*speed*M_PI + movingRight*-0.005*speed*M_PI;
 
 		position.x += speed * sin(angular);
 		position.y += speed * cos(angular);
