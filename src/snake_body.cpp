@@ -1,4 +1,4 @@
-#include "../parameters.h"
+#include "parameters.h"
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <iostream>

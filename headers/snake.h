@@ -16,11 +16,6 @@ namespace game {
 				return _is_dead;
 			}
 
-			// Get length
-			int getLength() {
-				return length;
-			}
-
 			// Add length can only be added by 1
 			void addLength() {
 				// TODO
@@ -37,7 +32,7 @@ namespace game {
 				_is_dead = false;
 			}
 
-			Snake(int length) _length(length), is_dead(false) {}
+			Snake(int length) : _length(length), _is_dead(false) {}
 
 
 		private:

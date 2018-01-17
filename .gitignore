@@ -1,4 +1,6 @@
 /build
+/objs
 .clang-format
 .vscode
-*.x
+/deps
+main
