@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <SFML/Graphics.hpp>
 #include "parameters.h"
+#define _USE_MATH_DEFINES
 #include <math.h>
 
 int main()
