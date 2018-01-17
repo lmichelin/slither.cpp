@@ -4,7 +4,7 @@
 #include <string>
 #include <iostream>
 namespace game {
-	
+
 	class Snake {
 		public:
 			// Get name
@@ -33,8 +33,6 @@ namespace game {
 
 			// Constructors
 			Snake() {
-				std::deque<C> coordinates;
-				_coordinates_array = coordinates;
 				_length = 0;
 				_is_dead = false;
 			}
@@ -44,7 +42,7 @@ namespace game {
 
 		private:
 			// name
-			string _name;
+			std::string _name;
 
 			// Variable to check whether the snake is dead or not
 			bool _is_dead;
