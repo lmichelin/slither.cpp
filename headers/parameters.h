@@ -6,4 +6,10 @@
 
 #define SNAKE_CIRCLE_RADIUS 10
 
+#define INIT_LENGTH 5
+
+#define LOW_SPEED 2
+#define HIGH_SPEED 4
+#define ROTATION_ANGULAR 0.02
+
 #endif

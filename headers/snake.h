@@ -3,49 +3,40 @@
 
 #include <string>
 #include <iostream>
-namespace game {
+#include "snake_body.h"
 
-	class Snake {
-		public:
-			// Get name
-			std::string getName() {
-				return _name;
-			}
+class Snake {
+	public:
+		// Get name
+		std::string getName() {
+			return _name;
+		}
 
-			bool checkIfDead() {
-				return _is_dead;
-			}
+		SnakeBody getBody() {
+			return _body;
+		}
 
-			// Add length can only be added by 1
-			void addLength() {
-				// TODO
-				_length += 1;
-			}
+		bool checkIfDead() {
+			return _is_dead;
+		}
 
-			void die() {
-				_is_dead = true;
-			}
+		void die() {
+			_is_dead = true;
+		}
 
-			// Constructors
-			Snake() {
-				_length = 0;
-				_is_dead = false;
-			}
+		// Constructors
+		Snake() : _body(), _is_dead(false) {}
 
-			Snake(int length) : _length(length), _is_dead(false) {}
+		Snake(sf::Vector2f init_pos) : _body(init_pos), _is_dead(false) {}
 
+	private:
+		// name
+		std::string _name;
 
-		private:
-			// name
-			std::string _name;
+		SnakeBody _body;
 
-			// Variable to check whether the snake is dead or not
-			bool _is_dead;
-
-			// Snake length
-			int _length;
-	};
-
+		// Variable to check whether the snake is dead or not
+		bool _is_dead;
 };
 
 #endif
