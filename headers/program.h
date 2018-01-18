@@ -16,6 +16,7 @@ private:
 	void display ();
 	void handleEvents ();
 public:
+	void init ();
 	void run ();
 
 	Program ();
