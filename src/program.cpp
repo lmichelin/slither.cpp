@@ -5,10 +5,10 @@
 
 Program::Program () {
 	_is_running = true;
+	_window(sf::VideoMode(WINDOW_SIZE_X, WINDOW_SIZE_Y), "The IN204 Snake", sf::Style::Close);
 }
 
 void Program::run () {
-	sf::RenderWindow _window(sf::VideoMode(WINDOW_SIZE_X, WINDOW_SIZE_Y), "The IN204 Snake", sf::Style::Close);
 	_window.setVerticalSyncEnabled(true);
 	while (_window.isOpen() && _is_running) {
 		// handleEvents();

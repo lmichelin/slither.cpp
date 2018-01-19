@@ -1,4 +1,5 @@
 #include "controller.h"
+#include <cmath>
 #include "parameters.h"
 
 void Controller::rotateLeft (bool value) {
