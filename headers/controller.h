@@ -15,6 +15,7 @@ public:
 	void rotateLeft (bool);
 	void rotateRight (bool);
 	void setSpeed (float);
+	float getSpeed ();
 
 	void updateAim ();
 	sf::Vector2f getAim ();

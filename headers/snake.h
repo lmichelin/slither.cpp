@@ -6,37 +6,53 @@
 #include "snake_body.h"
 
 class Snake {
-	public:
-		// Get name
-		std::string getName() {
-			return _name;
-		}
+public:
+	// Get name
+	std::string getName() {
+		return _name;
+	}
 
-		SnakeBody getBody() {
-			return _body;
-		}
+	SnakeBody getBody() {
+		return _body;
+	}
 
-		bool checkIfDead() {
-			return _is_dead;
-		}
+	bool checkIfDead() {
+		return _is_dead;
+	}
 
-		void die() {
-			_is_dead = true;
-		}
+	void die() {
+		_is_dead = true;
+	}
 
-		// Constructors
-		Snake() : _body(), _is_dead(false) {}
+	void addTail(int n) {
+		_body.addTail(n);
+	}
 
-		Snake(sf::Vector2f init_pos) : _body(init_pos), _is_dead(false) {}
+	void interpolate (const sf::Vector2f h, float s) {
+		_body.interpolate(h, s);
+	}
 
-	private:
-		// name
-		std::string _name;
+	bool checkIntersection (const SnakeBody& s) {
+		return _body.checkIntersection (s);
+	}
 
-		SnakeBody _body;
+	bool checkFoodIntersection (const Food& p) {
+		return _body.checkFoodIntersection (p);
+	}
 
-		// Variable to check whether the snake is dead or not
-		bool _is_dead;
+	// Constructors
+	Snake() : _body(), _is_dead(false) {}
+
+	Snake(sf::Vector2f init_pos) : _body(init_pos), _is_dead(false) {}
+
+private:
+	// name
+	std::string _name;
+
+	SnakeBody _body;
+
+	// Variable to check whether the snake is dead or not
+	bool _is_dead;
 };
 
 #endif
