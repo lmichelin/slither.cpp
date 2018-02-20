@@ -12,7 +12,7 @@ DEPS = $(patsubst %.o,$(DEPDIR)/%.d,$(OTMP))
 # Variables
 CC = g++
 CPPFLAGS = -std=c++11 -Wall -Wextra -O3 -Iheaders
-LIBS = -lpthread -lsfml-graphics -lsfml-window -lsfml-system
+LIBS = -lpthread -lsfml-graphics -lsfml-network -lsfml-window -lsfml-system
 
 run: all exec
 

@@ -2,6 +2,7 @@
 #include <cmath>
 #include "parameters.h"
 #include <iostream>
+#include <SFML/Network.hpp>
 
 void Controller::rotateLeft (bool value) {
 	_rotating_left = value;
@@ -17,6 +18,15 @@ void Controller::setSpeed (float value) {
 
 float Controller::getSpeed () {
 	return _speed;
+}
+
+bool Controller::getRotatingLeft() {
+	return _rotating_left;
+}
+
+
+bool Controller::getRotatingRight() {
+	return _rotating_right;
 }
 
 void Controller::updateAim () {
@@ -35,4 +45,14 @@ Controller::Controller () {
 	_speed = LOW_SPEED;
 	_aim.x = 1.0;
 	_aim.y = 0.0;
+}
+
+sf::Packet &operator<<(sf::Packet &packet, const Controller &controller)
+{
+	return packet << controller._aim.x << controller._aim.y << controller._rotating_left << controller._rotating_right;
+}
+
+sf::Packet &operator>>(sf::Packet &packet, Controller &controller)
+{
+	return packet >> controller._aim.x >> controller._aim.y >> controller._rotating_left >> controller._rotating_right;
 }

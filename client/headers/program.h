@@ -8,6 +8,7 @@
 #include "parameters.h"
 #include "snake.h"
 #include "food.h"
+// #include "communication.h"
 
 class Program {
 private:
@@ -15,6 +16,8 @@ private:
 
 	sf::RenderWindow _window;
 	Controller _controller;
+
+	// Communication _communication;
 
 	std::vector<Snake> _snakes;
 	std::list<Food> _foods;

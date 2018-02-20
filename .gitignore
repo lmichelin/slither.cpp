@@ -1,5 +1,5 @@
-*/build
-*/objs
+build
+objs
+deps
 .clang-format
 .vscode
-*/deps

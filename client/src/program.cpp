@@ -1,9 +1,11 @@
 #include <SFML/Graphics.hpp>
+// #include <SFML/Network.hpp>
 #include <iostream>
 #include <cstdlib>
 #include "program.h"
 #include "parameters.h"
 #include "snake_body.h"
+// #include "communication.h"
 
 Program::Program () : _window(sf::VideoMode(WINDOW_SIZE_X, WINDOW_SIZE_Y), "The IN204 Snake", sf::Style::Close) {
 	_is_running = false;
@@ -101,5 +103,9 @@ void Program::handleEvents () {
 	}
 
 	// Update controller
-	_controller.updateAim();
+	// Create Packet and send
+	// sf::Packet packet;
+	// packet << _controller;
+	// _communication.send(packet);
+	_controller.updateAim(); // For client refresh
 }

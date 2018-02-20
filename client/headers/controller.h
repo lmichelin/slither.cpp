@@ -2,6 +2,7 @@
 #define CONTROLLER_H
 
 #include <SFML/Graphics.hpp>
+// #include <SFML/Network.hpp>
 
 class Controller {
 private:
@@ -19,6 +20,11 @@ public:
 
 	void updateAim ();
 	sf::Vector2f getAim ();
+	// bool getRotatingLeft();
+	// bool getRotatingRight();
+
+	// friend sf::Packet &operator<<(sf::Packet &packet, const Controller &controller);
+	// friend sf::Packet &operator>>(sf::Packet &packet, Controller &controller);
 
 	Controller ();
 	~Controller () {}
