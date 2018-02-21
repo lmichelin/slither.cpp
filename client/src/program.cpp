@@ -83,11 +83,11 @@ void Program::handleEvents () {
 		if (event.type == sf::Event::KeyPressed) {
 			if (event.key.code == sf::Keyboard::Space || event.key.code == sf::Keyboard::Up) {
 				_controller.setSpeed(HIGH_SPEED);
-	// Update controller
-	// Create Packet and send
-	sf::Packet packet;
-	packet << _controller;
-	_communication.send(packet);
+				// Update controller
+				// Create Packet and send
+				sf::Packet packet;
+				packet << _controller;
+				_communication.send(packet);
 			}
 			if (event.key.code == sf::Keyboard::Right) {
 				_controller.rotateRight(true);
@@ -109,5 +109,5 @@ void Program::handleEvents () {
 		}
 	}
 
-	_controller.updateAim(); // For client refresh
+	// _controller.updateAim(); // For client refresh
 }
