@@ -1,18 +1,20 @@
 #include <SFML/Graphics.hpp>
-// #include <SFML/Network.hpp>
+#include <SFML/Network.hpp>
 #include <iostream>
 #include <cstdlib>
 #include "program.h"
 #include "parameters.h"
 #include "snake_body.h"
-// #include "communication.h"
+#include "communication.h"
 
-Program::Program () : _window(sf::VideoMode(WINDOW_SIZE_X, WINDOW_SIZE_Y), "The IN204 Snake", sf::Style::Close) {
+Program::Program () : _window(sf::VideoMode(WINDOW_SIZE_X, WINDOW_SIZE_Y), "The IN204 Snake", sf::Style::Close), _communication("localhost", 8001) {
+	_communication.init();
 	_is_running = false;
 }
 
 void Program::init () {
-	_window.setVerticalSyncEnabled(true);
+	// _window.setVerticalSyncEnabled(true);
+	_window.setFramerateLimit(60);
 	_is_running = true;
 	sf::Vector2f init_pos(200,200);
 	Snake my_snake(init_pos);
@@ -81,6 +83,11 @@ void Program::handleEvents () {
 		if (event.type == sf::Event::KeyPressed) {
 			if (event.key.code == sf::Keyboard::Space || event.key.code == sf::Keyboard::Up) {
 				_controller.setSpeed(HIGH_SPEED);
+	// Update controller
+	// Create Packet and send
+	sf::Packet packet;
+	packet << _controller;
+	_communication.send(packet);
 			}
 			if (event.key.code == sf::Keyboard::Right) {
 				_controller.rotateRight(true);
@@ -102,10 +109,5 @@ void Program::handleEvents () {
 		}
 	}
 
-	// Update controller
-	// Create Packet and send
-	// sf::Packet packet;
-	// packet << _controller;
-	// _communication.send(packet);
 	_controller.updateAim(); // For client refresh
 }
