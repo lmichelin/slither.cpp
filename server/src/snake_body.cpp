@@ -1,8 +1,3 @@
-#include <SFML/Graphics.hpp>
-#include <string>
-#include <iostream>
-#include <vector>
-#include <cmath>
 #include "snake_body.h"
 
 SnakeBody::SnakeBody (sf::Vector2f init_pos) {

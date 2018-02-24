@@ -1,45 +1,29 @@
-#include <SFML/Network.hpp>
-#include <iostream>
+#include "server.h"
 
+/**
+ * Initiate communication with a server
+*/
+void Server::init() {
+    _socket.connect(_addr, _port);
+    printf("Server launched\n");
+}
 
+/**
+ * Send a packet with the sfml network library
+ * Takes a header (int) in argument
+*/
+void Server::send(int header,  sf::Packet packet) {
+	sf::Packet header_packet;
+	header_packet << header;
+	packet << header_packet;
+    _socket.send(packet);
+}
 
-
-int main(int argc, char const *argv[]) {
-	// ----- The server -----
-	// Create a listener to wait for incoming connections on port 55001
-	sf::TcpListener listener;
-	listener.listen(8001);
-	// Wait for a connection
-	sf::TcpSocket socket;
-	for (;;) {
-		listener.accept(socket);
-		bool exit = false;
-		std::cout << "New client connected: " << socket.getRemoteAddress() << ':' << socket.getRemotePort() << std::endl;
-		
-		while (!exit) {
-		// Receive a message from the client
-		sf::Packet packet;
-		if (socket.receive(packet) != sf::Socket::Done) {
-			printf("it does not work work\n");
-			exit = true;
-		}
-		int x;
-		int y;
-		bool left;
-		bool right;
-		if (packet >> x)
-		{
-			printf("It works you damn son of a bitch !!!!!\n");
-		}
-		else
-		{
-			printf("sucker ...\n");
-		}
-		packet >> x >> y >> left >> right;
-		std::cout << x << y << left << right << std::endl;
-
-		}
-	}
-	socket.disconnect();
-	return 0;
+/**
+ * Receive a packet with the sfml network library
+ * Takes a pointer to a header (int) in argument
+*/
+void Server::receive(int* header, sf::Packet* packet) {
+	*packet >> *header;
+    _socket.receive(*packet);
 }
