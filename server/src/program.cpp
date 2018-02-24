@@ -16,6 +16,10 @@ void Program::init () {
 }
 
 void Program::run () {
+	while (_is_running) {
+		update();
+	}
+
 }
 
 void Program::update () {

@@ -1,6 +1,7 @@
 #ifndef PROGRAM_H
 #define PROGRAM_H
 
+#include "communication.h"
 #include <vector>
 #include <list>
 #include "parameters.h"

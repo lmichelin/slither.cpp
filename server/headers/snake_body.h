@@ -3,6 +3,7 @@
 
 #include "parameters.h"
 #include <SFML/Graphics.hpp>
+#include <SFML/Network.hpp>
 #include "input.h"
 #include <string>
 #include <iostream>
@@ -20,6 +21,8 @@ public:
 	bool checkIntersection (const SnakeBody&);
 	bool checkFoodIntersection (const Food&);
 	void SnakeBody::updateAim(const Input&);
+
+	friend sf::Packet &operator<<(sf::Packet &packet, const SnakeBody &snake_body);
 
 	friend sf::Packet &operator<<(sf::Packet &packet, const SnakeBody &snake_body);
 

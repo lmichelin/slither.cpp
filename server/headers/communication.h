@@ -8,9 +8,9 @@
 class Communication
 {
 	private:
+		int _port;
 		sf::TcpSocket _socket;
 		std::string _addr;
-		int _port;
 		
 
 	public:
