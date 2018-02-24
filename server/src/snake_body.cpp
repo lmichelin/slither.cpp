@@ -1,4 +1,5 @@
 #include "snake_body.h"
+#include <cmath>
 
 SnakeBody::SnakeBody (sf::Vector2f init_pos) {
 	_parts.push_back(init_pos);

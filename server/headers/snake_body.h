@@ -20,9 +20,7 @@ public:
 	void interpolate (const sf::Vector2f, const float);
 	bool checkIntersection (const SnakeBody&);
 	bool checkFoodIntersection (const Food&);
-	void SnakeBody::updateAim(const Input&);
-
-	friend sf::Packet &operator<<(sf::Packet &packet, const SnakeBody &snake_body);
+	void updateAim(const Input&);
 
 	friend sf::Packet &operator<<(sf::Packet &packet, const SnakeBody &snake_body);
 

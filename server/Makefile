@@ -2,7 +2,7 @@ CC = g++
 CFLAGS = -std=c++11 -Wall -Wextra -O3
 EXEC_NAME = main
 INCLUDES = -Iheaders
-LIBS = -IC:\C++\SFML-2.4.2\include -LC:\C++\SFML-2.4.2\lib -lsfml-graphics -lsfml-window -lsfml-system
+LIBS = -IC:\C++\SFML-2.4.2\include -LC:\C++\SFML-2.4.2\lib -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lpthread
 SRC_DIR = src
 OBJ_DIR = objs
 INSTALL_DIR = build

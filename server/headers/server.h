@@ -13,10 +13,10 @@ class Server {
 
 	public:
 		void init();
-		void send(int header, const sf::Packet packet);
-		void receive(int* header, sf::Packet* packet);
+		void send(sf::TcpSocket &socket, int header, const sf::Packet packet);
+		void receive(sf::TcpSocket &socket, int &header, sf::Packet &packet);
 
-		Server(std::string addr, int port) : _addr(addr), _port(port) {}
+		Server(std::string addr, int port) : _port(port) {}
 		~Server() {}
 };
 
