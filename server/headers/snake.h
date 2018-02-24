@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include "input.h"
 #include "snake_body.h"
 
 class Snake {
@@ -26,6 +27,10 @@ public:
 
 	void addTail(int n) {
 		_body.addTail(n);
+	}
+
+	void updateAim(const Input& input) {
+		_body.updateAim(input);
 	}
 
 	void interpolate (const sf::Vector2f h, float s) {

@@ -15,7 +15,8 @@ class Communication
 
 	public:
 		void init();
-		void send(sf::Packet packet);
+		void send(int header, const sf::Packet packet);
+		void receive(int* header, sf::Packet* packet);
 
 		Communication(std::string addr, int port) : _addr(addr), _port(port) {}
 		~Communication() {}

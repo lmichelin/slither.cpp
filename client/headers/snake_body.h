@@ -28,7 +28,6 @@ public:
 
 	friend void drawSnakeBody (sf::RenderWindow& _window, const SnakeBody&);
 
-	friend sf::Packet &operator<<(sf::Packet &packet, const SnakeBody &snake_body);
 	friend sf::Packet &operator>>(sf::Packet &packet, SnakeBody &snake_body);
 
 	// Constructors

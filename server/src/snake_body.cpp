@@ -1,11 +1,9 @@
-#include "parameters.h"
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <iostream>
 #include <vector>
 #include <cmath>
 #include "snake_body.h"
-#include "food.h"
 
 SnakeBody::SnakeBody (sf::Vector2f init_pos) {
 	_parts.push_back(init_pos);
@@ -18,7 +16,7 @@ SnakeBody::SnakeBody () {
 	addTail(INIT_LENGTH -1);
 }
 
-int SnakeBody::getLength() {
+int SnakeBody::getLength() const {
 	return _parts.size();
 }
 
@@ -26,6 +24,14 @@ void SnakeBody::addTail(int n) {
 	for (int i = 0; i < n; i++) {
 		_parts.push_back(_parts.back());
 	}
+}
+
+void SnakeBody::updateAim(const Input& input) {
+	sf::Vector2f tmp = _aim;
+	float angle = input.speed * ROTATION_ANGLE * (input.rotating_right - input.rotating_left);
+
+	_aim.x = cos(angle)*tmp.x - sin(angle)*tmp.y;
+	_aim.y = sin(angle)*tmp.x + cos(angle)*tmp.y;
 }
 
 void SnakeBody::interpolate(const sf::Vector2f head_aim, const float speed) {
@@ -67,4 +73,14 @@ bool SnakeBody::checkIntersection(const SnakeBody& S) {
 	}
 
 	return is_intersecting;
+}
+
+sf::Packet &operator<<(sf::Packet &packet, const SnakeBody &snake_body)
+{
+	packet << snake_body.getLength();
+	for (coord_vect::const_iterator it = snake_body._parts.begin(); it != snake_body._parts.end(); it++)
+	{
+		packet << it->x << it->y;
+	}
+	return packet;
 }

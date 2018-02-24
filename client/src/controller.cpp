@@ -49,10 +49,5 @@ Controller::Controller () {
 
 sf::Packet &operator<<(sf::Packet &packet, const Controller &controller)
 {
-	return packet << controller._aim.x << controller._aim.y << controller._rotating_left << controller._rotating_right;
-}
-
-sf::Packet &operator>>(sf::Packet &packet, Controller &controller)
-{
-	return packet >> controller._aim.x >> controller._aim.y >> controller._rotating_left >> controller._rotating_right;
+	return packet << controller._speed << controller._rotating_left << controller._rotating_right;
 }
