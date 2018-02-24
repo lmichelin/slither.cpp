@@ -3,6 +3,7 @@
 
 #include "parameters.h"
 #include <SFML/Graphics.hpp>
+#include <SFML/Network.hpp>
 #include <string>
 #include <iostream>
 #include <vector>
@@ -12,7 +13,7 @@ typedef std::vector<sf::Vector2f> coord_vect;
 
 class SnakeBody {
 public:
-	int getLength ();
+	int getLength () const;
 	void addTail (int);
 
 	void interpolate (const sf::Vector2f, const float);
@@ -20,6 +21,8 @@ public:
 	bool checkFoodIntersection (const Food&);
 
 	friend void drawSnakeBody (sf::RenderWindow& _window, const SnakeBody&);
+
+	friend sf::Packet &operator<<(sf::Packet &packet, const SnakeBody &snake_body);
 
 	// Constructors
 	SnakeBody (sf::Vector2f);

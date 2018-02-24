@@ -24,7 +24,6 @@ public:
 	bool getRotatingRight();
 
 	friend sf::Packet &operator<<(sf::Packet &packet, const Controller &controller);
-	friend sf::Packet &operator>>(sf::Packet &packet, Controller &controller);
 
 	Controller ();
 	~Controller () {}

@@ -18,7 +18,7 @@ SnakeBody::SnakeBody () {
 	addTail(INIT_LENGTH -1);
 }
 
-int SnakeBody::getLength() {
+int SnakeBody::getLength() const {
 	return _parts.size();
 }
 
@@ -67,4 +67,14 @@ bool SnakeBody::checkIntersection(const SnakeBody& S) {
 	}
 
 	return is_intersecting;
+}
+
+sf::Packet &operator<<(sf::Packet &packet, const SnakeBody &snake_body)
+{
+	packet << snake_body.getLength();
+	for (coord_vect::const_iterator it = snake_body._parts.begin(); it != snake_body._parts.end(); it++)
+	{
+		packet << it->x << it->y;
+	}
+	return packet;
 }
