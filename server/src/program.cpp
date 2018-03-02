@@ -2,6 +2,11 @@
 #include <cstdlib>
 #include "program.h"
 
+int User::_user_count = 0; 
+std::mutex m;
+std::condition_variable cv_positions;
+std::condition_variable cv_intersections;
+
 void Program::init () {
 	_is_running = true;
 
@@ -40,10 +45,20 @@ void Program::run () {
 
 		// }
 
+		////////////////////////////////
+		//  Erase disconnected users  //
+		////////////////////////////////
+
+
+
 		///////////////////////////////
 		//        Update Game        //
 		///////////////////////////////
 
+		cv_positions.notify_all();
+		cv_intersections.notify_all();
+
+		// std::this_thread::sleep_for(std::chrono::seconds(1));
 	}
 }
 
