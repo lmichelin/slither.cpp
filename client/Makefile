@@ -1,44 +1,32 @@
-# Directories
-SRCDIR=src
-DEPDIR=deps
-OBJDIR=objs
-
-# Find all sources
-SRC = $(shell find $(SRCDIR) -name "*.cpp")
-OTMP = $(patsubst %.cpp,%.o,$(SRC:$(SRCDIR)/%=%))
-OBJS = $(patsubst %,$(OBJDIR)/%,$(OTMP))
-DEPS = $(patsubst %.o,$(DEPDIR)/%.d,$(OTMP))
-
-# Variables
 CC = g++
-CPPFLAGS = -std=c++11 -Wall -Wextra -O3 -Iheaders
-LIBS = -lpthread -lsfml-graphics -lsfml-network -lsfml-window -lsfml-system
+CFLAGS = -std=c++11 -Wall -Wextra -O3
+EXEC_NAME = main
+INCLUDES = -Iheaders
+LIBS = -IC:\C++\SFML-2.4.2\include -LC:\C++\SFML-2.4.2\lib -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lpthread
+SRC_DIR = src
+OBJ_DIR = objs
+INSTALL_DIR = build
 
-run: all exec
 
-all: init $(OBJS)
-	@echo Building the executable...
-	$(CC) -o main $(OBJS) $(LIBS)
+SRC_FILES = $(wildcard $(SRC_DIR)/*.cpp)
+OTMP = $(patsubst %.cpp,%.o,$(SRC_FILES:$(SRC_DIR)/%=%))
+OBJ_FILES = $(patsubst %,$(OBJ_DIR)/%,$(OTMP))
 
-exec:
-	./main
+all : init $(EXEC_NAME)
 
-init:
-	@echo Initilizing...
-	mkdir -p $(DEPDIR)
-	mkdir -p $(OBJDIR)
+init: 
+	@echo Initializing...
+	mkdir -p $(OBJ_DIR)
 
-clean:
+clean :
 	@echo Clearing...
-	rm -fr $(OBJDIR)/ $(DEPDIR)/
+	rm $(EXEC_NAME) $(OBJ_FILES)
 
-.PHONY: all clean
+$(EXEC_NAME) : $(OBJ_FILES)
+	$(CC) -o $(EXEC_NAME) $(OBJ_FILES) $(LIBS)
 
--include $(DEPS)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	$(CC) $(CFLAGS) $(INCLUDES) $(LIBS) -o $@ -c $<
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.cpp
-	mkdir -p $(dir $@)
-	mkdir -p $(DEPDIR)/$(dir $(@:$(OBJDIR)/%=%))
-	$(eval CPP = $(shell find $(SRCDIR)/$(dir $*) -name "$(notdir $*).cpp"))
-	$(CC) -c $(CPPFLAGS) $(CPP) -o $@ $(LIBS)
-	$(CC) -MM $(CPPFLAGS) $(CPP) $(LIBS) > $(DEPDIR)/$*.d
+install :
+	mv $(EXEC_NAME) $(INSTALL_DIR)

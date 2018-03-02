@@ -25,4 +25,6 @@
 #define POSITION 203
 #define END 204
 
+#define PORT 8001
+
 #endif

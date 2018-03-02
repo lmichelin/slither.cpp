@@ -2,24 +2,32 @@
 #include <cstdlib>
 #include "program.h"
 
-Program::Program () {
-	_is_running = false;
-}
-
 void Program::init () {
 	_is_running = true;
-	sf::Vector2f init_pos(200,200);
-	Snake my_snake(init_pos);
-	_snakes.push_back(my_snake);
 
 	std::srand(std::time(nullptr)); // use current time as seed for random generator
 }
 
 void Program::run () {
-	while (_is_running) {
-		update();
-	}
+	// Run the server so that people can connect to the server in a new thread
+	std::thread server_thread(&Server::run, &_server);
 
+	while (_is_running) {
+		// When a new user connects, create a user object in a new thread with his socket in it
+		sf::TcpSocket* socket;
+		if (_socket_queue.pop(socket)) {
+			launchUser(socket);
+		}
+	}
+}
+
+// Launch a new user in a new thread
+void Program::launchUser(sf::TcpSocket* socket) {
+	User new_user(socket);
+	_users.push_back(new_user); // Add the user in the users array
+
+	// Launch new thread with user action
+	std::thread new_user_thread(&User::run, &new_user);
 }
 
 void Program::update () {

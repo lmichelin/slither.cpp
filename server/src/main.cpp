@@ -2,7 +2,7 @@
 #include "program.h"
 
 int main() {
-	Program program;
+	Program program(PORT);
 	program.init();
 	program.run();
 

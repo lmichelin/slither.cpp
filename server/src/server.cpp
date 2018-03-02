@@ -1,11 +1,24 @@
 #include "server.h"
+#include <iostream>
 
 /**
  * Initiate communication with a server
 */
 void Server::init() {
-    // _socket.connect(_addr, _port);
-    // printf("Server launched\n");
+	_listener.listen(_port);
+	std::cout << "Server listening on port " << _port << std::endl;
+}
+
+/**
+ * Run the server by listening for connection attempts
+ * For each connection do something with the doStuff function
+*/
+void Server::run() {
+	for(;;) {
+		sf::TcpSocket socket;
+		_listener.accept(socket);
+		std::cout << "New client connected: " << socket.getRemoteAddress() << ':' << socket.getRemotePort() << std::endl;
+	}
 }
 
 /**
