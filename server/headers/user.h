@@ -1,5 +1,8 @@
 #include "snake.h"
 #include <SFML/Network.hpp>
+#include <string>
+#include <thread>
+#include <memory>
 
 class User {
 	public: 
@@ -13,7 +16,7 @@ class User {
 			return _snake;
 		}
 
-		sf::TcpSocket* getSocket() const {
+		std::shared_ptr<sf::TcpSocket> getSocket() const {
 			return _socket;
 		}
 
@@ -24,13 +27,13 @@ class User {
 		/////////////////
 		// Constructor //
 		/////////////////
-		User(sf::TcpSocket* socket): _socket(socket), _playing(false) {}
+		User(std::shared_ptr<sf::TcpSocket> socket): _socket(socket), _playing(false) {}
 		~User() {
-			delete _socket;
+			// delete _socket;
 		}
 
 	private: 
 		Snake _snake;
-		sf::TcpSocket* _socket;
+		std::shared_ptr<sf::TcpSocket> _socket;
 		bool _playing;
 };

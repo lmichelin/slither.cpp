@@ -12,22 +12,39 @@ void Program::run () {
 	// Run the server so that people can connect to the server in a new thread
 	std::thread server_thread(&Server::run, &_server);
 
+	std::vector<std::thread> thread_container;
+
 	while (_is_running) {
+
+		///////////////////////////////
+		// Check new user connection //
+		///////////////////////////////
+
 		// When a new user connects, create a user object in a new thread with his socket in it
-		sf::TcpSocket* socket;
+		std::shared_ptr<sf::TcpSocket> socket;
 		if (_socket_queue.pop(socket)) {
-			launchUser(socket);
+			// Add the user in the users array
+			User new_user(socket);
+			_users.push_back(new_user);
+
+			// Start the run routine in a thread
+			thread_container.push_back(std::thread(&User::run, &new_user));
 		}
+
+		///////////////////////////////
+		//  Check for disconnection  //
+		///////////////////////////////
+
+		// std::list<User>::iterator it;
+		// for (it = _users.begin(); it != _users.end(); it++) {
+
+		// }
+
+		///////////////////////////////
+		//        Update Game        //
+		///////////////////////////////
+
 	}
-}
-
-// Launch a new user in a new thread
-void Program::launchUser(sf::TcpSocket* socket) {
-	User new_user(socket);
-	_users.push_back(new_user); // Add the user in the users array
-
-	// Launch new thread with user action
-	std::thread new_user_thread(&User::run, &new_user);
 }
 
 void Program::update () {

@@ -5,7 +5,7 @@
 #include "parameters.h"
 #include <string>
 #include "safequeue.h"
-
+#include <memory>
 class Server {
 	public:
 		// Initialize server by listening for connections
@@ -22,7 +22,7 @@ class Server {
 		/////////////////
 		// Constructor //
 		/////////////////
-		Server(int port, SafeQueue<sf::TcpSocket*>* socket_queue) : _listener(), _socket_queue(socket_queue) {
+		Server(int port, SafeQueue<std::shared_ptr<sf::TcpSocket> >* socket_queue) : _listener(), _socket_queue(socket_queue) {
 			_port = port;
 		}
 		~Server() {}
@@ -31,7 +31,7 @@ class Server {
 	private:
 		sf::TcpListener _listener;
 		int _port;
-		SafeQueue<sf::TcpSocket*>* _socket_queue;
+		SafeQueue<std::shared_ptr<sf::TcpSocket> >* _socket_queue;
 };
 
 #endif

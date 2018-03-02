@@ -5,13 +5,13 @@
 #include <list>
 #include <thread>
 #include <mutex>
+#include <memory>
 #include "parameters.h"
 #include "server.h"
 #include "user.h"
 #include "food.h"
 #include "safequeue.h"
 #include <SFML/Network.hpp>
-
 class Program {
 	public:
 
@@ -21,14 +21,11 @@ class Program {
 		// Run game
 		void run ();
 
-		// Launch a new user
-		void launchUser(sf::TcpSocket* socket);
-
-		SafeQueue<sf::TcpSocket*>& getSocketQueue() {
+		SafeQueue<std::shared_ptr<sf::TcpSocket> >& getSocketQueue() {
 			return _socket_queue;
 		}
 
-		std::vector<User> getUsers() {
+		std::list<User>& getUsers() {
 			return _users;
 		}
 
@@ -44,9 +41,9 @@ class Program {
 		bool _is_running;
 
 		Server _server;
-		SafeQueue<sf::TcpSocket*> _socket_queue;
+		SafeQueue<std::shared_ptr<sf::TcpSocket> > _socket_queue;
 
-		std::vector<User> _users;
+		std::list<User> _users;
 		std::list<Food> _foods;
 
 		void update ();

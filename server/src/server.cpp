@@ -1,5 +1,6 @@
 #include "server.h"
 #include <iostream>
+#include <list>
 
 /**
  * Initiate communication with a server
@@ -12,12 +13,23 @@ void Server::init() {
 /**
  * Run the server by listening for connection attempts
  * For each connection do something with the doStuff function
+ * IMPORTANT TO USE SHARED POINTERS TO KEEP THE SOCKETS IN SCOPE !!!
 */
 void Server::run() {
+	std::list<std::shared_ptr<sf::TcpSocket> > socket_container;
+
 	for(;;) {
-		sf::TcpSocket socket;
-		_listener.accept(socket);
-		std::cout << "New client connected: " << socket.getRemoteAddress() << ':' << socket.getRemotePort() << std::endl;
+		// sf::TcpSocket socket;
+		std::shared_ptr<sf::TcpSocket> s_ptr = std::make_shared<sf::TcpSocket>();
+		socket_container.push_back(s_ptr);
+
+		if (_listener.accept(*s_ptr) == sf::Socket::Done) {
+			// A new client just connected!
+			std::cout << "New client connected: " << s_ptr->getRemoteAddress() << ':' << s_ptr->getRemotePort() << std::endl;
+
+			// Send new client status
+			_socket_queue->push(s_ptr);
+		}
 	}
 }
 
