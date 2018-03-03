@@ -2,10 +2,17 @@
 #include <cstdlib>
 #include "program.h"
 
-int User::_user_count = 0; 
-std::mutex m;
+int User::_user_count = 0;
+int User::_user_playing_count = 0;
+std::mutex m_positions;
+std::mutex m_intersections;
+std::mutex m_ready_positions;
+std::mutex m_ready_intersections;
 std::condition_variable cv_positions;
 std::condition_variable cv_intersections;
+std::condition_variable cv_ready_positions;
+std::condition_variable cv_ready_intersections;
+std::atomic<int> done_users_count;
 
 void Program::init () {
 	_is_running = true;
@@ -29,11 +36,11 @@ void Program::run () {
 		std::shared_ptr<sf::TcpSocket> socket;
 		if (_socket_queue.pop(socket)) {
 			// Add the user in the users array
-			User new_user(socket);
-			_users.push_back(new_user);
+			// User new_user(socket);
+			_users.push_back(User(socket));
 
 			// Start the run routine in a thread
-			thread_container.push_back(std::thread(&User::run, &new_user));
+			thread_container.push_back(std::thread(&User::run, _users.back()));
 		}
 
 		///////////////////////////////
@@ -49,16 +56,31 @@ void Program::run () {
 		//  Erase disconnected users  //
 		////////////////////////////////
 
+		// std::this_thread::sleep_for(std::chrono::seconds(1));
 
 
 		///////////////////////////////
 		//        Update Game        //
 		///////////////////////////////
 
-		cv_positions.notify_all();
-		cv_intersections.notify_all();
+		if (User::getUserPlayingCount()) {
 
-		// std::this_thread::sleep_for(std::chrono::seconds(1));
+			done_users_count = 0;
+			cv_positions.notify_all();	
+
+
+			std::unique_lock<std::mutex> lk_positions(m_ready_positions);
+			cv_ready_positions.wait(lk_positions);
+
+
+			done_users_count = 0;
+			cv_intersections.notify_all();
+
+			std::unique_lock<std::mutex> lk_intersections(m_ready_intersections);
+			cv_ready_intersections.wait(lk_intersections);
+		}
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(200));
 	}
 }
 
