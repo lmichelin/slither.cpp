@@ -5,25 +5,24 @@
 #include <SFML/Network.hpp>
 #include <string>
 #include <mutex>
+#include "server.h"
 #include <condition_variable>
 #include <thread>
 #include <memory>
 #include <atomic>
 
 extern std::atomic<int> done_users_count;
-extern std::mutex m_positions;
-extern std::mutex m_intersections;
-extern std::mutex m_ready_positions;
-extern std::mutex m_ready_intersections;
-extern std::condition_variable cv_ready_positions;
-extern std::condition_variable cv_ready_intersections;
-extern std::condition_variable cv_positions;
-extern std::condition_variable cv_intersections;
+extern std::mutex m_compute;
+extern std::mutex m_ready_compute;
+extern std::condition_variable cv_ready_compute;
+extern std::condition_variable cv_compute;
 
 class User {
 	public: 
 
 		void run();
+		void send(int header, sf::Packet packet);
+		void receive(int& header, sf::Packet& packet);
 
 		/////////////
 		// Getters //
@@ -45,22 +44,34 @@ class User {
 		}
 
 		static int getUserCount() {
+			std::lock_guard<std::mutex> lock(_m);			
 			return _user_count;
 		}
 
 		static int getUserPlayingCount() {
+			std::lock_guard<std::mutex> lock(_m);
 			return _user_playing_count;
+		} 
+
+		static void addToUserCount(int add) {
+			std::lock_guard<std::mutex> lock(_m);			
+			_user_count += add;
+		}
+
+		static void addToUserPlayingCount(int add) {
+			std::lock_guard<std::mutex> lock(_m);
+			_user_playing_count += add;
 		} 
 
 		/////////////////
 		// Constructor //
 		/////////////////
 		User(std::shared_ptr<sf::TcpSocket> socket): _socket(socket), _is_playing(false), _is_connected(true) {
-			_user_count++;
-			std::cout << _user_count << std::endl;
+			addToUserCount(1);
+			// std::cout << _user_count << std::endl;
 		}
 		~User() {
-			// _user_count--;
+			addToUserCount(-1);
 		}
 
 	private: 
@@ -70,11 +81,20 @@ class User {
 		bool _is_connected;
 		static int _user_count;
 		static int _user_playing_count;
+		static std::mutex _m;
+
+		void processClientInput();
+
+		void sendClientData();
+
+		void computePosition();
+
+		void computeIntersection();
 
 		void play() {
 			if (!_is_playing) {
 				_is_playing = true;
-				_user_playing_count++;
+				addToUserPlayingCount(1);
 			}
 		}
 };

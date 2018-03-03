@@ -25,6 +25,8 @@
 #define POSITION 203
 #define END 204
 
+#define DISCONNECT 405
+
 #define PORT 8001
 
 #endif

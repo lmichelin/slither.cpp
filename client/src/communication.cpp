@@ -6,6 +6,7 @@ void Communication::init() {
 }
 
 void Communication::send(sf::Packet packet) {
+	_socket.send(packet);
     printf("Sending stuff\n");
 }
 

@@ -4,14 +4,11 @@
 
 int User::_user_count = 0;
 int User::_user_playing_count = 0;
-std::mutex m_positions;
-std::mutex m_intersections;
-std::mutex m_ready_positions;
-std::mutex m_ready_intersections;
-std::condition_variable cv_positions;
-std::condition_variable cv_intersections;
-std::condition_variable cv_ready_positions;
-std::condition_variable cv_ready_intersections;
+std::mutex User::_m;
+std::mutex m_compute;
+std::mutex m_ready_compute;
+std::condition_variable cv_compute;
+std::condition_variable cv_ready_compute;
 std::atomic<int> done_users_count;
 
 void Program::init () {
@@ -24,9 +21,10 @@ void Program::run () {
 	// Run the server so that people can connect to the server in a new thread
 	std::thread server_thread(&Server::run, &_server);
 
-	std::vector<std::thread> thread_container;
+	std::list<std::thread> thread_container;
 
 	while (_is_running) {
+		std::cout << "New main loop\n";
 
 		///////////////////////////////
 		// Check new user connection //
@@ -40,44 +38,37 @@ void Program::run () {
 			_users.push_back(User(socket));
 
 			// Start the run routine in a thread
-			thread_container.push_back(std::thread(&User::run, _users.back()));
+			thread_container.push_back(std::thread(&User::run, std::ref(_users.back())));
 		}
-
-		///////////////////////////////
-		//  Check for disconnection  //
-		///////////////////////////////
-
-		// std::list<User>::iterator it;
-		// for (it = _users.begin(); it != _users.end(); it++) {
-
-		// }
 
 		////////////////////////////////
 		//  Erase disconnected users  //
 		////////////////////////////////
 
-		// std::this_thread::sleep_for(std::chrono::seconds(1));
-
+		std::list<User>::iterator it_user = _users.begin();
+		std::list<std::thread>::iterator it_thread = thread_container.begin();
+		for (;it_user != _users.end();) {
+			if (!it_user->isPlaying() && !it_user->isConnected()) {
+				if (it_thread->joinable()) {
+					it_thread->join();
+				}
+				_users.erase(it_user++);
+				thread_container.erase(it_thread++);
+			} else {
+				it_user++;
+				it_thread++;
+			}
+		}
 
 		///////////////////////////////
 		//        Update Game        //
 		///////////////////////////////
 
+		done_users_count = 0;
+		cv_compute.notify_all();	
 		if (User::getUserPlayingCount()) {
-
-			done_users_count = 0;
-			cv_positions.notify_all();	
-
-
-			std::unique_lock<std::mutex> lk_positions(m_ready_positions);
-			cv_ready_positions.wait(lk_positions);
-
-
-			done_users_count = 0;
-			cv_intersections.notify_all();
-
-			std::unique_lock<std::mutex> lk_intersections(m_ready_intersections);
-			cv_ready_intersections.wait(lk_intersections);
+			std::unique_lock<std::mutex> lk_compute(m_compute);
+			cv_ready_compute.wait(lk_compute);
 		}
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(200));
