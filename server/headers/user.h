@@ -14,6 +14,7 @@
 #include <thread>
 #include <memory>
 #include <atomic>
+#include "clientData.h"
 
 ////////////////////////
 // External variables //
@@ -28,13 +29,15 @@ extern std::condition_variable cv_compute;
 class User {
 	public: 
 
+		//////////////////
+		// Main Methods //
+		//////////////////
+
 		void run();
-		void send(int header, sf::Packet packet);
-		void receive(int& header, sf::Packet& packet);
 
 		/////////////
 		// Getters //
-		////////////
+		/////////////
 		Snake& getSnake() {
 			return _snake;
 		}
@@ -61,6 +64,10 @@ class User {
 			return _user_playing_count;
 		} 
 
+		/////////////
+		// Setters //
+		/////////////
+
 		static void addToUserCount(int add) {
 			std::lock_guard<std::mutex> lock(_m);			
 			_user_count += add;
@@ -74,9 +81,9 @@ class User {
 		/////////////////
 		// Constructor //
 		/////////////////
+		
 		User(std::shared_ptr<sf::TcpSocket> socket): _socket(socket), _is_playing(false), _is_connected(true) {
 			addToUserCount(1);
-			// std::cout << _user_count << std::endl;
 		}
 		~User() {
 			addToUserCount(-1);
@@ -98,6 +105,9 @@ class User {
 		void computePosition();
 
 		void computeIntersection();
+
+		void send(int header, sf::Packet packet);
+		void receive(int& header, sf::Packet& packet);
 
 		void play() {
 			if (!_is_playing) {

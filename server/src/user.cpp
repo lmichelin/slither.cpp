@@ -83,5 +83,12 @@ void User::processClientInput() {
 	}
 }
 
-void User::sendClientData() {}
+void User::sendClientData() {
+	Data clientData;
+	sf::Vector2f coord(50,50);
+	clientData.my_snake_coord.push_back(coord);
+	sf::Packet packet;
+	packet << clientData;
+	send(OK, packet);
+}
 

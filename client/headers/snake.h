@@ -5,6 +5,8 @@
 #include <iostream>
 #include "snake_body.h"
 
+typedef std::vector<sf::Vector2f> coord_vect;
+
 class Snake {
 public:
 	// Get name
@@ -26,6 +28,10 @@ public:
 
 	void addTail(int n) {
 		_body.addTail(n);
+	}
+
+	void updateSnake(coord_vect parts) {
+		_body.updateParts(parts);
 	}
 
 	void interpolate (const sf::Vector2f h, float s) {

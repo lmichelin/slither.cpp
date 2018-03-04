@@ -18,4 +18,16 @@
 
 #define EPSILON 0.01
 
+// Network Status Codes
+#define OK 200
+#define INIT 201
+#define CONTROLLER 202
+#define POSITION 203
+#define END 204
+
+#define DISCONNECT 405
+
+#define PORT 8001
+
+
 #endif

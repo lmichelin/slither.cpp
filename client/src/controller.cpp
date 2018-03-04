@@ -47,7 +47,6 @@ Controller::Controller () {
 	_aim.y = 0.0;
 }
 
-sf::Packet &operator<<(sf::Packet &packet, const Controller &controller)
-{
-	return packet << controller._speed << controller._rotating_left << controller._rotating_right;
+sf::Packet &operator<<(sf::Packet &packet, const Controller &controller) {
+	return packet << controller._speed << controller._rotating_right << controller._rotating_left;
 }

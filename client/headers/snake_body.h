@@ -21,6 +21,7 @@ private:
 public:
 	int getLength () const;
 	void addTail (int);
+	void updateParts(coord_vect parts);
 
 	void interpolate (const sf::Vector2f, const float);
 	bool checkIntersection (const SnakeBody&);

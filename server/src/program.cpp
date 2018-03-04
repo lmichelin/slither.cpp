@@ -42,7 +42,7 @@ void Program::run () {
 			_users.push_back(User(socket));
 
 			// Start the run routine in a thread
-			thread_container.push_back(std::thread(&User::run, std::ref(_users.back())));
+			thread_container.push_back(std::thread(&User::run, &_users.back()));
 		}
 
 		////////////////////////////////

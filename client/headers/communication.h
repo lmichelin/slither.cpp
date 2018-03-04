@@ -1,3 +1,7 @@
+/*
+ * Class to communicate with server
+*/
+
 #ifndef COMMUNICATION_H
 #define COMMUNICATION_H
 
@@ -5,21 +9,19 @@
 #include "parameters.h"
 #include <string>
 
-class Communication
-{
+class Communication {
+	public:
+		void init();
+		void send(int header,  sf::Packet packet);
+		void receive(int& header, sf::Packet& packet);
+
+		Communication(std::string addr, int port) : _addr(addr), _port(port) {}
+		~Communication() {}
+
 	private:
 		sf::TcpSocket _socket;
 		std::string _addr;
 		int _port;
-		
-
-	public:
-		void init();
-		void send(sf::Packet);
-		void receive(sf::Packet*);
-
-		Communication(std::string addr, int port) : _addr(addr), _port(port) {}
-		~Communication() {}
 };
 
 #endif

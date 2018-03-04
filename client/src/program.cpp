@@ -6,6 +6,7 @@
 #include "parameters.h"
 #include "snake_body.h"
 #include "communication.h"
+#include "serverData.h"
 
 Program::Program () : _window(sf::VideoMode(WINDOW_SIZE_X, WINDOW_SIZE_Y), "The IN204 Snake", sf::Style::Close), _communication("localhost", 8001) {
 	_communication.init();
@@ -25,6 +26,8 @@ void Program::init () {
 
 void Program::run () {
 	while (_window.isOpen() && _is_running) {
+		getServerData();
+		
 		handleEvents();
 
 		update();
@@ -74,11 +77,17 @@ void Program::display () {
 	_window.display();
 }
 
+void Program::disconnect() {}
+
 void Program::handleEvents () {
 	sf::Event event;
 	while (_window.pollEvent(event)) {
-		if (event.type == sf::Event::Closed)
-		_window.close();
+		if (event.type == sf::Event::Closed) {
+			// Disconnect from server
+			disconnect();
+			// Close window
+			_window.close();
+		}
 
 		if (event.type == sf::Event::KeyPressed) {
 			if (event.key.code == sf::Keyboard::Space || event.key.code == sf::Keyboard::Up) {
@@ -106,8 +115,31 @@ void Program::handleEvents () {
 	// Update controller
 	// Create Packet and send
 	sf::Packet packet;
+	int header = 200;
 	packet << _controller;
-	_communication.send(packet);
+	_communication.send(header, packet);
 
-	// _controller.updateAim(); // For client refresh
+	_controller.updateAim(); // For client refresh
+}
+
+void Program::getServerData() {
+	// Receive Data from server
+	sf::Packet data;
+	int header;
+	Data serverData;
+	_communication.receive(header, data);
+	switch (header) {
+
+	case END: 
+		_snake.die();
+		break;
+
+	case OK:
+		data >> serverData;
+		std::cout << serverData.my_snake_coord[0].x << " " << serverData.my_snake_coord[0].y << "\n";
+		break;
+
+	default:
+		break;
+	}
 }

@@ -11,26 +11,29 @@
 #include "communication.h"
 
 class Program {
-private:
-	bool _is_running;
+	private:
+		bool _is_running;
 
-	sf::RenderWindow _window;
-	Controller _controller;
+		sf::RenderWindow _window;
+		Controller _controller;
 
-	Communication _communication;
+		Communication _communication;
 
-	std::vector<Snake> _snakes;
-	std::list<Food> _foods;
+		Snake _snake;
+		std::vector<Snake> _snakes;
+		std::list<Food> _foods;
 
-	void update ();
-	void display ();
-	void handleEvents ();
-public:
-	void init ();
-	void run ();
+		void update ();
+		void disconnect();
+		void display ();
+		void handleEvents ();
+		void getServerData();
+	public:
+		void init ();
+		void run ();
 
-	Program ();
-	~Program () {}
+		Program ();
+		~Program () {}
 };
 
 #endif

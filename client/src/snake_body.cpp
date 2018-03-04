@@ -28,6 +28,10 @@ void SnakeBody::addTail(int n) {
 	}
 }
 
+void SnakeBody::updateParts(coord_vect parts) {
+	_parts = parts;
+}
+
 void SnakeBody::interpolate(const sf::Vector2f head_aim, const float speed) {
 	sf::Vector2f aim = head_aim;
 

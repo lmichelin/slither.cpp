@@ -1,16 +1,34 @@
 #include "communication.h"
+#include <iostream>
 
 void Communication::init() {
     _socket.connect(_addr, _port);
-    printf("Communication launched\n");
+    printf("Communication with server launched\n");
 }
 
-void Communication::send(sf::Packet packet) {
-	_socket.send(packet);
-    printf("Sending stuff\n");
+void Communication::send(int header,  sf::Packet packet) {
+	sf::Packet header_packet;
+	header_packet << header;
+	packet << header_packet;
+    auto status = _socket.send(packet);
+	if (status == sf::Socket::Done) {
+		std::cout << "Sending packet\n";
+	} else {
+		// Error
+		std::cout << "Error when sending to server\n";
+	}
 }
 
-void Communication::receive(sf::Packet *packet)
-{
-    _socket.receive(*packet);
+void Communication::receive(int& header, sf::Packet& packet) {
+    auto status = _socket.receive(packet);
+	if (status == sf::Socket::Done) {
+		// Retrieve header from the packet
+		packet >> header;
+	} else if (status == sf::Socket::NotReady) {
+		// There is nothing to receive on server side
+		std::cout << "Nothing to receive\n";
+	} else {
+		// There was an error on receive
+		std::cout << "Error on receive\n";
+	}
 }
