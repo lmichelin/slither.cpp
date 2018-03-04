@@ -16,6 +16,10 @@ int SnakeBody::getLength() const {
 	return _parts.size();
 }
 
+coord_vect SnakeBody::getParts() const {
+	return _parts;
+}
+
 void SnakeBody::addTail(int n) {
 	for (int i = 0; i < n; i++) {
 		_parts.push_back(_parts.back());
@@ -30,8 +34,8 @@ void SnakeBody::updateAim(const Input& input) {
 	_aim.y = sin(angle)*tmp.x + cos(angle)*tmp.y;
 }
 
-void SnakeBody::interpolate(const sf::Vector2f head_aim, const float speed) {
-	sf::Vector2f aim = head_aim;
+void SnakeBody::interpolate(const float speed) {
+	sf::Vector2f aim = _aim;
 
 	// Head
 	_parts[0] += aim * speed;
@@ -68,14 +72,4 @@ bool SnakeBody::checkIntersection(const SnakeBody& S) {
 	}
 
 	return is_intersecting;
-}
-
-sf::Packet &operator<<(sf::Packet &packet, const SnakeBody &snake_body)
-{
-	packet << snake_body.getLength();
-	for (coord_vect::const_iterator it = snake_body._parts.begin(); it != snake_body._parts.end(); it++)
-	{
-		packet << it->x << it->y;
-	}
-	return packet;
 }

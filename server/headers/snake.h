@@ -33,8 +33,8 @@ public:
 		_body.updateAim(input);
 	}
 
-	void interpolate (const sf::Vector2f h, float s) {
-		_body.interpolate(h, s);
+	void interpolate (const float speed) {
+		_body.interpolate(speed);
 	}
 
 	bool checkIntersection (const SnakeBody& s) {

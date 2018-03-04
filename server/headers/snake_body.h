@@ -25,7 +25,7 @@ class SnakeBody {
 		//////////////////
 
 
-		void interpolate (const sf::Vector2f head_aim, const float speed);
+		void interpolate (const float speed);
 		bool checkIntersection (const SnakeBody& S);
 		bool checkFoodIntersection (const Food& p);
 		void updateAim(const Input& input);
@@ -35,10 +35,10 @@ class SnakeBody {
 		/////////////////
 
 		int getLength () const;
-		void addTail (int);
+		sf::Vector2f getAim() const;
+		coord_vect getParts() const;
 
-		// Overcharge send operator for sf::Packet
-		friend sf::Packet &operator<<(sf::Packet& packet, const SnakeBody& snake_body);
+		void addTail (int);
 
 		/////////////////
 		// Constructor //

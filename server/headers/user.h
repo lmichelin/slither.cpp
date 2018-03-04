@@ -12,8 +12,11 @@
 #include "server.h"
 #include <condition_variable>
 #include <thread>
+#include <list>
 #include <memory>
 #include <atomic>
+#include "input.h"
+#include "clientData.h"
 
 ////////////////////////
 // External variables //
@@ -81,7 +84,7 @@ class User {
 		// Constructor //
 		/////////////////
 		
-		User(std::shared_ptr<sf::TcpSocket> socket): _socket(socket), _is_playing(false), _is_connected(true) {
+		User(std::shared_ptr<sf::TcpSocket> socket, std::list<User>* users): _socket(socket), _is_playing(false), _is_connected(true), _users(users) {
 			addToUserCount(1);
 		}
 		~User() {
@@ -96,12 +99,25 @@ class User {
 		static int _user_count;
 		static int _user_playing_count;
 		static std::mutex _m;
+		Input _input;
+		Data _clientData;
+
+		// List the users
+		std::list<User>* _users;
 
 		void processClientInput();
 
 		void sendClientData();
 
 		void computePosition();
+
+		void updateOtherUserPositions();
+
+		void updateUserPosition();
+
+		float getSpeed() const {
+			return _input.speed;
+		}
 
 		void computeIntersection();
 
