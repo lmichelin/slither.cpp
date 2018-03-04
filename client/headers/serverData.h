@@ -30,7 +30,8 @@ sf::Packet& operator >>(sf::Packet& packet, sf::Vector2f& vector)
 template <class T>
 sf::Packet& operator <<(sf::Packet& packet, std::vector<T> vector)
 {
-	packet << vector.size();
+	unsigned int temp = vector.size();
+	packet << temp;
 	for (unsigned int i = 0; i < vector.size(); i++) {
 		packet << vector[i];
 	}
