@@ -135,8 +135,8 @@ void Program::getServerData() {
 		break;
 
 	case OK:
+		std::cout << "HEADER: " << header << "\n";
 		data >> serverData;
-		std::cout << serverData.my_snake_coord[0].x << " " << serverData.my_snake_coord[0].y << "\n";
 		break;
 
 	default:

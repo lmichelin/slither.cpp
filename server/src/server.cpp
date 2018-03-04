@@ -38,10 +38,10 @@ void Server::run() {
  * Send a packet with the sfml network library
  * Takes a header (int) in argument
 */
-void Server::send(sf::TcpSocket &socket, int header,  sf::Packet packet) {
+void Server::send(sf::TcpSocket &socket, int header, sf::Packet packet) {
 	sf::Packet header_packet;
 	header_packet << header;
-	header_packet << packet;
+	header_packet.append(packet.getData(), packet.getDataSize());
     if (socket.send(header_packet) != sf::Socket::Done) {
 		// Error
 		std::cout << "Error when sending to client\n";

@@ -3,3 +3,4 @@ objs
 deps
 .clang-format
 .vscode
+Makef*

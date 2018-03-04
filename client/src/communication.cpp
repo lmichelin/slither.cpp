@@ -7,10 +7,10 @@ void Communication::init() {
     printf("Communication with server launched\n");
 }
 
-void Communication::send(int header,  sf::Packet packet) {
+void Communication::send(int header, sf::Packet packet) {
 	sf::Packet header_packet;
 	header_packet << header;
-	header_packet << packet;
+	header_packet.append(packet.getData(), packet.getDataSize());
     auto status = _socket.send(header_packet);
 	if (status == sf::Socket::Done) {
 		std::cout << "Sending packet\n";

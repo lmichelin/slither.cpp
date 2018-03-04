@@ -88,6 +88,7 @@ void User::sendClientData() {
 	Data clientData;
 	sf::Vector2f coord(50,50);
 	clientData.my_snake_coord.push_back(coord);
+	std::cout << "COORD: " << clientData.my_snake_coord[0].x << "\n"; 
 	sf::Packet packet;
 	packet << clientData;
 	std::cout << "Sending client data\n";

@@ -41,10 +41,12 @@ sf::Packet& operator <<(sf::Packet& packet, std::vector<T> vector)
 template <class T>
 sf::Packet& operator >>(sf::Packet& packet, std::vector<T>& vector)
 {
-    int size;
+    unsigned int size;
 	packet >> size;
-	for (int i = 0; i < size; i++) {
-		packet >> vector[i];
+	for (unsigned int i = 0; i < size; i++) {
+		T temp;
+		packet >> temp;
+		vector.push_back(temp);
 	}
 	return packet;
 }
