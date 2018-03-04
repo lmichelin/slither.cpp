@@ -7,6 +7,9 @@
 #define SNAKE_CIRCLE_RADIUS 10
 #define FOOD_CIRCLE_RADIUS 5
 
+#define GAME_SIZE_X 10000
+#define GAME_SIZE_Y 10000
+
 #define FOOD_PROBA 0.01
 #define ADD_TAIL 4
 

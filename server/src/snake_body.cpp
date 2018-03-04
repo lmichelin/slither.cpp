@@ -16,6 +16,10 @@ int SnakeBody::getLength() const {
 	return _parts.size();
 }
 
+coord_vect SnakeBody::getParts() const {
+	return _parts;
+}
+
 void SnakeBody::addTail(int n) {
 	for (int i = 0; i < n; i++) {
 		_parts.push_back(_parts.back());
@@ -30,8 +34,8 @@ void SnakeBody::updateAim(const Input& input) {
 	_aim.y = sin(angle)*tmp.x + cos(angle)*tmp.y;
 }
 
-void SnakeBody::interpolate(const sf::Vector2f head_aim, const float speed) {
-	sf::Vector2f aim = head_aim;
+void SnakeBody::interpolate(const float speed) {
+	sf::Vector2f aim = _aim;
 
 	// Head
 	_parts[0] += aim * speed;
@@ -56,26 +60,19 @@ bool SnakeBody::checkFoodIntersection (const Food& p) {
 	return (dist < FOOD_CIRCLE_RADIUS + SNAKE_CIRCLE_RADIUS);
 }
 
-bool SnakeBody::checkIntersection(const SnakeBody& S) {
-	sf::Vector2f opponent_head = S.getHead();
+bool SnakeBody::checkIntersection(const SnakeBody& S, int radius) {
+
 	bool is_intersecting = false;
-	for (coord_vect::iterator it = _parts.begin(); it != _parts.end(); it++) {
-		sf::Vector2f diff = opponent_head - (*it);
+	for (coord_vect::iterator it = S.getParts().begin(); it != S.getParts().end(); it++) {
+		sf::Vector2f diff = getHead() - (*it);
 		float dist = sqrt(diff.x*diff.x+diff.y*diff.y);
-		if (dist < 2 * SNAKE_CIRCLE_RADIUS) {
+		if (dist < 2 * radius) {
 			is_intersecting = true;
 		}
 	}
-
 	return is_intersecting;
 }
 
-sf::Packet &operator<<(sf::Packet &packet, const SnakeBody &snake_body)
-{
-	packet << snake_body.getLength();
-	for (coord_vect::const_iterator it = snake_body._parts.begin(); it != snake_body._parts.end(); it++)
-	{
-		packet << it->x << it->y;
-	}
-	return packet;
+bool SnakeBody::checkIntersection(const SnakeBody& S) {
+	return checkIntersection(S, SNAKE_CIRCLE_RADIUS);
 }

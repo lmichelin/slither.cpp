@@ -39,10 +39,10 @@ void Program::run () {
 		if (_socket_queue.pop(socket)) {
 			// Add the user in the users array
 			// User new_user(socket);
-			_users.push_back(User(socket));
+			_users.push_back(User(socket, &_users));
 
 			// Start the run routine in a thread
-			thread_container.push_back(std::thread(&User::run, &_users.back()));
+			thread_container.push_back(std::thread(&User::init, &_users.back()));
 		}
 
 		////////////////////////////////
@@ -80,26 +80,3 @@ void Program::run () {
 		// std::this_thread::sleep_for(std::chrono::milliseconds(200));
 	}
 }
-
-// void Program::update () {
-// 	// Refresh snake position
-// 	// sf::Vector2f head_aim = _controller.getAim();
-// 	// _snakes[0].interpolate(head_aim, _controller.getSpeed());
-// 	// if (std::rand()/(float)RAND_MAX < FOOD_PROBA) {
-// 	// 	sf::Vector2f new_food_position(std::rand()*(float)WINDOW_SIZE_X/RAND_MAX,std::rand()*(float)WINDOW_SIZE_Y/RAND_MAX);
-// 	// 	Food new_food(new_food_position);
-// 	// 	_foods.push_back(new_food);
-// 	// }
-
-// 	// for (std::list<Food>::iterator it = _foods.begin(); it != _foods.end(); it++) {
-// 	// 	if (_snakes[0].checkFoodIntersection(*it)) {
-// 	// 		it = _foods.erase(it);
-// 	// 		_snakes[0].addTail(ADD_TAIL);
-// 	// 	}
-// 	// }
-
-// 	// End game test
-// 	// if (position.x < SNAKE_CIRCLE_RADIUS || position.x > WINDOW_SIZE_X - SNAKE_CIRCLE_RADIUS || position.y < SNAKE_CIRCLE_RADIUS || position.y > WINDOW_SIZE_Y - SNAKE_CIRCLE_RADIUS) {
-// 	// 	_is_running = false;
-// 	// }
-// }

@@ -7,10 +7,17 @@
 
 #include <SFML/Network.hpp>
 
-struct Input {
-	float speed;
-	bool rotating_right;
-	bool rotating_left;
+class Input {
+	public:
+		float speed;
+		bool rotating_right;
+		bool rotating_left;
+
+		// Overload operators
+		friend sf::Packet& operator >>(sf::Packet& packet, Input& input) {
+			return packet >> input.speed >> input.rotating_right >> input.rotating_left;
+		}
 };
+
 
 #endif
