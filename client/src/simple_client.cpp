@@ -35,7 +35,7 @@ void runTcpClient(unsigned short port)
 			return;
 		}
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(400));
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 
 	sf::Packet packet;

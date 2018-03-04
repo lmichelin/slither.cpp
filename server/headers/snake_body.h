@@ -10,31 +10,51 @@
 #include <vector>
 #include "food.h"
 
+//////////////////////
+// Type Definitions //
+//////////////////////
+
 typedef std::vector<sf::Vector2f> coord_vect;
 
+
 class SnakeBody {
-public:
-	int getLength () const;
-	void addTail (int);
+	public:
 
-	void interpolate (const sf::Vector2f, const float);
-	bool checkIntersection (const SnakeBody&);
-	bool checkFoodIntersection (const Food&);
-	void updateAim(const Input&);
+		//////////////////
+		// Main Methods //
+		//////////////////
 
-	friend sf::Packet &operator<<(sf::Packet &packet, const SnakeBody &snake_body);
 
-	// Constructors
-	SnakeBody (sf::Vector2f);
-	SnakeBody ();
-private:
-	coord_vect _parts;
+		void interpolate (const sf::Vector2f head_aim, const float speed);
+		bool checkIntersection (const SnakeBody& S);
+		bool checkFoodIntersection (const Food& p);
+		void updateAim(const Input& input);
 
-	sf::Vector2f _aim;
+		/////////////////
+		//   Getters   //
+		/////////////////
 
-	sf::Vector2f getHead() const {
-		return _parts[0];
-	}
+		int getLength () const;
+		void addTail (int);
+
+		// Overcharge send operator for sf::Packet
+		friend sf::Packet &operator<<(sf::Packet& packet, const SnakeBody& snake_body);
+
+		/////////////////
+		// Constructor //
+		/////////////////
+
+		SnakeBody (sf::Vector2f);
+		SnakeBody ();
+
+	private:
+		coord_vect _parts;
+
+		sf::Vector2f _aim;
+
+		sf::Vector2f getHead() const {
+			return _parts[0];
+		}
 };
 
 #endif

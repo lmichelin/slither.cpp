@@ -2,18 +2,22 @@
 #include <cstdlib>
 #include "program.h"
 
+// Initialize User external variables
 int User::_user_count = 0;
 int User::_user_playing_count = 0;
 std::mutex User::_m;
 std::mutex m_compute;
 std::mutex m_ready_compute;
+
+// Initialize condition variables (Useful to wait for many threads)
 std::condition_variable cv_compute;
 std::condition_variable cv_ready_compute;
+
+// Initialize users count (to count the number of users that have finished the computation)
 std::atomic<int> done_users_count;
 
 void Program::init () {
 	_is_running = true;
-
 	std::srand(std::time(nullptr)); // use current time as seed for random generator
 }
 
@@ -65,35 +69,37 @@ void Program::run () {
 		///////////////////////////////
 
 		done_users_count = 0;
-		cv_compute.notify_all();	
-		if (User::getUserPlayingCount()) {
-			std::unique_lock<std::mutex> lk_compute(m_compute);
-			cv_ready_compute.wait(lk_compute);
-		}
+		// std::cout << "Prgram notifying\n"; // THREAD DEBUGGING
+		cv_compute.notify_all(); // Notify all users threads that they may compute their positions and intersections
+		// std::cout << "Program waiting\n"; // THREAD DEBUGGING
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(200));
+		// Wait for the users threads to finish computation of postitions and intersections ... If it takes too much time, break after 100ms
+		std::unique_lock<std::mutex> lk_compute(m_compute);
+		cv_ready_compute.wait_for(lk_compute, std::chrono::milliseconds(100));
+
+		// std::this_thread::sleep_for(std::chrono::milliseconds(200));
 	}
 }
 
-void Program::update () {
-	// Refresh snake position
-	// sf::Vector2f head_aim = _controller.getAim();
-	// _snakes[0].interpolate(head_aim, _controller.getSpeed());
-	// if (std::rand()/(float)RAND_MAX < FOOD_PROBA) {
-	// 	sf::Vector2f new_food_position(std::rand()*(float)WINDOW_SIZE_X/RAND_MAX,std::rand()*(float)WINDOW_SIZE_Y/RAND_MAX);
-	// 	Food new_food(new_food_position);
-	// 	_foods.push_back(new_food);
-	// }
+// void Program::update () {
+// 	// Refresh snake position
+// 	// sf::Vector2f head_aim = _controller.getAim();
+// 	// _snakes[0].interpolate(head_aim, _controller.getSpeed());
+// 	// if (std::rand()/(float)RAND_MAX < FOOD_PROBA) {
+// 	// 	sf::Vector2f new_food_position(std::rand()*(float)WINDOW_SIZE_X/RAND_MAX,std::rand()*(float)WINDOW_SIZE_Y/RAND_MAX);
+// 	// 	Food new_food(new_food_position);
+// 	// 	_foods.push_back(new_food);
+// 	// }
 
-	// for (std::list<Food>::iterator it = _foods.begin(); it != _foods.end(); it++) {
-	// 	if (_snakes[0].checkFoodIntersection(*it)) {
-	// 		it = _foods.erase(it);
-	// 		_snakes[0].addTail(ADD_TAIL);
-	// 	}
-	// }
+// 	// for (std::list<Food>::iterator it = _foods.begin(); it != _foods.end(); it++) {
+// 	// 	if (_snakes[0].checkFoodIntersection(*it)) {
+// 	// 		it = _foods.erase(it);
+// 	// 		_snakes[0].addTail(ADD_TAIL);
+// 	// 	}
+// 	// }
 
-	// End game test
-	// if (position.x < SNAKE_CIRCLE_RADIUS || position.x > WINDOW_SIZE_X - SNAKE_CIRCLE_RADIUS || position.y < SNAKE_CIRCLE_RADIUS || position.y > WINDOW_SIZE_Y - SNAKE_CIRCLE_RADIUS) {
-	// 	_is_running = false;
-	// }
-}
+// 	// End game test
+// 	// if (position.x < SNAKE_CIRCLE_RADIUS || position.x > WINDOW_SIZE_X - SNAKE_CIRCLE_RADIUS || position.y < SNAKE_CIRCLE_RADIUS || position.y > WINDOW_SIZE_Y - SNAKE_CIRCLE_RADIUS) {
+// 	// 	_is_running = false;
+// 	// }
+// }

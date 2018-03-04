@@ -58,7 +58,6 @@ bool SnakeBody::checkFoodIntersection (const Food& p) {
 
 bool SnakeBody::checkIntersection(const SnakeBody& S) {
 	sf::Vector2f opponent_head = S.getHead();
-
 	bool is_intersecting = false;
 	for (coord_vect::iterator it = _parts.begin(); it != _parts.end(); it++) {
 		sf::Vector2f diff = opponent_head - (*it);

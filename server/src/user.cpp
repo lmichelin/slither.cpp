@@ -17,6 +17,7 @@ void User::run() {
 		//////////////////////////////////////
 
 		std::unique_lock<std::mutex> lk_compute(m_compute);
+		// std::cout << "User waiting\n"; // THREAD DEBUGGING
 		cv_compute.wait(lk_compute);
 		play();
 
@@ -25,6 +26,7 @@ void User::run() {
 		
 		done_users_count++;
 		if (done_users_count >= getUserPlayingCount()) { // IMPORTANT SO THAT NO USER CAN DODGE WITH DISCONNECTION
+			// std::cout << "User notifying\n"; // THREAD DEBUGGING
 			cv_ready_compute.notify_one();
 		}
 
@@ -60,10 +62,15 @@ void User::processClientInput() {
 	int header;
 	receive(header, input);
 
+	// FOR DEBUG ONLY //
+	int x;
+	input >> x;
+	////////////////////
+
 	switch (header) {
 	
 	case OK:
-		std::cout << "OK the server received the packet: " << input << "\n";
+		std::cout << "OK the server received the packet: " << x << "\n";
 		break;
 	
 	case DISCONNECT:

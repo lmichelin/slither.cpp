@@ -1,3 +1,7 @@
+/*
+ * User Class for the server
+*/
+
 #ifndef USER_H
 #define USER_H
 
@@ -11,7 +15,11 @@
 #include <memory>
 #include <atomic>
 
-extern std::atomic<int> done_users_count;
+////////////////////////
+// External variables //
+////////////////////////
+
+extern std::atomic<int> done_users_count; // Counter to count the number of users that have finished their main loop
 extern std::mutex m_compute;
 extern std::mutex m_ready_compute;
 extern std::condition_variable cv_ready_compute;

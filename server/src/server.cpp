@@ -28,20 +28,8 @@ void Server::run() {
 			// A new client just connected!
 			std::cout << "New client connected: " << s_ptr->getRemoteAddress() << ':' << s_ptr->getRemotePort() << std::endl;
 			
-
-
-			// Send new client status
+			// Send new client status (Add it to the socket queue so the program can do something with it)
 			_socket_queue->push(s_ptr);
-
-
-			// int header;
-			// sf::Packet packet;
-			// std::cout << "Recieving: " << s_ptr->receive(packet) << "\n";
-			// if (s_ptr->receive(packet) != sf::Socket::Done) {
-			// 	std::cout << "There was a fucking error\n";
-			// }
-			// packet >> header;
-			// std::cout  << "SERVER HAS RECEIVED: " << header << "\n";
 		}
 	}
 }
@@ -69,6 +57,9 @@ void Server::receive(sf::TcpSocket &socket, int& header, sf::Packet& packet) {
 	if (status == sf::Socket::Done) {
 		// Retrieve header from the packet
 		packet >> header;
+	} else if (status == sf::Socket::NotReady) {
+		// There is nothing to receive on server side
+		std::cout << "Nothing to receive\n";
 	} else {
 		// There was an error on receive
 		std::cout << "Error on receive\n";
