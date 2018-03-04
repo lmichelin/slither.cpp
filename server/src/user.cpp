@@ -1,4 +1,5 @@
 #include "user.h"
+#include "clientData.h"
 #include <iostream>
 
 void User::run() {
@@ -89,6 +90,7 @@ void User::sendClientData() {
 	clientData.my_snake_coord.push_back(coord);
 	sf::Packet packet;
 	packet << clientData;
+	std::cout << "Sending client data\n";
 	send(OK, packet);
 }
 

@@ -41,8 +41,8 @@ void Server::run() {
 void Server::send(sf::TcpSocket &socket, int header,  sf::Packet packet) {
 	sf::Packet header_packet;
 	header_packet << header;
-	packet << header_packet;
-    if (socket.send(packet) != sf::Socket::Done) {
+	header_packet << packet;
+    if (socket.send(header_packet) != sf::Socket::Done) {
 		// Error
 		std::cout << "Error when sending to client\n";
 	}

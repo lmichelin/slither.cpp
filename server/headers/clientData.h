@@ -1,5 +1,5 @@
-#ifndef _Serverdata_H
-#define _Serverdata_H
+#ifndef _Client_Data_H
+#define _Client_Data_H
 
 #include <vector>
 #include <SFML/Graphics.hpp>

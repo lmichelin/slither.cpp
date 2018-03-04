@@ -13,6 +13,7 @@ OTMP = $(patsubst %.cpp,%.o,$(SRC_FILES:$(SRC_DIR)/%=%))
 OBJ_FILES = $(patsubst %,$(OBJ_DIR)/%,$(OTMP))
 
 all : init $(EXEC_NAME)
+	make install
 
 init: 
 	@echo Initializing...

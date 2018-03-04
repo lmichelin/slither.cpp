@@ -14,7 +14,6 @@
 #include <thread>
 #include <memory>
 #include <atomic>
-#include "clientData.h"
 
 ////////////////////////
 // External variables //
