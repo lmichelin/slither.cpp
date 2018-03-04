@@ -15,6 +15,13 @@ class Program {
 		bool _is_running;
 
 		sf::RenderWindow _window;
+
+		unsigned int _window_height;
+		unsigned int _window_width;
+		sf::Vector2f _window_center;
+
+		sf::Texture _texture;
+
 		Controller _controller;
 
 		Communication _communication;

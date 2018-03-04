@@ -8,16 +8,26 @@
 #include "communication.h"
 #include "serverData.h"
 
-Program::Program () : _window(sf::VideoMode(WINDOW_SIZE_X, WINDOW_SIZE_Y), "The IN204 Snake", sf::Style::Close), _communication("localhost", 8001) {
+Program::Program() : _window(sf::VideoMode(1200,800), "The IN204 Snake", sf::Style::Close), _communication("localhost", 8001)
+{
 	_communication.init();
 	_is_running = false;
+	_window_height = _window.getSize().y; // horizontal dimension
+	_window_width = _window.getSize().x; // vertical dimension
+	_window_center.x = _window_width / 2;
+	_window_center.y = _window_height / 2;
+
+	if (!_texture.loadFromFile("bg45.jpg")) {
+		// error when load file
+		exit(1);
+	}
 }
 
 void Program::init () {
-	// _window.setVerticalSyncEnabled(true);
-	_window.setFramerateLimit(60);
+	_window.setVerticalSyncEnabled(true);
+	// _window.setFramerateLimit(60);
 	_is_running = true;
-	sf::Vector2f init_pos(200,200);
+	sf::Vector2f init_pos(0,0);
 	Snake my_snake(init_pos);
 	_snakes.push_back(my_snake);
 
@@ -43,7 +53,7 @@ void Program::update () {
 	sf::Vector2f head_aim = _controller.getAim();
 	_snakes[0].interpolate(head_aim, _controller.getSpeed());
 	if (std::rand()/(float)RAND_MAX < FOOD_PROBA) {
-		sf::Vector2f new_food_position(std::rand()*(float)WINDOW_SIZE_X/RAND_MAX,std::rand()*(float)WINDOW_SIZE_Y/RAND_MAX);
+		sf::Vector2f new_food_position(std::rand()*(float)_window_width/RAND_MAX,std::rand()*(float)_window_height/RAND_MAX);
 		Food new_food(new_food_position);
 		_foods.push_back(new_food);
 	}
@@ -62,16 +72,23 @@ void Program::update () {
 }
 
 void Program::display () {
+	sf::Vector2f origin = _snakes[0].getBody().getHead();
+
+	sf::Sprite background(_texture);
+	background.setOrigin(_texture.getSize().x / 2 + origin.x - _window_center.x, _texture.getSize().y / 2 +  origin.y - _window_center.y);
 	_window.clear();
 
+	_window.draw(background);
+
+
 	for (std::list<Food>::iterator it = _foods.begin(); it != _foods.end(); it++) {
-		drawFoods(_window, *it);
+		drawFoods(_window, origin, _window_center, *it);
 	}
 
 	for (std::vector<Snake>::iterator it = _snakes.begin(); it != _snakes.end(); it++) {
 		SnakeBody snake_body = it->getBody();
 
-		drawSnakeBody(_window, snake_body);
+		drawSnakeBody(_window, origin, _window_center, snake_body);
 	}
 
 	_window.display();
