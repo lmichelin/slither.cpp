@@ -60,16 +60,19 @@ bool SnakeBody::checkFoodIntersection (const Food& p) {
 	return (dist < FOOD_CIRCLE_RADIUS + SNAKE_CIRCLE_RADIUS);
 }
 
-bool SnakeBody::checkIntersection(const SnakeBody& S) {
-	sf::Vector2f opponent_head = S.getHead();
+bool SnakeBody::checkIntersection(const SnakeBody& S, int radius) {
+
 	bool is_intersecting = false;
-	for (coord_vect::iterator it = _parts.begin(); it != _parts.end(); it++) {
-		sf::Vector2f diff = opponent_head - (*it);
+	for (coord_vect::iterator it = S.getParts().begin(); it != S.getParts().end(); it++) {
+		sf::Vector2f diff = getHead() - (*it);
 		float dist = sqrt(diff.x*diff.x+diff.y*diff.y);
-		if (dist < 2 * SNAKE_CIRCLE_RADIUS) {
+		if (dist < 2 * radius) {
 			is_intersecting = true;
 		}
 	}
-
 	return is_intersecting;
+}
+
+bool SnakeBody::checkIntersection(const SnakeBody& S) {
+	return checkIntersection(S, SNAKE_CIRCLE_RADIUS);
 }

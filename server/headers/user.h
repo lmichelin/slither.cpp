@@ -35,6 +35,7 @@ class User {
 		// Main Methods //
 		//////////////////
 
+		void init();
 		void run();
 
 		/////////////
@@ -112,6 +113,8 @@ class User {
 		void computePosition();
 
 		void updateOtherUserPositions();
+
+		void generateRandomInitialPosition();
 
 		void updateUserPosition();
 

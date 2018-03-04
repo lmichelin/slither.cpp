@@ -22,8 +22,10 @@ public:
 	int getLength () const;
 	void addTail (int);
 	void updateParts(coord_vect parts);
+	coord_vect getParts() const;
 
 	void interpolate (const sf::Vector2f, const float);
+	bool checkIntersection (const SnakeBody&, int radius);
 	bool checkIntersection (const SnakeBody&);
 	bool checkFoodIntersection (const Food&);
 

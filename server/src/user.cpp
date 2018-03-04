@@ -3,6 +3,14 @@
 #include <iostream>
 #include <list>
 
+void User::init() {
+	// Generate initial position
+	generateRandomInitialPosition();
+
+	// Run the user
+	run();
+}
+
 void User::run() {
 	std::cout << "User with socket " << _socket->getRemoteAddress() << " now running" << std::endl;
 
@@ -84,6 +92,20 @@ void User::processClientInput() {
 	default:
 		break;
 	}
+}
+
+void User::generateRandomInitialPosition() {
+	sf::Vector2f position(std::rand()*(float)GAME_SIZE_X/RAND_MAX, std::rand()*(float)GAME_SIZE_Y/RAND_MAX);
+	Snake _snake(position);
+	bool flag = false;
+	std::list<User>::iterator it_user;
+	for (it_user = _users->begin(); it_user != _users->end(); it_user++) {
+		flag = _snake.getBody().checkIntersection(it_user->_snake.getBody(), 10*SNAKE_CIRCLE_RADIUS);	
+		if (flag)
+			break;
+	}
+	if (flag)
+		return generateRandomInitialPosition();
 }
 
 void User::updateOtherUserPositions() {
