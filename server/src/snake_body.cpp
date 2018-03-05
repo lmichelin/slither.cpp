@@ -26,7 +26,7 @@ void SnakeBody::addTail(int n) {
 	}
 }
 
-void SnakeBody::updateAim(const Input& input) {
+void SnakeBody::updateAim(const input& input) {
 	sf::Vector2f tmp = _aim;
 	float angle = input.speed * ROTATION_ANGLE * (input.rotating_right - input.rotating_left);
 

@@ -33,7 +33,7 @@ public:
 		_body.addTail(n);
 	}
 
-	void updateAim(const Input& input) {
+	void updateAim(const input& input) {
 		_body.updateAim(input);
 	}
 

@@ -51,7 +51,7 @@ server: init_server $(OBJ_SERVER_FILES) $(OBJ_MIXINS_FILES)
 	$(CC) -o build/server $(OBJ_SERVER_FILES) $(OBJ_MIXINS_FILES) $(LIBS_SERVER)
 
 client: init_client $(OBJ_CLIENT_FILES) $(OBJ_MIXINS_FILES)
-	$(CC) -o build/server $(OBJ_CLIENT_FILES) $(OBJ_MIXINS_FILES) $(LIBS_CLIENT)
+	$(CC) -o build/client $(OBJ_CLIENT_FILES) $(OBJ_MIXINS_FILES) $(LIBS_CLIENT)
 
 clean:
 	@echo Clearing...

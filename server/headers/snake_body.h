@@ -29,7 +29,7 @@ class SnakeBody {
 		bool checkIntersection (const SnakeBody& S, int radius);
 		bool checkIntersection (const SnakeBody& S);
 		bool checkFoodIntersection (const Food& p);
-		void updateAim(const Input& input);
+		void updateAim(const input& input);
 
 		/////////////////
 		//   Getters   //

@@ -25,9 +25,11 @@ class clientInput: public networkData<input> {
 		friend sf::Packet& operator >>(sf::Packet& packet, input& input);
 
 		clientInput() {
-			_data.speed = LOW_SPEED;
-			_data.rotating_right = false;
-			_data.rotating_left = false;
+			input input;
+			input.speed = LOW_SPEED;
+			input.rotating_right = false;
+			input.rotating_left = false;
+			setData(input);
 		};
 		~clientInput() {};
 };
