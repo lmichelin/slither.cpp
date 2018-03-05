@@ -39,7 +39,7 @@ class Program {
 		void init ();
 		void run ();
 
-		void drawTexture(sf::RenderWindow &_window, const sf::Vector2f &origin, const sf::Vector2f &center, const sf::Texture &);
+		friend void drawTexture(sf::RenderWindow &_window, const sf::Vector2f &origin, const sf::Vector2f &center, const sf::Texture &);
 
 		Program ();
 		~Program () {}

@@ -23,7 +23,7 @@ void drawFoods(sf::RenderWindow &window, const sf::Vector2f &origin, const sf::V
 	window.draw(shape);
 }
 
-void Program::drawTexture(sf::RenderWindow &window, const sf::Vector2f &origin, const sf::Vector2f &center, const sf::Texture &texture)
+void drawTexture(sf::RenderWindow &window, const sf::Vector2f &origin, const sf::Vector2f &center, const sf::Texture &texture)
 {
 	sf::Sprite background(texture);
 

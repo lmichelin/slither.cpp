@@ -7,6 +7,7 @@
 #include "snake_body.h"
 #include "communication.h"
 #include "serverData.h"
+#include "draw.h"
 
 Program::Program() : _window(sf::VideoMode(1200,800), "The IN204 Snake", sf::Style::Close), _communication("localhost", 8001)
 {
