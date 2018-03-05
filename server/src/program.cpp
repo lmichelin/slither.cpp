@@ -18,7 +18,6 @@ std::atomic<int> done_users_count;
 
 void Program::init () {
 	_is_running = true;
-	std::cout << "HELLO" << time(NULL);
 }
 
 void Program::run () {

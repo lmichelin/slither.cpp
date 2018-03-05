@@ -3,9 +3,9 @@
 
 #include <string>
 #include <iostream>
+#include "input.h"
 #include "snake_body.h"
-
-typedef std::vector<sf::Vector2f> coord_vect;
+#include <cmath>
 
 class Snake {
 public:
@@ -22,6 +22,10 @@ public:
 		return _is_dead;
 	}
 
+	sf::Vector2f getAim() const {
+		return _aim;
+	}
+
 	void die() {
 		_is_dead = true;
 	}
@@ -30,12 +34,16 @@ public:
 		_body.addTail(n);
 	}
 
-	void updateSnake(coord_vect parts) {
-		_body.updateParts(parts);
+	void updateAim(const Input& input) {
+		sf::Vector2f tmp = _aim;
+		float angle = input.speed * ROTATION_ANGLE * (input.rotating_right - input.rotating_left);
+
+		_aim.x = cos(angle)*tmp.x - sin(angle)*tmp.y;
+		_aim.y = sin(angle)*tmp.x + cos(angle)*tmp.y;
 	}
 
-	void interpolate (const sf::Vector2f h, float s) {
-		_body.interpolate(h, s);
+	void interpolate (const float speed) {
+		_body.interpolate(speed, _aim);
 	}
 
 	bool checkIntersection (const SnakeBody& s) {
@@ -49,13 +57,20 @@ public:
 	// Constructors
 	Snake() : _body(), _is_dead(false) {}
 
-	Snake(sf::Vector2f init_pos) : _body(init_pos), _is_dead(false) {}
+	Snake(sf::Vector2f init_pos, sf::Vector2f aim) : _body(init_pos), _is_dead(false) {
+		_aim = aim;
+		_speed = LOW_SPEED;
+	}
 
 private:
 	// name
 	std::string _name;
 
 	SnakeBody _body;
+
+	sf::Vector2f _aim;
+
+	float _speed;
 
 	// Variable to check whether the snake is dead or not
 	bool _is_dead;

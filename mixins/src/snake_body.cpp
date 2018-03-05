@@ -1,11 +1,5 @@
-#include "parameters.h"
-#include <SFML/Graphics.hpp>
-#include <string>
-#include <iostream>
-#include <vector>
-#include <cmath>
 #include "snake_body.h"
-#include "food.h"
+#include <cmath>
 
 SnakeBody::SnakeBody (sf::Vector2f init_pos) {
 	_parts.push_back(init_pos);
@@ -32,13 +26,7 @@ void SnakeBody::addTail(int n) {
 	}
 }
 
-void SnakeBody::updateParts(coord_vect parts) {
-	_parts = parts;
-}
-
-void SnakeBody::interpolate(const sf::Vector2f head_aim, const float speed) {
-	sf::Vector2f aim = head_aim;
-
+void SnakeBody::interpolate(const float speed, sf::Vector2f aim) {
 	// Head
 	_parts[0] += aim * speed;
 
@@ -63,31 +51,17 @@ bool SnakeBody::checkFoodIntersection (const Food& p) {
 }
 
 bool SnakeBody::checkIntersection(const SnakeBody& S, int radius) {
-
-	bool is_intersecting = false;
-	for (coord_vect::iterator it = S.getParts().begin(); it != S.getParts().end(); it++) {
-		sf::Vector2f diff = getHead() - (*it);
+	coord_vect parts = S.getParts();
+	for (unsigned int i = 0; i < parts.size(); i++) {
+		sf::Vector2f diff = getHead() - parts[i];
 		float dist = sqrt(diff.x*diff.x+diff.y*diff.y);
 		if (dist < 2 * radius) {
-			is_intersecting = true;
+			return true;
 		}
 	}
-	return is_intersecting;
+	return false;
 }
 
 bool SnakeBody::checkIntersection(const SnakeBody& S) {
 	return checkIntersection(S, SNAKE_CIRCLE_RADIUS);
-} 
-
-sf::Packet &operator>>(sf::Packet &packet, SnakeBody &snake_body)
-{
-	int size;
-	packet >> size;
-	sf::Vector2f temp_element;
-	for (int i = 0; i < size; i++)
-	{
-		packet >> temp_element.x >> temp_element.y;
-		snake_body._parts.push_back(temp_element);
-	}
-	return packet;
 }

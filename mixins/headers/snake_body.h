@@ -25,11 +25,10 @@ class SnakeBody {
 		//////////////////
 
 
-		void interpolate (const float speed);
+		void interpolate (const float speed, sf::Vector2f aim);
 		bool checkIntersection (const SnakeBody& S, int radius);
 		bool checkIntersection (const SnakeBody& S);
 		bool checkFoodIntersection (const Food& p);
-		void updateAim(const Input& input);
 
 		/////////////////
 		//   Getters   //
@@ -39,7 +38,6 @@ class SnakeBody {
 			return _parts[0];
 		}
 		int getLength () const;
-		sf::Vector2f getAim() const;
 		coord_vect getParts() const;
 
 		void addTail (int);
@@ -53,9 +51,6 @@ class SnakeBody {
 
 	private:
 		coord_vect _parts;
-
-		sf::Vector2f _aim;
-
 };
 
 #endif

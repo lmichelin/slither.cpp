@@ -1,5 +1,4 @@
 #include "user.h"
-#include "clientData.h"
 #include <iostream>
 #include <list>
 #include <cmath>

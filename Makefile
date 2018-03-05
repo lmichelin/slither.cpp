@@ -2,16 +2,19 @@ CC = g++
 CFLAGS = -std=c++11 -Wall -Wextra -g
 INCLUDES_SERVER = -Iserver/headers -Imixins/headers
 INCLUDES_CLIENT = -Iclient/headers -Imixins/headers
+INCLUDES_MIXINS = -Imixins/headers
 
 UNAME := $(shell uname)
 
 ifeq ($(UNAME), Linux)
 	LIBS_SERVER = -lsfml-graphics -lsfml-system -lsfml-network -lpthread
 	LIBS_CLIENT = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network
+	LIBS_CLIENT = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network
 endif
 ifeq ($(UNAME), MSYS_NT-10.0)
 	LIBS_SERVER = -IC:\C++\SFML-2.4.2\include -LC:\C++\SFML-2.4.2\lib -lsfml-graphics -lsfml-system -lsfml-network -lpthread
 	LIBS_CLIENT = -IC:\C++\SFML-2.4.2\include -LC:\C++\SFML-2.4.2\lib -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network
+	LIBS_MIXINS = -IC:\C++\SFML-2.4.2\include -LC:\C++\SFML-2.4.2\lib -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network
 endif
 
 SRC_CLIENT_DIR = client/src
@@ -51,7 +54,7 @@ server: init_server $(OBJ_SERVER_FILES) $(OBJ_MIXINS_FILES)
 	$(CC) -o build/server $(OBJ_SERVER_FILES) $(OBJ_MIXINS_FILES) $(LIBS_SERVER)
 
 client: init_client $(OBJ_CLIENT_FILES) $(OBJ_MIXINS_FILES)
-	$(CC) -o build/server $(OBJ_CLIENT_FILES) $(OBJ_MIXINS_FILES) $(LIBS_CLIENT)
+	$(CC) -o build/client $(OBJ_CLIENT_FILES) $(OBJ_MIXINS_FILES) $(LIBS_CLIENT)
 
 clean:
 	@echo Clearing...
