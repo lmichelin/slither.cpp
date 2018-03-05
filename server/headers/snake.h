@@ -21,6 +21,10 @@ public:
 		return _is_dead;
 	}
 
+	sf::Vector2f getAim() const {
+		return _aim;
+	}
+
 	void die() {
 		_is_dead = true;
 	}
@@ -48,13 +52,20 @@ public:
 	// Constructors
 	Snake() : _body(), _is_dead(false) {}
 
-	Snake(sf::Vector2f init_pos) : _body(init_pos), _is_dead(false) {}
+	Snake(sf::Vector2f init_pos, sf::Vector2f aim) : _body(init_pos), _is_dead(false) {
+		_aim = aim;
+		_speed = LOW_SPEED;
+	}
 
 private:
 	// name
 	std::string _name;
 
 	SnakeBody _body;
+
+	sf::Vector2f _aim;
+
+	float _speed;
 
 	// Variable to check whether the snake is dead or not
 	bool _is_dead;

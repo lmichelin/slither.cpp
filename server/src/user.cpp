@@ -2,10 +2,11 @@
 #include "clientData.h"
 #include <iostream>
 #include <list>
+#include <cmath>
 
 void User::init() {
 	// Generate initial position
-	// generateRandomInitialPosition();
+	generateRandomInitialPosition();
 
 	// Run the user
 	run();
@@ -124,16 +125,31 @@ void User::processClientInput() {
 
 void User::generateRandomInitialPosition() {
 	sf::Vector2f position(std::rand()*(float)GAME_SIZE_X/RAND_MAX, std::rand()*(float)GAME_SIZE_Y/RAND_MAX);
-	Snake _snake(position);
+	if (position.x == (GAME_SIZE_X-1)/2 && position.y == (GAME_SIZE_Y-1)/2)
+		return generateRandomInitialPosition();
+
+	sf::Vector2f center((GAME_SIZE_X-1)/2, (GAME_SIZE_Y-1)/2);
+	sf::Vector2f diff = center - position;
+	float dist = sqrt(diff.x*diff.x+diff.y*diff.y);
+	sf::Vector2f aim = diff/dist;
+	_snake = Snake(position, aim);
+
 	bool flag = false;
 	std::list<User>::iterator it_user;
+	std::cout << "Setting initial position\n";
 	for (it_user = _users->begin(); it_user != _users->end(); it_user++) {
-		flag = _snake.getBody().checkIntersection(it_user->_snake.getBody(), 10*SNAKE_CIRCLE_RADIUS);	
-		if (flag)
-			break;
+		if (&(*(it_user)) != this) {
+			flag = _snake.getBody().checkIntersection(it_user->_snake.getBody(), 2*SNAKE_CIRCLE_RADIUS);	
+			std::cout << "Flag: " << flag << "\n";
+			if (flag)
+				break;
+		}
 	}
 	if (flag)
 		return generateRandomInitialPosition();
+
+	std::cout << "Initial position set with: x: " << position.x << " y: " << position.y << "\n"; 
+	std::cout << "Aim set with: x: " << aim.x << " y: " << aim.y << "\n"; 	
 }
 
 void User::updateOtherUserPositions() {
