@@ -111,7 +111,7 @@ class User {
 		static int _user_playing_count;
 		static std::mutex _m;
 		Input _input;
-		Data _clientData;
+		clientData _clientData;
 		Time::time_point _disconnect_time; 
 		ms _elapsed_disconnect_time;
 

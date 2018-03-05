@@ -1,4 +1,5 @@
 #include "clientData.h"
+#include "server.h"
 
 // Overload operators
 
@@ -39,12 +40,26 @@ sf::Packet& operator >>(sf::Packet& packet, std::vector<T>& vector)
 }
 
 // Send and receive data struct
-sf::Packet& operator <<(sf::Packet& packet, const Data& data)
+sf::Packet& operator <<(sf::Packet& packet, const data& data)
 {
     return packet << data.my_snake_coord << data.snakes_coord_vector << data.food_vector;
 }
 
-sf::Packet& operator >>(sf::Packet& packet, Data& data)
+sf::Packet& operator >>(sf::Packet& packet, data& data)
 {
     return packet >> data.my_snake_coord >> data.snakes_coord_vector >> data.food_vector;
+}
+
+void clientData::send(sf::TcpSocket& socket, int header, sf::Socket::Status& status) {
+	sf::Packet packet;
+	packet << header << getData();
+	Server::send(socket, header, packet, status);
+}
+
+void clientData::receive(sf::TcpSocket& socket, int& header, sf::Socket::Status& status) {
+	sf::Packet packet;
+	status = socket.receive(packet);
+	data data;
+	packet >> header >> data;
+	setData(data);
 }

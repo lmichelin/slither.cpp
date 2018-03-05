@@ -180,19 +180,16 @@ void User::updateOtherUserPositions() {
 			result.push_back(it_user->getSnake().getBody().getParts());	
 		}
 	}
-	_clientData.snakes_coord_vector = result;
+	_clientData.getData().snakes_coord_vector = result;
 }
 
 void User::updateUserPosition() {
 	_snake.updateAim(_input);
 	_snake.interpolate(getSpeed());
-	_clientData.my_snake_coord = _snake.getBody().getParts();
+	_clientData.getData().my_snake_coord = _snake.getBody().getParts();
 }
 
 void User::sendClientData() {
-	sf::Packet packet;
-	packet << _clientData;
-	std::cout << "Sending client data\n";
-	send(OK, packet);
+	// _clientData.send(_socket, )
 }
 
