@@ -35,6 +35,9 @@ class SnakeBody {
 		//   Getters   //
 		/////////////////
 
+		sf::Vector2f getHead() const {
+			return _parts[0];
+		}
 		int getLength () const;
 		sf::Vector2f getAim() const;
 		coord_vect getParts() const;
@@ -53,9 +56,6 @@ class SnakeBody {
 
 		sf::Vector2f _aim;
 
-		sf::Vector2f getHead() const {
-			return _parts[0];
-		}
 };
 
 #endif

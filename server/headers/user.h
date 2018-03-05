@@ -54,6 +54,11 @@ class User {
 			return _socket;
 		}
 
+		std::list<User>& getUsers() const {
+			std::lock_guard<std::mutex> lock(_m);
+			return *_users;
+		}
+
 		bool isPlaying() const {
 			return _is_playing;
 		}

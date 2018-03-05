@@ -18,7 +18,7 @@ std::atomic<int> done_users_count;
 
 void Program::init () {
 	_is_running = true;
-	std::srand(std::time(nullptr)); // use current time as seed for random generator
+	std::cout << "HELLO" << time(NULL);
 }
 
 void Program::run () {
@@ -41,8 +41,11 @@ void Program::run () {
 			// User new_user(socket);
 			_users.push_back(User(socket, &_users));
 
+			// Initialize user
+			_users.back().init();
+
 			// Start the run routine in a thread
-			thread_container.push_back(std::thread(&User::init, &_users.back()));
+			thread_container.push_back(std::thread(&User::run, &_users.back()));
 		}
 
 		////////////////////////////////

@@ -61,17 +61,15 @@ bool SnakeBody::checkFoodIntersection (const Food& p) {
 }
 
 bool SnakeBody::checkIntersection(const SnakeBody& S, int radius) {
-	std::cout << "CHECKING INTERSECTION\n";
-	bool is_intersecting = false;
-	for (coord_vect::iterator it = S.getParts().begin(); it != S.getParts().end(); it++) {
-		sf::Vector2f diff = getHead() - (*it);
-		std::cout << "DIFF: " << diff.x << " " << diff.y << "\n";
+	coord_vect parts = S.getParts();
+	for (unsigned int i = 0; i < parts.size(); i++) {
+		sf::Vector2f diff = getHead() - parts[i];
 		float dist = sqrt(diff.x*diff.x+diff.y*diff.y);
 		if (dist < 2 * radius) {
-			is_intersecting = true;
+			return true;
 		}
 	}
-	return is_intersecting;
+	return false;
 }
 
 bool SnakeBody::checkIntersection(const SnakeBody& S) {

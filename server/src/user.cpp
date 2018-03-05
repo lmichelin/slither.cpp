@@ -7,9 +7,6 @@
 void User::init() {
 	// Generate initial position
 	generateRandomInitialPosition();
-
-	// Run the user
-	run();
 }
 
 void User::run() {
@@ -32,7 +29,7 @@ void User::run() {
 		cv_compute.wait(lk_compute);
 		play();
 
-		computeIntersection();
+		// computeIntersection();
 		computePosition();
 		
 		done_users_count++;
@@ -76,10 +73,27 @@ void User::computePosition() {
 
 	// Refresh other user positions and put it into data to be sent to client
 	updateOtherUserPositions();
+
+	// std::cout << "Position: " << _snake.getBody().getHead().x << " " << _snake.getBody().getHead().y << "\n";
 }
 
 void User::computeIntersection() {
 	std::cout << "INTERSECTION\n";
+	bool flag = false;
+	std::list<User>::iterator it_user;
+	// std::cout << "Setting initial position\n";
+	for (it_user = getUsers().begin(); it_user != getUsers().end(); it_user++) {
+		if (&(*(it_user)) != this && it_user->isConnected() && it_user->isPlaying()) {
+			flag = _snake.getBody().checkIntersection(it_user->_snake.getBody(), 2*SNAKE_CIRCLE_RADIUS);	
+			// std::cout << "Flag: " << flag << "\n";
+			if (flag)
+				break;
+		}
+	}
+	if (flag) {
+		_snake.die();
+		_is_connected = false;
+	}
 }
 
 void User::processClientInput() {
@@ -125,6 +139,7 @@ void User::processClientInput() {
 
 void User::generateRandomInitialPosition() {
 	sf::Vector2f position(std::rand()*(float)GAME_SIZE_X/RAND_MAX, std::rand()*(float)GAME_SIZE_Y/RAND_MAX);
+	std::cout << "RANDOM: " << position.x << " y: " << position.y << "\n";
 	if (position.x == (GAME_SIZE_X-1)/2 && position.y == (GAME_SIZE_Y-1)/2)
 		return generateRandomInitialPosition();
 
@@ -132,21 +147,26 @@ void User::generateRandomInitialPosition() {
 	sf::Vector2f diff = center - position;
 	float dist = sqrt(diff.x*diff.x+diff.y*diff.y);
 	sf::Vector2f aim = diff/dist;
+	std::cout << "Lauching snake\n";
 	_snake = Snake(position, aim);
+	std::cout << "Lauching snake ok\n";
 
 	bool flag = false;
 	std::list<User>::iterator it_user;
-	std::cout << "Setting initial position\n";
-	for (it_user = _users->begin(); it_user != _users->end(); it_user++) {
-		if (&(*(it_user)) != this) {
+	// std::cout << "Setting initial position\n";
+	for (it_user = getUsers().begin(); it_user != getUsers().end(); it_user++) {
+		std::cout << "Name: " << it_user->getSnake().getName();
+		if (&(*(it_user)) != this && it_user->isConnected() && it_user->isPlaying()) {
 			flag = _snake.getBody().checkIntersection(it_user->_snake.getBody(), 2*SNAKE_CIRCLE_RADIUS);	
 			std::cout << "Flag: " << flag << "\n";
 			if (flag)
 				break;
 		}
 	}
-	if (flag)
+	if (flag) {
+		std::cout << "RELOOP\n";
 		return generateRandomInitialPosition();
+	}
 
 	std::cout << "Initial position set with: x: " << position.x << " y: " << position.y << "\n"; 
 	std::cout << "Aim set with: x: " << aim.x << " y: " << aim.y << "\n"; 	
@@ -155,8 +175,8 @@ void User::generateRandomInitialPosition() {
 void User::updateOtherUserPositions() {
 	std::vector<std::vector<sf::Vector2f> > result;
 	std::list<User>::iterator it_user;
-	for (it_user = _users->begin(); it_user != _users->end(); it_user++) {
-		if (&(*it_user) != this) {
+	for (it_user = getUsers().begin(); it_user != getUsers().end(); it_user++) {
+		if (&(*it_user) != this && it_user->isConnected() && it_user->isPlaying()) {
 			result.push_back(it_user->getSnake().getBody().getParts());	
 		}
 	}

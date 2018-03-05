@@ -50,9 +50,12 @@ public:
 	}
 
 	// Constructors
-	Snake() : _body(), _is_dead(false) {}
+	Snake() : _body(), _is_dead(false) {
+		_name = "LOLILO";
+	}
 
 	Snake(sf::Vector2f init_pos, sf::Vector2f aim) : _body(init_pos), _is_dead(false) {
+		_name = "LOLILO";
 		_aim = aim;
 		_speed = LOW_SPEED;
 	}
