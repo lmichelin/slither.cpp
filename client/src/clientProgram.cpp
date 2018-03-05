@@ -145,22 +145,22 @@ void Program::handleEvents () {
 
 void Program::getServerData() {
 	// Receive Data from server
-	// sf::Packet data;
-	// int header;
-	// serverData server_data;
-	// _communication.receive(header, data);
-	// switch (header) {
+	sf::Packet data;
+	int header;
+	serverData server_data;
+	_communication.receive(header, data);
+	switch (header) {
 
-	// case END: 
-	// 	_snake.die();
-	// 	break;
+	case END: 
+		_snake.die();
+		break;
 
-	// case OK:
-	// 	std::cout << "HEADER: " << header << "\n";
-	// 	// server_data.extract(data);
-	// 	break;
+	case OK:
+		std::cout << "HEADER: " << header << "\n";
+		server_data.extract(data);
+		break;
 
-	// default:
-	// 	break;
-	// }
+	default:
+		break;
+	}
 }
