@@ -5,7 +5,7 @@
 
 void User::init() {
 	// Generate initial position
-	generateRandomInitialPosition();
+	// generateRandomInitialPosition();
 
 	// Run the user
 	run();
@@ -51,8 +51,16 @@ void User::run() {
 	addToUserPlayingCount(-1);
 }
 
+void User::send(int header, sf::Packet packet, sf::Socket::Status& status) {
+	Server::send(*_socket, header, packet, status);
+}
+
 void User::send(int header, sf::Packet packet) {
 	Server::send(*_socket, header, packet);
+}
+
+void User::receive(int& header, sf::Packet& packet, sf::Socket::Status& status) {
+	Server::receive(*_socket, header, packet, status);
 }
 
 void User::receive(int& header, sf::Packet& packet) {
@@ -75,22 +83,42 @@ void User::computeIntersection() {
 
 void User::processClientInput() {
 	sf::Packet input;
+	sf::Socket::Status status;
 	int header;
-	receive(header, input);
+	receive(header, input, status);
 
-	switch (header) {
-	
-	case OK:
-		input >> _input;
-		break;
-	
-	case DISCONNECT:
-		_is_connected = false;
-		std::cout << "The client has disconnected normally\n";
-		break;
-	
-	default:
-		break;
+
+	if (status == sf::Socket::Done) {
+		_elapsed_disconnect_time = std::chrono::milliseconds::zero();
+		switch (header) {
+		
+		case OK:
+			input >> _input;
+			break;
+		
+		case DISCONNECT:
+			_is_connected = false;
+			std::cout << "The client has disconnected normally\n";
+			break;
+		
+		default:
+			break;
+		}
+	} else if (status == sf::Socket::Disconnected) {
+		if (_elapsed_disconnect_time == std::chrono::milliseconds::zero()) {
+			std::cout << "HELLLLOOOOOO\n";
+			_elapsed_disconnect_time = ms(10);
+			_disconnect_time = Time::now();
+		} else {
+			fsec fs = Time::now() - _disconnect_time;
+			_elapsed_disconnect_time = std::chrono::duration_cast<ms>(fs);
+			std::cout << "Elapsed time: " << _elapsed_disconnect_time.count() << "\n";
+
+			if (_elapsed_disconnect_time.count() > 1000) {
+				_is_connected = false;
+				std::cout << "The client has disconnected\n";
+			}
+		}
 	}
 }
 

@@ -77,7 +77,11 @@ void Program::display () {
 	_window.display();
 }
 
-void Program::disconnect() {}
+void Program::disconnect() {
+	sf::Packet dummy;
+	std::cout << "Disconnect\n";
+	_communication.send(DISCONNECT, dummy);
+}
 
 void Program::handleEvents () {
 	sf::Event event;

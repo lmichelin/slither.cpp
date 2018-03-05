@@ -38,22 +38,28 @@ void Server::run() {
  * Send a packet with the sfml network library
  * Takes a header (int) in argument
 */
-void Server::send(sf::TcpSocket &socket, int header, sf::Packet packet) {
+void Server::send(sf::TcpSocket &socket, int header, sf::Packet packet, sf::Socket::Status& status) {
 	sf::Packet header_packet;
 	header_packet << header;
 	header_packet.append(packet.getData(), packet.getDataSize());
-    if (socket.send(header_packet) != sf::Socket::Done) {
+	status = socket.send(header_packet);
+    if (status != sf::Socket::Done) {
 		// Error
 		std::cout << "Error when sending to client\n";
 	}
+}
+
+void Server::send(sf::TcpSocket &socket, int header, sf::Packet packet) {
+	sf::Socket::Status status;
+	send(socket, header, packet, status);
 }
 
 /**
  * Receive a packet with the sfml network library
  * Takes a pointer to a header (int) in argument
 */
-void Server::receive(sf::TcpSocket &socket, int& header, sf::Packet& packet) {
-    auto status = socket.receive(packet);
+void Server::receive(sf::TcpSocket &socket, int& header, sf::Packet& packet, sf::Socket::Status& status) {
+    status = socket.receive(packet);
 	if (status == sf::Socket::Done) {
 		// Retrieve header from the packet
 		packet >> header;
@@ -64,4 +70,9 @@ void Server::receive(sf::TcpSocket &socket, int& header, sf::Packet& packet) {
 		// There was an error on receive
 		std::cout << "Error on receive\n";
 	}
+}
+
+void Server::receive(sf::TcpSocket &socket, int& header, sf::Packet& packet) {
+	sf::Socket::Status status;
+	receive(socket, header, packet, status);
 }
