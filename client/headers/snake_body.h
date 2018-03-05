@@ -15,10 +15,10 @@ class SnakeBody {
 private:
 	coord_vect _parts;
 
+public:
 	sf::Vector2f getHead() const {
 		return _parts[0];
 	}
-public:
 	int getLength () const;
 	void addTail (int);
 	void updateParts(coord_vect parts);
@@ -29,7 +29,7 @@ public:
 	bool checkIntersection (const SnakeBody&);
 	bool checkFoodIntersection (const Food&);
 
-	friend void drawSnakeBody (sf::RenderWindow& _window, const SnakeBody&);
+	friend void drawSnakeBody(sf::RenderWindow &_window, const sf::Vector2f &origin, const sf::Vector2f &center, const SnakeBody &);
 
 	friend sf::Packet &operator>>(sf::Packet &packet, SnakeBody &snake_body);
 
