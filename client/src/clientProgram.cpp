@@ -2,7 +2,7 @@
 #include <SFML/Network.hpp>
 #include <iostream>
 #include <cstdlib>
-#include "program.h"
+#include "clientProgram.h"
 #include "parameters.h"
 #include "snake_body.h"
 #include "communication.h"
