@@ -6,17 +6,32 @@
 #define INPUT_H
 
 #include <SFML/Network.hpp>
+#include "data.h"
+#include "parameters.h"
 
-class Input {
+struct input {
+	float speed;
+	bool rotating_right;
+	bool rotating_left;
+};
+
+class clientInput: public networkData<input> {
 	public:
-		float speed;
-		bool rotating_right;
-		bool rotating_left;
+		void send(sf::TcpSocket& socket, int header, sf::Socket::Status& status);
+		void receive(sf::TcpSocket& socket, int& header, sf::Socket::Status& status);
 
 		// Overload operators
-		friend sf::Packet& operator >>(sf::Packet& packet, Input& input) {
-			return packet >> input.speed >> input.rotating_right >> input.rotating_left;
-		}
+		friend sf::Packet& operator <<(sf::Packet& packet, const input& input);
+		friend sf::Packet& operator >>(sf::Packet& packet, input& input);
+
+		clientInput() {
+			input input;
+			input.speed = LOW_SPEED;
+			input.rotating_right = false;
+			input.rotating_left = false;
+			setData(input);
+		};
+		~clientInput() {};
 };
 
 

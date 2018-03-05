@@ -34,7 +34,7 @@ public:
 		_body.addTail(n);
 	}
 
-	void updateAim(const Input& input) {
+	void updateAim(const input& input) {
 		sf::Vector2f tmp = _aim;
 		float angle = input.speed * ROTATION_ANGLE * (input.rotating_right - input.rotating_left);
 

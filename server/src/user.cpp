@@ -1,4 +1,6 @@
 #include "user.h"
+#include "serverData.h"
+#include "input.h"
 #include <iostream>
 #include <list>
 #include <cmath>

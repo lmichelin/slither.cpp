@@ -7,6 +7,7 @@
 #include "snake_body.h"
 #include "communication.h"
 #include "serverData.h"
+#include "draw.h"
 
 Program::Program() : _window(sf::VideoMode(1200,800), "The IN204 Snake", sf::Style::Close), _communication("localhost", 8001)
 {
@@ -17,7 +18,7 @@ Program::Program() : _window(sf::VideoMode(1200,800), "The IN204 Snake", sf::Sty
 	_window_center.x = _window_width / 2;
 	_window_center.y = _window_height / 2;
 
-	if (!_texture.loadFromFile("bg45.jpg")) {
+	if (!_texture.loadFromFile("build/static/bg45.jpg")) {
 		// error when load file
 		exit(1);
 	}

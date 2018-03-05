@@ -1,3 +1,6 @@
+#ifndef DATA_H
+#define DATA_H
+
 #include <SFML/Network.hpp>
 
 template <class T>
@@ -17,3 +20,5 @@ class networkData {
 	private: 
 		T _data;
 };
+
+#endif
