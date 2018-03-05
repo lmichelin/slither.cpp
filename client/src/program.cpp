@@ -74,12 +74,9 @@ void Program::update () {
 void Program::display () {
 	sf::Vector2f origin = _snakes[0].getBody().getHead();
 
-	sf::Sprite background(_texture);
-	background.setOrigin(_texture.getSize().x / 2 + origin.x - _window_center.x, _texture.getSize().y / 2 +  origin.y - _window_center.y);
 	_window.clear();
-
-	_window.draw(background);
-
+	
+	drawTexture(_window, origin, _window_center, _texture);
 
 	for (std::list<Food>::iterator it = _foods.begin(); it != _foods.end(); it++) {
 		drawFoods(_window, origin, _window_center, *it);

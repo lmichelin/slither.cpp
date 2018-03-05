@@ -1,8 +1,8 @@
 #ifndef PARAMETERS_H
 #define PARAMETERS_H
 
-#define GAME_SIZE_X 10000
-#define GAME_SIZE_Y 10000
+#define GAME_SIZE_X 6589
+#define GAME_SIZE_Y 5709
 
 #define SNAKE_CIRCLE_RADIUS 10
 #define FOOD_CIRCLE_RADIUS 5
