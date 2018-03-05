@@ -24,7 +24,9 @@ class Server {
 		void run();
 
 		// Send and receive messages with SFML Network
+		static void send(sf::TcpSocket &socket, int header, const sf::Packet packet, sf::Socket::Status& status);
 		static void send(sf::TcpSocket &socket, int header, const sf::Packet packet);
+		static void receive(sf::TcpSocket &socket, int &header, sf::Packet &packet, sf::Socket::Status& status);
 		static void receive(sf::TcpSocket &socket, int &header, sf::Packet &packet);
 
 

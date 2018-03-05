@@ -17,6 +17,7 @@
 #include <atomic>
 #include "input.h"
 #include "clientData.h"
+#include <chrono>
 
 ////////////////////////
 // External variables //
@@ -27,6 +28,10 @@ extern std::mutex m_compute;
 extern std::mutex m_ready_compute;
 extern std::condition_variable cv_ready_compute;
 extern std::condition_variable cv_compute;
+
+typedef std::chrono::high_resolution_clock Time;
+typedef std::chrono::milliseconds ms;
+typedef std::chrono::duration<float> fsec;
 
 class User {
 	public: 
@@ -102,6 +107,8 @@ class User {
 		static std::mutex _m;
 		Input _input;
 		Data _clientData;
+		Time::time_point _disconnect_time; 
+		ms _elapsed_disconnect_time;
 
 		// List the users
 		std::list<User>* _users;
@@ -124,7 +131,9 @@ class User {
 
 		void computeIntersection();
 
+		void send(int header, sf::Packet packet, sf::Socket::Status& status);
 		void send(int header, sf::Packet packet);
+		void receive(int& header, sf::Packet& packet, sf::Socket::Status& status);
 		void receive(int& header, sf::Packet& packet);
 
 		void play() {
