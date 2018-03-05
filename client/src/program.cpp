@@ -29,9 +29,11 @@ void Program::init () {
 	// _window.setFramerateLimit(60);
 	_is_running = true;
 	sf::Vector2f init_pos(0,0);
-	Snake my_snake(init_pos);
+	sf::Vector2f aim(1, 0);
+	Snake my_snake(init_pos, aim);
 	_snakes.push_back(my_snake);
 
+	std::cout << "INitialization\n";
 	std::srand(std::time(nullptr)); // use current time as seed for random generator
 }
 
@@ -51,8 +53,9 @@ void Program::run () {
 
 void Program::update () {
 	// Refresh snake position
-	sf::Vector2f head_aim = _controller.getAim();
-	_snakes[0].interpolate(head_aim, _controller.getSpeed());
+	std::cout << "UPDATING\n";
+	_snakes[0].interpolate(_controller.getSpeed());
+	std::cout << "INTERPOLATE FINISHED\n";
 	if (std::rand()/(float)RAND_MAX < FOOD_PROBA) {
 		sf::Vector2f new_food_position(std::rand()*(float)_window_width/RAND_MAX,std::rand()*(float)_window_height/RAND_MAX);
 		Food new_food(new_food_position);
@@ -88,7 +91,6 @@ void Program::display () {
 
 		drawSnakeBody(_window, origin, _window_center, snake_body);
 	}
-
 	_window.display();
 }
 
@@ -143,22 +145,22 @@ void Program::handleEvents () {
 
 void Program::getServerData() {
 	// Receive Data from server
-	sf::Packet data;
-	int header;
-	Data serverData;
-	_communication.receive(header, data);
-	switch (header) {
+	// sf::Packet data;
+	// int header;
+	// serverData server_data;
+	// _communication.receive(header, data);
+	// switch (header) {
 
-	case END: 
-		_snake.die();
-		break;
+	// case END: 
+	// 	_snake.die();
+	// 	break;
 
-	case OK:
-		std::cout << "HEADER: " << header << "\n";
-		data >> serverData;
-		break;
+	// case OK:
+	// 	std::cout << "HEADER: " << header << "\n";
+	// 	// server_data.extract(data);
+	// 	break;
 
-	default:
-		break;
-	}
+	// default:
+	// 	break;
+	// }
 }

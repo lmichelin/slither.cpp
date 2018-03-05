@@ -5,7 +5,8 @@
 
 void drawSnakeBody(sf::RenderWindow &window, const sf::Vector2f &origin, const sf::Vector2f &center, const SnakeBody &snake_body)
 {
-	for (coord_vect::const_iterator it = snake_body._parts.begin(); it != snake_body._parts.end(); it++) {
+	auto parts = snake_body.getParts();
+	for (coord_vect::const_iterator it = parts.begin(); it != parts.end(); it++) {
 		sf::CircleShape shape(SNAKE_CIRCLE_RADIUS);
 		shape.setFillColor(sf::Color::Red);
 		shape.setOrigin(SNAKE_CIRCLE_RADIUS + origin.x - center.x, SNAKE_CIRCLE_RADIUS + origin.y - center.y);
@@ -19,7 +20,7 @@ void drawFoods(sf::RenderWindow &window, const sf::Vector2f &origin, const sf::V
 	sf::CircleShape shape(FOOD_CIRCLE_RADIUS);
 	shape.setFillColor(sf::Color::White);
 	shape.setOrigin(FOOD_CIRCLE_RADIUS + origin.x - center.x, FOOD_CIRCLE_RADIUS + origin.y - center.y);
-	shape.setPosition(food._position);
+	shape.setPosition(food.getPosition());
 	window.draw(shape);
 }
 

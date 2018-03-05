@@ -17,8 +17,8 @@ struct input {
 
 class clientInput: public networkData<input> {
 	public:
-		void send(sf::TcpSocket& socket, int header, sf::Socket::Status& status);
-		void receive(sf::TcpSocket& socket, int& header, sf::Socket::Status& status);
+		void package(sf::Packet& packet);
+		void extract(sf::Packet& packet);
 
 		// Overload operators
 		friend sf::Packet& operator <<(sf::Packet& packet, const input& input);

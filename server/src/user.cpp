@@ -98,10 +98,10 @@ void User::computeIntersection() {
 }
 
 void User::processClientInput() {
-	sf::Packet input;
+	sf::Packet input_packet;
 	sf::Socket::Status status;
 	int header;
-	receive(header, input, status);
+	receive(header, input_packet, status);
 
 
 	if (status == sf::Socket::Done) {
@@ -109,7 +109,7 @@ void User::processClientInput() {
 		switch (header) {
 		
 		case OK:
-			input >> _input;
+			_input.extract(input_packet);
 			break;
 		
 		case DISCONNECT:
@@ -181,16 +181,16 @@ void User::updateOtherUserPositions() {
 			result.push_back(it_user->getSnake().getBody().getParts());	
 		}
 	}
-	_clientData.getData().snakes_coord_vector = result;
+	_serverData.getData().snakes_coord_vector = result;
 }
 
 void User::updateUserPosition() {
-	_snake.updateAim(_input);
+	_snake.updateAim(_input.getData());
 	_snake.interpolate(getSpeed());
-	_clientData.getData().my_snake_coord = _snake.getBody().getParts();
+	_serverData.getData().my_snake_coord = _snake.getBody().getParts();
 }
 
 void User::sendClientData() {
-	// _clientData.send(_socket, )
+	// _serverData.send(_socket, )
 }
 

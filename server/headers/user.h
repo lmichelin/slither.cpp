@@ -110,8 +110,8 @@ class User {
 		static int _user_count;
 		static int _user_playing_count;
 		static std::mutex _m;
-		input _input;
-		clientData _clientData;
+		clientInput _input;
+		serverData _serverData;
 		Time::time_point _disconnect_time; 
 		ms _elapsed_disconnect_time;
 
@@ -131,7 +131,7 @@ class User {
 		void updateUserPosition();
 
 		float getSpeed() const {
-			return _input.speed;
+			return _input.getData().speed;
 		}
 
 		void computeIntersection();

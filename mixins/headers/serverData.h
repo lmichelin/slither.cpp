@@ -11,17 +11,17 @@ struct data {
 	std::vector<sf::Vector2f> food_vector;
 };
 
-class clientData: public networkData<data> {
+class serverData: public networkData<data> {
 	public:
-		void send(sf::TcpSocket& socket, int header, sf::Socket::Status& status);
-		void receive(sf::TcpSocket& socket, int& header, sf::Socket::Status& status);
+		void package(sf::Packet& packet);
+		void extract(sf::Packet& packet);
 
 		// Send and receive data struct
 		friend sf::Packet& operator <<(sf::Packet& packet, const data& data);
 		friend sf::Packet& operator >>(sf::Packet& packet, data& data);
 
-		clientData() {};
-		~clientData() {};
+		serverData() {};
+		~serverData() {};
 };
 
 #endif // !_Serverdata_H

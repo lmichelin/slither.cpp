@@ -14,8 +14,8 @@ class networkData {
 			_data = data;
 		}
 
-		virtual void send(sf::TcpSocket& socket, int header, sf::Socket::Status& status) =0;
-		virtual void receive(sf::TcpSocket& socket, int& header, sf::Socket::Status& status) =0;
+		virtual void package(sf::Packet& packet) =0;
+		virtual void extract(sf::Packet& packet) =0;
 
 	private: 
 		T _data;

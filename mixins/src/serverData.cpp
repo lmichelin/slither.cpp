@@ -49,16 +49,12 @@ sf::Packet& operator >>(sf::Packet& packet, data& data)
     return packet >> data.my_snake_coord >> data.snakes_coord_vector >> data.food_vector;
 }
 
-void clientData::send(sf::TcpSocket& socket, int header, sf::Socket::Status& status) {
-	sf::Packet packet;
-	packet << header << getData();
-	status = socket.send(packet);
+void serverData::package(sf::Packet& packet) {
+	packet << getData();
 }
 
-void clientData::receive(sf::TcpSocket& socket, int& header, sf::Socket::Status& status) {
-	sf::Packet packet;
-	status = socket.receive(packet);
-	data data;
-	packet >> header >> data;
-	setData(data);
+void serverData::extract(sf::Packet& packet) {
+	data temp;
+	packet >> temp;
+	setData(temp);
 }
