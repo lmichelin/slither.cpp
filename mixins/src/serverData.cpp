@@ -1,4 +1,5 @@
 #include "serverData.h"
+#include <iostream> //DEBUG
 
 // Overload operators
 
@@ -57,4 +58,5 @@ void serverData::extract(sf::Packet& packet) {
 	data temp;
 	packet >> temp;
 	setData(temp);
+	std::cout << "RECEIVED " << getData().my_snake_coord[0].x << '\n';
 }
