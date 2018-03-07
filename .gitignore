@@ -3,4 +3,5 @@ build/*
 objs
 deps
 .clang-format
-.vscode
+.vscode/c_cpp_properties.json
+.vscode/settings.json

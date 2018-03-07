@@ -119,7 +119,7 @@ class User {
 
 		void processClientInput();
 
-		void sendClientData();
+		void sendServerData();
 
 		void computePosition();
 

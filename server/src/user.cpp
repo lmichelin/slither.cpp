@@ -43,7 +43,7 @@ void User::run() {
 		// SEND NEW DATA TO CLIENT //
 		/////////////////////////////
 
-		sendClientData();
+		sendServerData();
 	}
 	std::cout << "Not playing anymore\n";
 	_is_playing = false;
@@ -170,10 +170,12 @@ void User::updateOtherUserPositions() {
 void User::updateUserPosition() {
 	_snake.updateAim(_input.getData());
 	_snake.interpolate(getSpeed());
-	_serverData.getData().my_snake_coord = _snake.getBody().getParts();
+	data sent_data;
+	sent_data.my_snake_coord = _snake.getBody().getParts();
+	_serverData.setData(sent_data);
 }
 
-void User::sendClientData() {
+void User::sendServerData() {
 	
 }
 

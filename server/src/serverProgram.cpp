@@ -77,8 +77,8 @@ void Program::run () {
 
 		// Wait for the users threads to finish computation of postitions and intersections ... If it takes too much time, break after 100ms
 		std::unique_lock<std::mutex> lk_compute(m_compute);
-		cv_ready_compute.wait_for(lk_compute, std::chrono::milliseconds(100));
+		cv_ready_compute.wait_for(lk_compute, std::chrono::milliseconds(1000));
 
-		// std::this_thread::sleep_for(std::chrono::milliseconds(200));
+		// std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 }
