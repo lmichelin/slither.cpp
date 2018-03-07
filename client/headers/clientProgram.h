@@ -8,7 +8,7 @@
 #include "parameters.h"
 #include "snake.h"
 #include "food.h"
-#include "communication.h"
+#include "clientCommunication.h"
 
 class Program {
 	private:
@@ -24,7 +24,7 @@ class Program {
 
 		Controller _controller;
 
-		Communication _communication;
+		ClientCommunication _communication;
 
 		Snake _snake;
 		std::vector<Snake> _snakes;

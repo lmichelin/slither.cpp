@@ -11,7 +11,7 @@ void User::init() {
 }
 
 void User::run() {
-	std::cout << "User with socket " << _socket->getRemoteAddress() << " now running" << std::endl;
+	std::cout << "User with socket " << _communication.getRemoteAddress() << " now running" << std::endl;
 
 	while (_is_connected) {
 
@@ -50,22 +50,6 @@ void User::run() {
 	addToUserPlayingCount(-1);
 }
 
-void User::send(int header, sf::Packet packet, sf::Socket::Status& status) {
-	Server::send(*_socket, header, packet, status);
-}
-
-void User::send(int header, sf::Packet packet) {
-	Server::send(*_socket, header, packet);
-}
-
-void User::receive(int& header, sf::Packet& packet, sf::Socket::Status& status) {
-	Server::receive(*_socket, header, packet, status);
-}
-
-void User::receive(int& header, sf::Packet& packet) {
-	Server::receive(*_socket, header, packet);
-}
-
 void User::computePosition() {
 	std::cout << "POSITION\n";
 
@@ -101,8 +85,7 @@ void User::processClientInput() {
 	sf::Packet input_packet;
 	sf::Socket::Status status;
 	int header;
-	receive(header, input_packet, status);
-
+	_communication.receive(header, input_packet, status);
 
 	if (status == sf::Socket::Done) {
 		_elapsed_disconnect_time = std::chrono::milliseconds::zero();
@@ -191,6 +174,6 @@ void User::updateUserPosition() {
 }
 
 void User::sendClientData() {
-	// _serverData.send(_socket, )
+	
 }
 

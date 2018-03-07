@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "snake_body.h"
 #include "food.h"
-#include "program.h"
+#include "clientProgram.h"
 
 void drawSnakeBody(sf::RenderWindow &window, const sf::Vector2f &origin, const sf::Vector2f &center, const SnakeBody &snake_body)
 {

@@ -17,6 +17,7 @@
 #include <atomic>
 #include "input.h"
 #include "serverData.h"
+#include "serverCommunication.h"
 #include <chrono>
 
 ////////////////////////
@@ -48,10 +49,6 @@ class User {
 		/////////////
 		Snake& getSnake() {
 			return _snake;
-		}
-
-		std::shared_ptr<sf::TcpSocket> getSocket() const {
-			return _socket;
 		}
 
 		std::list<User>& getUsers() const {
@@ -95,7 +92,7 @@ class User {
 		// Constructor //
 		/////////////////
 		
-		User(std::shared_ptr<sf::TcpSocket> socket, std::list<User>* users): _socket(socket), _is_playing(false), _is_connected(true), _users(users) {
+		User(std::shared_ptr<sf::TcpSocket> socket, std::list<User>* users): _communication(socket), _is_playing(false), _is_connected(true), _users(users) {
 			addToUserCount(1);
 		}
 		~User() {
@@ -103,8 +100,8 @@ class User {
 		}
 
 	private: 
+		ServerCommunication _communication;
 		Snake _snake;
-		std::shared_ptr<sf::TcpSocket> _socket;
 		bool _is_playing;
 		bool _is_connected;
 		static int _user_count;
@@ -114,6 +111,8 @@ class User {
 		serverData _serverData;
 		Time::time_point _disconnect_time; 
 		ms _elapsed_disconnect_time;
+
+		// Communication module
 
 		// List the users
 		std::list<User>* _users;
@@ -135,11 +134,6 @@ class User {
 		}
 
 		void computeIntersection();
-
-		void send(int header, sf::Packet packet, sf::Socket::Status& status);
-		void send(int header, sf::Packet packet);
-		void receive(int& header, sf::Packet& packet, sf::Socket::Status& status);
-		void receive(int& header, sf::Packet& packet);
 
 		void play() {
 			if (!_is_playing) {

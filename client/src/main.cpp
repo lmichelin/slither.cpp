@@ -1,5 +1,5 @@
 #include "parameters.h"
-#include "program.h"
+#include "clientProgram.h"
 
 int main() {
 	Program program;
