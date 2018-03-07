@@ -7,13 +7,16 @@
 #define SNAKE_CIRCLE_RADIUS 10
 #define FOOD_CIRCLE_RADIUS 5
 
-#define GAME_SIZE_X 10000
-#define GAME_SIZE_Y 10000
+#define GAME_SIZE_X 5990
+#define GAME_SIZE_Y 5190
+
+#define MINIMAP_HEIGHT 120
+#define SNAKE_CIRCLE_RADIUS_MINIMAP 2
 
 #define FOOD_PROBA 0.01
 #define ADD_TAIL 4
 
-#define INIT_LENGTH 4
+#define INIT_LENGTH 40
 
 #define LOW_SPEED 2
 #define HIGH_SPEED 4

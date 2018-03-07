@@ -9,14 +9,10 @@
 #include "serverData.h"
 #include "draw.h"
 
-Program::Program() : _window(sf::VideoMode(1200,800), "The IN204 Snake", sf::Style::Close), _communication("localhost", 8001)
+Program::Program() : _window(sf::VideoMode(WINDOW_SIZE_X, WINDOW_SIZE_Y), "The IN204 Snake", sf::Style::Close), _communication("localhost", 8001)
 {
 	_communication.init();
 	_is_running = false;
-	_window_height = _window.getSize().y; // horizontal dimension
-	_window_width = _window.getSize().x; // vertical dimension
-	_window_center.x = _window_width / 2;
-	_window_center.y = _window_height / 2;
 
 	if (!_texture.loadFromFile("build/static/bg45.jpg")) {
 		// error when load file
@@ -57,7 +53,7 @@ void Program::update () {
 	_snakes[0].interpolate(_controller.getSpeed());
 	std::cout << "INTERPOLATE FINISHED\n";
 	if (std::rand()/(float)RAND_MAX < FOOD_PROBA) {
-		sf::Vector2f new_food_position(std::rand()*(float)_window_width/RAND_MAX,std::rand()*(float)_window_height/RAND_MAX);
+		sf::Vector2f new_food_position(std::rand()*(float)WINDOW_SIZE_X/RAND_MAX,std::rand()*(float)WINDOW_SIZE_Y/RAND_MAX);
 		Food new_food(new_food_position);
 		_foods.push_back(new_food);
 	}
@@ -79,17 +75,21 @@ void Program::display () {
 	sf::Vector2f origin = _snakes[0].getBody().getHead();
 
 	_window.clear();
-	
-	drawTexture(_window, origin, _window_center, _texture);
 
-	for (std::list<Food>::iterator it = _foods.begin(); it != _foods.end(); it++) {
-		drawFoods(_window, origin, _window_center, *it);
+	drawTexture(_window, origin, _texture);
+
+	drawMinimap(_window);
+
+		for (std::list<Food>::iterator it = _foods.begin(); it != _foods.end(); it++)
+	{
+		drawFoods(_window, origin, *it);
 	}
 
 	for (std::vector<Snake>::iterator it = _snakes.begin(); it != _snakes.end(); it++) {
 		SnakeBody snake_body = it->getBody();
 
-		drawSnakeBody(_window, origin, _window_center, snake_body);
+		drawSnakeBody(_window, origin, snake_body);
+		drawSnakeBodyMinimap(_window, snake_body);
 	}
 	_window.display();
 }

@@ -38,6 +38,7 @@ void Controller::updateAim () {
 }
 
 sf::Vector2f Controller::getAim () {
+	std::cout << _aim.y << '\n';
 	return _aim;
 }
 
