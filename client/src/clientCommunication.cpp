@@ -26,7 +26,7 @@ void ClientCommunication::receivePacket(int& header, Packet& packet, Status& sta
     status = _socket.receive(packet);
 	if (status == sf::Socket::Done) {
 		// Retrieve header from the packet
-		std::cout << "I DID SOMETRHING" << '\n';
+		// std::cout << "I DID SOMETRHING" << '\n';
 		packet >> header;
 	} else if (status == sf::Socket::NotReady) {
 		// There is nothing to receive on server side

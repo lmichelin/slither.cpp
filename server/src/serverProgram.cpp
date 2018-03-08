@@ -39,6 +39,7 @@ void Program::run () {
 		if (_socket_queue.pop(socket)) {
 			// Add the user in the users array
 			// User new_user(socket);
+			std::cout << "NEW USER" << '\n';
 			_users.push_back(User(socket, &_users, generateId()));
 
 			// Initialize user
@@ -78,8 +79,8 @@ void Program::run () {
 		// Wait for the users threads to finish computation of postitions and intersections ... If it takes too much time, break after 100ms
 		std::unique_lock<std::mutex> lk_compute(m_compute);
 		// std::cout << "Program waiting\n"; // THREAD DEBUGGING
-		cv_ready_compute.wait_for(lk_compute, std::chrono::milliseconds(1000));
+		cv_ready_compute.wait_for(lk_compute, std::chrono::milliseconds(500));
 
-		// std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	}
 }

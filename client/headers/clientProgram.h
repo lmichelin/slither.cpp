@@ -17,8 +17,12 @@ class Program {
 		void init ();
 		void run ();
 
-		friend void drawTexture(sf::RenderWindow &_window, const sf::Vector2f &origin, const sf::Vector2f &center, const sf::Texture &);
+		friend void drawTexture(sf::RenderWindow &_window, const sf::Vector2f &origin, const sf::Texture &);
 
+		friend void drawMinimap(sf::RenderWindow &window);
+
+		friend void drawSnakeBodyMinimap(sf::RenderWindow &window, const SnakeBody &snake_body);
+		
 		Program ();
 		~Program () {}
 
@@ -28,9 +32,6 @@ class Program {
 		sf::RenderWindow _window;
 		ClientCommunication _communication;
 
-		unsigned int _window_height;
-		unsigned int _window_width;
-		sf::Vector2f _window_center;
 		bool _has_received_data;
 
 		serverData _serverData;

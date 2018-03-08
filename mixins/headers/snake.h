@@ -23,10 +23,6 @@ public:
 		return _body;
 	}
 
-	// SnakeBody getBody() {
-	// 	return _body;
-	// }
-
 	bool checkIfDead() {
 		return _is_dead;
 	}
@@ -46,7 +42,7 @@ public:
 	void updateAim(const input& input) {
 		sf::Vector2f tmp = _aim;
 		float angle = input.speed * ROTATION_ANGLE * (input.rotating_right - input.rotating_left);
-
+		
 		_aim.x = cos(angle)*tmp.x - sin(angle)*tmp.y;
 		_aim.y = sin(angle)*tmp.x + cos(angle)*tmp.y;
 	}

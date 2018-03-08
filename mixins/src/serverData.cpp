@@ -47,7 +47,9 @@ sf::Packet& operator <<(sf::Packet& packet, snake_data data_snake)
 
 sf::Packet& operator >>(sf::Packet& packet, snake_data& data_snake)
 {
-    return packet >> data_snake.id >> data_snake.coordinates;
+    packet >> data_snake.id >> data_snake.coordinates;
+	std::cout << "OPERATOR ID " << data_snake.coordinates[0].x << '\n';
+	return packet;
 }
 
 // Send and receive data struct
@@ -69,4 +71,5 @@ void serverData::extract(sf::Packet& packet) {
 	data temp;
 	packet >> temp;
 	setData(temp);
+	std::cout << "EXTRACTING SERVER DATA" << '\n';
 }

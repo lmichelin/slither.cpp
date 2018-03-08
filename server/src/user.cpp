@@ -10,13 +10,11 @@ void User::init() {
 	generateRandomInitialPosition();
 
 	// Send Snake data
-	_has_received_data = true;
-	packageServerData();
-	sendServerData();
+	processOutput();
 }
 
 void User::run() {
-	std::cout << "User with socket " << _communication.getRemoteAddress() << " now running" << std::endl;
+	std::cout << "User with socket " << _communication.getRemoteAddress() << " now running + ID " << _id << std::endl;
 
 	while (_is_connected) {
 
@@ -25,7 +23,7 @@ void User::run() {
 		///////////////////////////////
 
 		std::unique_lock<std::mutex> lk_compute(m_compute);
-		std::cout << "User waiting\n"; // THREAD DEBUGGING
+		// std::cout << "User waiting\n"; // THREAD DEBUGGING
 		cv_compute.wait(lk_compute);
 		play();
 
@@ -40,14 +38,14 @@ void User::run() {
 		///////////////////////////////////////
 
 		// computeIntersection();
+		// std::cout << "UPDATE POSITION + ID: " << _id << '\n';
 		updateUserPosition();
 		
 		/////////////////////////////
 		// SEND NEW DATA TO CLIENT //
 		/////////////////////////////
 
-		// packageServerData();
-		sendServerData();
+		processOutput();
 
 		/////////////////////////
 		// NOTIFY MAIN PROGRAM //
@@ -55,7 +53,7 @@ void User::run() {
 
 		done_users_count++;
 		if (done_users_count >= getUserPlayingCount()) { // IMPORTANT SO THAT NO USER CAN DODGE WITH DISCONNECTION
-			std::cout << "User notifying\n"; // THREAD DEBUGGING
+			// std::cout << "User notifying\n"; // THREAD DEBUGGING
 			cv_ready_compute.notify_one();
 		}
 	}
@@ -88,7 +86,6 @@ void User::processClientInput() {
 	sf::Socket::Status status;
 	int header;
 	_communication.receivePacket(header, input_packet, status);
-	_has_received_data = true;
 
 	if (status == sf::Socket::Done) {
 		_elapsed_disconnect_time = std::chrono::milliseconds::zero();
@@ -98,6 +95,7 @@ void User::processClientInput() {
 		case OK:
 			_input.extract(input_packet);
 			std::cout << "RECEIVING STUFF WITH HEADER 200" << '\n';
+			_has_received_data = true;	
 			break;
 		
 		case DISCONNECT:
@@ -162,11 +160,13 @@ void User::updateUserPosition() {
 	_snake.interpolate(getSpeed());
 }
 
-void User::sendServerData() {
+void User::processOutput() {
 	if (_has_received_data) {
+		packageServerData();
+		std::cout << "SEND POSITIONS + ID: " << _id << '\n';
+		std::cout << "SERVER DATA ON SEND: " << _serverData.getData().my_snake.coordinates[0].x << '\n';
 		_communication.send(OK, _serverData.getData());
 		_has_received_data = false;
-		std::cout << "HELLLLLOOO SENDING STUFF FROM SERVER" << '\n';
 	}
 }
 
@@ -178,6 +178,8 @@ void User::packageServerData() {
 	my_snake.coordinates = _snake.getBody().getParts();
 
 	send_data.my_snake = my_snake;
+
+	std::cout << "MY SNAKE: " << my_snake.coordinates[0].x << " " << my_snake.coordinates[0].y << "\n";
 
 	std::list<User>::iterator it_user;
 	for (it_user = getUsers().begin(); it_user != getUsers().end(); it_user++) {

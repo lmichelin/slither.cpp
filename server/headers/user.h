@@ -97,7 +97,7 @@ class User {
 		// Constructor //
 		/////////////////
 		
-		User(std::shared_ptr<sf::TcpSocket> socket, std::list<User>* users, unsigned int id): _communication(socket), _id(id), _has_received_data(false), _is_playing(false), _is_connected(true), _users(users) {
+		User(std::shared_ptr<sf::TcpSocket> socket, std::list<User>* users, unsigned int id): _communication(socket), _id(id), _has_received_data(true), _is_playing(false), _is_connected(true), _users(users) {
 			addToUserCount(1);
 		}
 		~User() {
@@ -126,13 +126,13 @@ class User {
 
 		void processClientInput();
 
-		void sendServerData();
-
 		void generateRandomInitialPosition();
 
 		void updateUserPosition();
 
 		void packageServerData();
+
+		void processOutput();
 
 		float getSpeed() const {
 			return _input.getData().speed;
