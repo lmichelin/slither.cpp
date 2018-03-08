@@ -37,8 +37,7 @@ void User::run() {
 		// POSITIONS AND INTERSECTIONS AWAIT //
 		///////////////////////////////////////
 
-		// computeIntersection();
-		// std::cout << "UPDATE POSITION + ID: " << _id << '\n';
+		computeIntersection();
 		updateUserPosition();
 		
 		/////////////////////////////
@@ -67,13 +66,13 @@ void User::computeIntersection() {
 	std::cout << "INTERSECTION\n";
 	bool flag = false;
 	std::list<User>::iterator it_user;
-	// std::cout << "Setting initial position\n";
 	for (it_user = getUsers().begin(); it_user != getUsers().end(); it_user++) {
 		if (&(*(it_user)) != this && it_user->isConnected() && it_user->isPlaying()) {
 			flag = _snake.getBody().checkIntersection(it_user->_snake.getBody(), 2*SNAKE_CIRCLE_RADIUS);	
-			// std::cout << "Flag: " << flag << "\n";
-			if (flag)
+			if (flag) {
+				std::cout << "INTERSECT !!!!!!!!" << '\n';
 				break;
+			}
 		}
 	}
 	if (flag) {
@@ -107,7 +106,6 @@ void User::processClientInput() {
 		}
 	} else if (status == sf::Socket::Disconnected) {
 		if (_elapsed_disconnect_time == std::chrono::milliseconds::zero()) {
-			std::cout << "HELLLLOOOOOO\n";
 			_elapsed_disconnect_time = ms(10);
 			_disconnect_time = Time::now();
 		} else {
@@ -132,7 +130,6 @@ void User::generateRandomInitialPosition() {
 	sf::Vector2f diff = center - position;
 	float dist = sqrt(diff.x*diff.x+diff.y*diff.y);
 	sf::Vector2f aim = diff/dist;
-	std::cout << "Lauching snake\n";
 	_snake = Snake(position, aim);
 
 	bool flag = false;
@@ -146,12 +143,8 @@ void User::generateRandomInitialPosition() {
 		}
 	}
 	if (flag) {
-		std::cout << "RELOOP\n";
 		return generateRandomInitialPosition();
 	}
-
-	std::cout << "Initial position set with: x: " << position.x << " y: " << position.y << "\n"; 
-	std::cout << "Aim set with: x: " << aim.x << " y: " << aim.y << "\n"; 	
 }
 
 void User::updateUserPosition() {
@@ -175,8 +168,6 @@ void User::packageServerData() {
 	my_snake.coordinates = _snake.getBody().getParts();
 
 	send_data.my_snake = my_snake;
-
-	// std::cout << "MY SNAKE: " << my_snake.coordinates[0].x << " " << my_snake.coordinates[0].y << "\n";
 
 	std::list<User>::iterator it_user;
 	for (it_user = getUsers().begin(); it_user != getUsers().end(); it_user++) {
