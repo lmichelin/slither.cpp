@@ -9,7 +9,7 @@ UNAME := $(shell uname)
 ifeq ($(UNAME), Linux)
 	LIBS_SERVER = -lsfml-graphics -lsfml-system -lsfml-network -lpthread
 	LIBS_CLIENT = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network
-	LIBS_CLIENT = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network
+	LIBS_MIXINS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network
 endif
 ifeq ($(UNAME), MSYS_NT-10.0)
 	LIBS_SERVER = -IC:\C++\SFML-2.4.2\include -LC:\C++\SFML-2.4.2\lib -lsfml-graphics -lsfml-system -lsfml-network -lpthread

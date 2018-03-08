@@ -28,7 +28,7 @@ void Program::run () {
 	std::list<std::thread> thread_container;
 
 	while (_is_running) {
-		std::cout << "New main loop\n";
+		// std::cout << "New main loop\n";
 
 		///////////////////////////////
 		// Check new user connection //
@@ -79,8 +79,8 @@ void Program::run () {
 		// Wait for the users threads to finish computation of postitions and intersections ... If it takes too much time, break after 100ms
 		std::unique_lock<std::mutex> lk_compute(m_compute);
 		// std::cout << "Program waiting\n"; // THREAD DEBUGGING
-		cv_ready_compute.wait_for(lk_compute, std::chrono::milliseconds(500));
+		cv_ready_compute.wait_for(lk_compute, std::chrono::milliseconds(20));
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(200));
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	}
 }

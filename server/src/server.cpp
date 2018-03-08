@@ -20,7 +20,6 @@ void Server::run() {
 	for(;;) {
 		for (size_t i = 0; i < MAX_CONNECTIONS; i++)
 		{
-			std::cout << "i: " << i << '\n';
 			if (socket_container[i].getRemoteAddress() == sf::IpAddress::None) {
 				if (_listener.accept(socket_container[i]) == sf::Socket::Done) {
 					// A new client just connected!
