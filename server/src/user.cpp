@@ -63,14 +63,12 @@ void User::run() {
 }
 
 void User::computeIntersection() {
-	std::cout << "INTERSECTION\n";
 	bool flag = false;
 	std::list<User>::iterator it_user;
 	for (it_user = getUsers().begin(); it_user != getUsers().end(); it_user++) {
 		if (&(*(it_user)) != this && it_user->isConnected() && it_user->isPlaying()) {
-			flag = _snake.getBody().checkIntersection(it_user->_snake.getBody(), 2*SNAKE_CIRCLE_RADIUS);	
+			flag = _snake.getBody().checkIntersection(it_user->_snake.getBody(), SNAKE_CIRCLE_RADIUS);	
 			if (flag) {
-				std::cout << "INTERSECT !!!!!!!!" << '\n';
 				break;
 			}
 		}

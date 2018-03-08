@@ -51,8 +51,6 @@ void Program::update () {
 	if (_has_received_data) {
 		auto data = _serverData.getData();
 
-		std::cout << "/* MY SNAKE ID */" << data.my_snake.id << '\n';
-
 		_snake.updateBody(data.my_snake.coordinates);
 		
 		for (size_t i = 0; i < data.snakes.size(); i++) {
@@ -66,19 +64,22 @@ void Program::update () {
 		}
 
 		// Clean the rest of the snakes (who dies or disconnected)
-		// std::map<unsigned int, Snake>::iterator it_snake;
-		// for (it_snake = _snakes.begin(); it_snake != _snakes.end(); it_snake++) {
-		// 	bool flag = false;
-		// 	for (size_t i = 0; i < data.snakes.size(); i++) {
-		// 		if (it_snake->first == data.snakes[i].id) {
-		// 			flag = true;
-		// 			break;
-		// 		}
-		// 	}
-		// 	if (!flag)
-		// 		_snakes.erase(it_snake);
-		// }
-		std::cout << "/* MY SNAKE COORD */" << data.my_snake.coordinates[0].x << '\n';
+		std::map<unsigned int, Snake>::iterator it_snake;
+		for (it_snake = _snakes.begin(); it_snake != _snakes.end();) {
+			bool flag = false;
+			for (size_t i = 0; i < data.snakes.size(); i++) {
+				if (it_snake->first == data.snakes[i].id) {
+					flag = true;
+					break;
+				}
+			}
+			if (!flag) {
+				std::cout << "HELLLLOOO" << '\n';
+				_snakes.erase(it_snake++);
+			} else {
+				it_snake++;
+			}
+		}
 	}
 }
 
