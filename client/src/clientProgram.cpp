@@ -9,7 +9,7 @@
 #include "serverData.h"
 #include "draw.h"
 
-Program::Program() : _window(sf::VideoMode(WINDOW_SIZE_X,WINDOW_SIZE_Y), "The IN204 Snake", sf::Style::Close), _communication("localhost", 8001), _has_received_data(false) {
+Program::Program() : _window(sf::VideoMode(WINDOW_SIZE_X,WINDOW_SIZE_Y), "The IN204 Snake", sf::Style::Close), _communication(SERVER_ADDRESS, SERVER_PORT), _has_received_data(false) {
 	_communication.init();
 	_is_running = false;
 
@@ -78,7 +78,7 @@ void Program::update () {
 		// 	if (!flag)
 		// 		_snakes.erase(it_snake);
 		// }
-		std::cout << "/* MY SNAKE COORD */" << data.my_snake.coordinates[0].x << '\n';
+		std::cout << "MY SNAKE COORD : " << data.my_snake.coordinates[0].x << ' ' << data.my_snake.coordinates[0].y << '\n';
 	}
 }
 
