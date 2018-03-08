@@ -29,7 +29,7 @@ class Server {
 		/////////////////
 
 		// Initialize listener, socket_queue and port
-		Server(int port, SafeQueue<std::shared_ptr<sf::TcpSocket> >* socket_queue) : _listener(), _socket_queue(socket_queue) {
+		Server(int port, SafeQueue<sf::TcpSocket*>* socket_queue) : _listener(), _socket_queue(socket_queue) {
 			_port = port;
 		}
 		~Server() {}
@@ -44,7 +44,7 @@ class Server {
 		int _port;
 
 		// Safequeue to put new client connections in it (IMPORTANT FOR MULTITHREADING)
-		SafeQueue<std::shared_ptr<sf::TcpSocket> >* _socket_queue;
+		SafeQueue<sf::TcpSocket*>* _socket_queue;
 };
 
 #endif

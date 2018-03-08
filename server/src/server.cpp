@@ -13,23 +13,35 @@ void Server::init() {
 /**
  * Run the server by listening for connection attempts
  * For each connection do something with the doStuff function
- * IMPORTANT TO USE SHARED POINTERS TO KEEP THE SOCKETS IN SCOPE !!!
 */
 void Server::run() {
-	std::list<std::shared_ptr<sf::TcpSocket> > socket_container;
+	sf::TcpSocket socket_container[MAX_CONNECTIONS];
 
 	for(;;) {
-		// sf::TcpSocket socket;
-		std::shared_ptr<sf::TcpSocket> s_ptr = std::make_shared<sf::TcpSocket>();
-		s_ptr->setBlocking(false);
-		socket_container.push_back(s_ptr);
+		for (size_t i = 0; i < MAX_CONNECTIONS; i++)
+		{
+			std::cout << "i: " << i << '\n';
+			if (socket_container[i].getRemoteAddress() == sf::IpAddress::None) {
+				if (_listener.accept(socket_container[i]) == sf::Socket::Done) {
+					// A new client just connected!
+					std::cout << "New client connected: Socket number " << i << " Address: " << socket_container[i].getRemoteAddress() << ':' << socket_container[i].getRemotePort() << std::endl;
 
-		if (_listener.accept(*s_ptr) == sf::Socket::Done) {
-			// A new client just connected!
-			std::cout << "New client connected: " << s_ptr->getRemoteAddress() << ':' << s_ptr->getRemotePort() << std::endl;
-			
-			// Send new client status (Add it to the socket queue so the program can do something with it)
-			_socket_queue->push(s_ptr);
+					// If it is the last socket available, reject the client
+					if (i == MAX_CONNECTIONS - 1) {
+						sf::Packet reject_packet;
+						reject_packet << GAME_FULL;
+						socket_container[i].send(reject_packet); 
+						socket_container[i].disconnect();
+					}
+
+					// Send new client status (Add it to the socket queue so the program can do something with it)
+					else {
+						sf::TcpSocket* pointer = &socket_container[i];
+						_socket_queue->push(pointer);
+						break;
+					}
+				}
+			}
 		}
 	}
 }

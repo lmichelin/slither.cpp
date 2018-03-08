@@ -10,7 +10,6 @@ sf::Packet& operator >>(sf::Packet& packet, input& input) {
 }
 
 void clientInput::package(sf::Packet& packet) {
-	std::cout << "SENDING" << '\n';
 	packet << getData();
 }
 

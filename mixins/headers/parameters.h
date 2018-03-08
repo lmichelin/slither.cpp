@@ -32,7 +32,9 @@
 #define END 204
 
 #define DISCONNECT 405
+#define GAME_FULL 406
 
 #define PORT 8001
+#define MAX_CONNECTIONS 2
 
 #endif

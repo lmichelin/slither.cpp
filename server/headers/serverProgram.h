@@ -39,7 +39,7 @@ class Program {
 		//   Getters   //
 		/////////////////
 
-		SafeQueue<std::shared_ptr<sf::TcpSocket> >& getSocketQueue() {
+		SafeQueue<sf::TcpSocket*>& getSocketQueue() {
 			return _socket_queue;
 		}
 
@@ -69,7 +69,7 @@ class Program {
 		Server _server; 
 
 		// Safequeue to see if a new user is trying to connect through a new socket (IMPORTANT FOR MULTITHREADING)
-		SafeQueue<std::shared_ptr<sf::TcpSocket> > _socket_queue;
+		SafeQueue<sf::TcpSocket*> _socket_queue;
 
 		// List the users
 		std::list<User> _users;

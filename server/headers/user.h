@@ -97,8 +97,9 @@ class User {
 		// Constructor //
 		/////////////////
 		
-		User(std::shared_ptr<sf::TcpSocket> socket, std::list<User>* users, unsigned int id): _communication(socket), _id(id), _has_received_data(true), _is_playing(false), _is_connected(true), _users(users) {
+		User(sf::TcpSocket* socket, std::list<User>* users, unsigned int id): _communication(socket), _id(id), _has_received_data(true), _is_playing(false), _is_connected(true), _users(users) {
 			addToUserCount(1);
+			std::cout << "SOCKET USER " << socket->getRemotePort() << "\n";
 		}
 		~User() {
 			addToUserCount(-1);

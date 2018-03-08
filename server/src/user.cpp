@@ -14,7 +14,7 @@ void User::init() {
 }
 
 void User::run() {
-	std::cout << "User with socket " << _communication.getRemoteAddress() << " now running + ID " << _id << std::endl;
+	std::cout << "User with socket " << _communication.getRemoteAddress() << " now running + ID " << _id << " + Port: " << _communication.getSocket().getRemotePort() << std::endl;
 
 	while (_is_connected) {
 
@@ -58,6 +58,7 @@ void User::run() {
 		}
 	}
 	std::cout << "Not playing anymore\n";
+	_communication.disconnect();
 	_is_playing = false;
 	addToUserPlayingCount(-1);
 }
@@ -94,13 +95,11 @@ void User::processClientInput() {
 		
 		case OK:
 			_input.extract(input_packet);
-			std::cout << "RECEIVING STUFF WITH HEADER 200" << '\n';
 			_has_received_data = true;	
 			break;
 		
 		case DISCONNECT:
 			_is_connected = false;
-			std::cout << "The client has disconnected normally\n";
 			break;
 		
 		default:
@@ -163,8 +162,6 @@ void User::updateUserPosition() {
 void User::processOutput() {
 	if (_has_received_data) {
 		packageServerData();
-		std::cout << "SEND POSITIONS + ID: " << _id << '\n';
-		std::cout << "SERVER DATA ON SEND: " << _serverData.getData().my_snake.coordinates[0].x << '\n';
 		_communication.send(OK, _serverData.getData());
 		_has_received_data = false;
 	}
@@ -179,7 +176,7 @@ void User::packageServerData() {
 
 	send_data.my_snake = my_snake;
 
-	std::cout << "MY SNAKE: " << my_snake.coordinates[0].x << " " << my_snake.coordinates[0].y << "\n";
+	// std::cout << "MY SNAKE: " << my_snake.coordinates[0].x << " " << my_snake.coordinates[0].y << "\n";
 
 	std::list<User>::iterator it_user;
 	for (it_user = getUsers().begin(); it_user != getUsers().end(); it_user++) {

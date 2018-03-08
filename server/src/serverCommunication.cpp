@@ -7,6 +7,11 @@ Socket& ServerCommunication::getSocket() {
 	return *_socket;
 }
 
+void ServerCommunication::disconnect() {
+	_socket->disconnect();
+	std::cout << "The client has disconnected normally\n";
+}
+
 Address ServerCommunication::getRemoteAddress() {
 	return _socket->getRemoteAddress();
 }
@@ -16,6 +21,7 @@ void ServerCommunication::sendPacket(int header, Packet packet, Status& status) 
 	header_packet << header;
 	header_packet.append(packet.getData(), packet.getDataSize());
 	status = _socket->send(header_packet);
+	std::cout << "SOCKET " << _socket->getRemotePort() << '\n';
     if (status != sf::Socket::Done) {
 		// Error
 		std::cout << "Error when sending to server\n";

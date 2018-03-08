@@ -21,6 +21,7 @@ class Communication {
 
 		virtual Address getRemoteAddress() =0;
 		virtual Socket& getSocket() =0;
+		virtual void disconnect() =0;
 
 		template <typename T>
 		void send(int header, T send_data, Status& status) {

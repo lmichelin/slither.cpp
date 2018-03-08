@@ -12,6 +12,8 @@ class ServerCommunication : public Communication {
 	public:
 
 		void init();
+
+		void disconnect();
 		
 		Address getRemoteAddress();
 		Socket& getSocket();
@@ -22,11 +24,11 @@ class ServerCommunication : public Communication {
 		void sendPacket(int header, Packet packet);
 		void receivePacket(int& header, Packet& packet);
 
-		ServerCommunication(std::shared_ptr<Socket>& socket): _socket(socket) {}
+		ServerCommunication(Socket* socket): _socket(socket) {}
 		~ServerCommunication() {}
 	
 	private: 
-		std::shared_ptr<Socket>& _socket;
+		Socket* _socket;
 };
 
 #endif

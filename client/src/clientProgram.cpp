@@ -100,6 +100,7 @@ void Program::display () {
 	drawSnakeBodyMinimap(_window,  _snake.getBody());
 
 	// Draw all the other snakes
+	origin = sf::Vector2f(0,0);
 	for (std::map<unsigned int, Snake>::iterator it = _snakes.begin(); it != _snakes.end(); it++) {
 		drawSnakeBody(_window, origin, it->second.getBody());
 		drawSnakeBodyMinimap(_window, it->second.getBody());

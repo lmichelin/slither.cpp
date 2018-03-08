@@ -16,6 +16,7 @@ class ClientCommunication : public Communication {
 
 		Address getRemoteAddress();
 		Socket& getSocket();
+		void disconnect();
 
 		void sendPacket(int header,  Packet packet, Status& status);
 		void receivePacket(int& header, Packet& packet, Status& status);

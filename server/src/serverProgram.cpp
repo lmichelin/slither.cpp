@@ -35,7 +35,7 @@ void Program::run () {
 		///////////////////////////////
 
 		// When a new user connects, create a user object in a new thread with his socket in it
-		std::shared_ptr<sf::TcpSocket> socket;
+		sf::TcpSocket* socket;
 		if (_socket_queue.pop(socket)) {
 			// Add the user in the users array
 			// User new_user(socket);
@@ -73,7 +73,7 @@ void Program::run () {
 		///////////////////////////////
 
 		done_users_count = 0;
-		std::cout << "Prgram notifying\n"; // THREAD DEBUGGING
+		// std::cout << "Prgram notifying\n"; // THREAD DEBUGGING
 		cv_compute.notify_all(); // Notify all users threads that they may compute their positions and intersections
 
 		// Wait for the users threads to finish computation of postitions and intersections ... If it takes too much time, break after 100ms
@@ -81,6 +81,6 @@ void Program::run () {
 		// std::cout << "Program waiting\n"; // THREAD DEBUGGING
 		cv_ready_compute.wait_for(lk_compute, std::chrono::milliseconds(500));
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		std::this_thread::sleep_for(std::chrono::milliseconds(200));
 	}
 }

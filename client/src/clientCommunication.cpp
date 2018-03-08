@@ -11,6 +11,10 @@ Socket& ClientCommunication::getSocket() {
 	return _socket;
 }
 
+void ClientCommunication::disconnect() {
+	_socket.disconnect();
+}
+
 void ClientCommunication::sendPacket(int header, Packet packet, Status& status) {
 	sf::Packet header_packet;
 	header_packet << header;
