@@ -58,9 +58,9 @@ client: init_client $(OBJ_CLIENT_FILES) $(OBJ_MIXINS_FILES)
 
 clean:
 	@echo Clearing...
-	rm -r $(OBJ_SERVER_DIR)
-	rm -r $(OBJ_CLIENT_DIR)
-	rm -r $(OBJ_MIXINS_DIR)
+	rm -rf $(OBJ_SERVER_DIR)
+	rm -rf $(OBJ_CLIENT_DIR)
+	rm -rf $(OBJ_MIXINS_DIR)
 
 $(OBJ_SERVER_DIR)/%.o: $(SRC_SERVER_DIR)/%.cpp
 	$(CC) $(CFLAGS) $(INCLUDES_SERVER) $(LIBS_SERVER) -o $@ -c $<

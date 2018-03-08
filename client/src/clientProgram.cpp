@@ -9,7 +9,7 @@
 #include "serverData.h"
 #include "draw.h"
 
-Program::Program() : _window(sf::VideoMode(1200,800), "The IN204 Snake", sf::Style::Close), _communication("localhost", 8001)
+Program::Program() : _window(sf::VideoMode(1200,800), "The IN204 Snake", sf::Style::Close), _communication("localhost", 8001), _has_received_data(false)
 {
 	_communication.init();
 	_is_running = false;
@@ -27,21 +27,25 @@ Program::Program() : _window(sf::VideoMode(1200,800), "The IN204 Snake", sf::Sty
 void Program::init () {
 	_window.setVerticalSyncEnabled(true);
 	// _window.setFramerateLimit(60);
-	_is_running = true;
-	sf::Vector2f init_pos(0,0);
-	sf::Vector2f aim(1, 0);
-	Snake my_snake(init_pos, aim);
-	_snakes.push_back(my_snake);
 
-	std::cout << "INitialization\n";
+	// TODO Add server snake
+	_snake.getBody().addPart(sf::Vector2f(0.15, 5.0));
+
+	_is_running = true;
+
+	std::cout << "Initialization\n";
 	std::srand(std::time(nullptr)); // use current time as seed for random generator
 }
 
 void Program::run () {
 	while (_window.isOpen() && _is_running) {
-		getServerData();
-		
+		std::cout << "NEW LOOP\n";
+
 		handleEvents();
+		
+		getServerData();
+
+		sendClientInput();
 
 		update();
 
@@ -52,45 +56,59 @@ void Program::run () {
 }
 
 void Program::update () {
-	// Refresh snake position
-	std::cout << "UPDATING\n";
-	_snakes[0].interpolate(_controller.getSpeed());
-	std::cout << "INTERPOLATE FINISHED\n";
-	if (std::rand()/(float)RAND_MAX < FOOD_PROBA) {
-		sf::Vector2f new_food_position(std::rand()*(float)_window_width/RAND_MAX,std::rand()*(float)_window_height/RAND_MAX);
-		Food new_food(new_food_position);
-		_foods.push_back(new_food);
-	}
+	// if (_has_received_data) {
+	// 	auto data = _serverData.getData();
 
-	for (std::list<Food>::iterator it = _foods.begin(); it != _foods.end(); it++) {
-		if (_snakes[0].checkFoodIntersection(*it)) {
-			it = _foods.erase(it);
-			_snakes[0].addTail(ADD_TAIL);
-		}
-	}
+	// 	_snake.updateBody(data.my_snake.coordinates);0
+		
+	// 	for (size_t i = 0; i < data.snakes.size(); i++) {
+	// 		// If the user does not already exist ...
+	// 		if (_snakes.find(data.snakes[i].id) == _snakes.end())
+	// 			_snakes[data.snakes[i].id] = Snake(data.snakes[i].coordinates);
 
-	// End game test
-	// if (position.x < SNAKE_CIRCLE_RADIUS || position.x > WINDOW_SIZE_X - SNAKE_CIRCLE_RADIUS || position.y < SNAKE_CIRCLE_RADIUS || position.y > WINDOW_SIZE_Y - SNAKE_CIRCLE_RADIUS) {
-	// 	_is_running = false;
+	// 		// The user already exists --> Update his coordinates
+	// 		else
+	// 			_snakes[data.snakes[i].id] = data.snakes[i].coordinates;
+	// 	}
+
+	// 	// Clean the rest of the snakes (who dies or disconnected)
+	// 	std::map<unsigned int, Snake>::iterator it_snake;
+	// 	for (it_snake = _snakes.begin(); it_snake != _snakes.end(); it_snake++) {
+	// 		bool flag = false;
+	// 		for (size_t i = 0; i < data.snakes.size(); i++) {
+	// 			if (it_snake->first == data.snakes[i].id) {
+	// 				flag = true;
+	// 				break;
+	// 			}
+	// 		}
+	// 		if (!flag)
+	// 			_snakes.erase(it_snake);
+	// 	}
 	// }
 }
 
 void Program::display () {
-	sf::Vector2f origin = _snakes[0].getBody().getHead();
+	sf::Vector2f origin = _snake.getBody().getHead();
 
 	_window.clear();
 	
+	// Draw Background
 	drawTexture(_window, origin, _window_center, _texture);
 
+	// Draw the foods
 	for (std::list<Food>::iterator it = _foods.begin(); it != _foods.end(); it++) {
 		drawFoods(_window, origin, _window_center, *it);
 	}
 
-	for (std::vector<Snake>::iterator it = _snakes.begin(); it != _snakes.end(); it++) {
-		SnakeBody snake_body = it->getBody();
+	// Draw my snake
+	drawSnakeBody(_window, origin, _window_center, _snake.getBody());
 
-		drawSnakeBody(_window, origin, _window_center, snake_body);
+	// Draw all the other snakes
+	for (std::map<unsigned int, Snake>::iterator it = _snakes.begin(); it != _snakes.end(); it++) {
+		drawSnakeBody(_window, origin, _window_center, it->second.getBody());
 	}
+
+	// Display Result
 	_window.display();
 }
 
@@ -133,22 +151,15 @@ void Program::handleEvents () {
 			}
 		}
 	}
-	// Update controller
-	// Create Packet and send
-	sf::Packet packet;
-	int header = 200;
-	packet << _controller;
-	_communication.send(header, packet);
-
-	_controller.updateAim(); // For client refresh
 }
 
 void Program::getServerData() {
 	// Receive Data from server
 	sf::Packet data;
 	int header;
-	serverData server_data;
-	_communication.receive(header, data);
+	_communication.receivePacket(header, data);
+	std::cout << "HEADER: " << header << "\n";
+	_has_received_data = true;
 	switch (header) {
 
 	case END: 
@@ -156,11 +167,17 @@ void Program::getServerData() {
 		break;
 
 	case OK:
-		std::cout << "HEADER: " << header << "\n";
-		server_data.extract(data);
+		_serverData.extract(data);
 		break;
 
 	default:
 		break;
+	}
+}
+
+void Program::sendClientInput() {
+	if (_has_received_data) {
+		_communication.send(OK, _controller.getInput());
+		_has_received_data = false;
 	}
 }

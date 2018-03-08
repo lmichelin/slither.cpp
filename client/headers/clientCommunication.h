@@ -17,11 +17,11 @@ class ClientCommunication : public Communication {
 		Address getRemoteAddress();
 		Socket& getSocket();
 
-		void send(int header,  Packet packet, Status& status);
-		void receive(int& header, Packet& packet, Status& status);
+		void sendPacket(int header,  Packet packet, Status& status);
+		void receivePacket(int& header, Packet& packet, Status& status);
 
-		 void send(int header, Packet packet);
-		 void receive(int& header, Packet& packet);
+		 void sendPacket(int header, Packet packet);
+		 void receivePacket(int& header, Packet& packet);
 
 		ClientCommunication(std::string addr, int port) : _addr(addr), _port(port) {}
 		~ClientCommunication() {}

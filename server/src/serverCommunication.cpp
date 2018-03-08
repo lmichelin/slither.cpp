@@ -11,7 +11,7 @@ Address ServerCommunication::getRemoteAddress() {
 	return _socket->getRemoteAddress();
 }
 
-void ServerCommunication::send(int header, Packet packet, Status& status) {
+void ServerCommunication::sendPacket(int header, Packet packet, Status& status) {
 	sf::Packet header_packet;
 	header_packet << header;
 	header_packet.append(packet.getData(), packet.getDataSize());
@@ -22,7 +22,7 @@ void ServerCommunication::send(int header, Packet packet, Status& status) {
 	}
 }
 
-void ServerCommunication::receive(int& header, Packet& packet, Status& status) {
+void ServerCommunication::receivePacket(int& header, Packet& packet, Status& status) {
     status = _socket->receive(packet);
 	if (status == sf::Socket::Done) {
 		// Retrieve header from the packet
@@ -36,12 +36,12 @@ void ServerCommunication::receive(int& header, Packet& packet, Status& status) {
 	}
 }
 
-void ServerCommunication::send(int header, Packet packet) {
+void ServerCommunication::sendPacket(int header, Packet packet) {
 	Status dummy;
-	send(header, packet, dummy);
+	sendPacket(header, packet, dummy);
 }
 
-void ServerCommunication::receive(int& header, Packet& packet) {
+void ServerCommunication::receivePacket(int& header, Packet& packet) {
 	Status dummy;
-	receive(header, packet, dummy);
+	receivePacket(header, packet, dummy);
 }

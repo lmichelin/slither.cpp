@@ -16,7 +16,6 @@
 
 typedef std::vector<sf::Vector2f> coord_vect;
 
-
 class SnakeBody {
 	public:
 
@@ -24,11 +23,11 @@ class SnakeBody {
 		// Main Methods //
 		//////////////////
 
-
 		void interpolate (const float speed, sf::Vector2f aim);
 		bool checkIntersection (const SnakeBody& S, int radius);
 		bool checkIntersection (const SnakeBody& S);
 		bool checkFoodIntersection (const Food& p);
+		void addTail (int);
 
 		/////////////////
 		//   Getters   //
@@ -37,16 +36,25 @@ class SnakeBody {
 		sf::Vector2f getHead() const {
 			return _parts[0];
 		}
+
 		int getLength () const;
+
 		coord_vect getParts() const;
 
-		void addTail (int);
+		void setParts(coord_vect parts) {
+			_parts = parts;
+		}
+
+		void addPart(sf::Vector2f new_part) {
+			_parts.push_back(new_part);
+		}
 
 		/////////////////
 		// Constructor //
 		/////////////////
 
 		SnakeBody (sf::Vector2f);
+		SnakeBody (coord_vect);
 		SnakeBody ();
 
 	private:

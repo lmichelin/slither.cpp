@@ -5,7 +5,6 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-#include <SFML/Network.hpp>
 #include "data.h"
 #include "parameters.h"
 
@@ -15,24 +14,19 @@ struct input {
 	bool rotating_left;
 };
 
+sf::Packet& operator <<(sf::Packet& packet, const input& input);
+sf::Packet& operator >>(sf::Packet& packet, input& input);
+
 class clientInput: public networkData<input> {
 	public:
 		void package(sf::Packet& packet);
 		void extract(sf::Packet& packet);
 
-		// Overload operators
-		friend sf::Packet& operator <<(sf::Packet& packet, const input& input);
-		friend sf::Packet& operator >>(sf::Packet& packet, input& input);
-
 		clientInput() {
-			input input;
-			input.speed = LOW_SPEED;
-			input.rotating_right = false;
-			input.rotating_left = false;
+			input input{LOW_SPEED, false, false};
 			setData(input);
 		};
 		~clientInput() {};
 };
-
 
 #endif

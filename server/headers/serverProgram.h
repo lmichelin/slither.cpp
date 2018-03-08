@@ -30,6 +30,11 @@ class Program {
 		// Run game (Main loop for the game with ticks)
 		void run ();
 
+		// Generate user id
+		static unsigned int generateId () {
+			return _user_id_counter++;
+		}
+
 		/////////////////
 		//   Getters   //
 		/////////////////
@@ -56,6 +61,9 @@ class Program {
 	
 		// Tells whether the program is running or not
 		bool _is_running; 
+
+		// Int to generate user id
+		static unsigned int _user_id_counter;
 
 		// Server class of the server program
 		Server _server; 

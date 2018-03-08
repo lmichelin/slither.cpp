@@ -9,14 +9,23 @@
 
 class Snake {
 public:
+
+	void updateBody(coord_vect parts) {
+		_body.setParts(parts);
+	}
+
 	// Get name
 	std::string getName() {
 		return _name;
 	}
 
-	SnakeBody getBody() {
+	SnakeBody& getBody() {
 		return _body;
 	}
+
+	// SnakeBody getBody() {
+	// 	return _body;
+	// }
 
 	bool checkIfDead() {
 		return _is_dead;
@@ -55,12 +64,16 @@ public:
 	}
 
 	// Constructors
-	Snake() : _body(), _is_dead(false) {}
+	Snake() : _body(), _is_dead(false) {
+		_speed = LOW_SPEED;
+	}
 
 	Snake(sf::Vector2f init_pos, sf::Vector2f aim) : _body(init_pos), _is_dead(false) {
 		_aim = aim;
 		_speed = LOW_SPEED;
 	}
+
+	Snake(coord_vect coordinates): _body(coordinates), _is_dead(false) {}
 
 private:
 	// name

@@ -16,11 +16,11 @@ class ServerCommunication : public Communication {
 		Address getRemoteAddress();
 		Socket& getSocket();
 
-		void send(int header,  Packet packet, Status& status);
-		void receive(int& header, Packet& packet, Status& status);
+		void sendPacket(int header,  Packet packet, Status& status);
+		void receivePacket(int& header, Packet& packet, Status& status);
 
-		void send(int header, Packet packet);
-		void receive(int& header, Packet& packet);
+		void sendPacket(int header, Packet packet);
+		void receivePacket(int& header, Packet& packet);
 
 		ServerCommunication(std::shared_ptr<Socket>& socket): _socket(socket) {}
 		~ServerCommunication() {}

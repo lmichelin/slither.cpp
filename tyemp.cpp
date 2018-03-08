@@ -15,8 +15,7 @@ sf::Packet& operator >>(sf::Packet& packet, sf::Vector2f& vector)
 }
 
 // Send and receive vector types
-template <class T>
-sf::Packet& operator <<(sf::Packet& packet, std::vector<T> vector)
+sf::Packet& operator <<(sf::Packet& packet, std::vector<sf::Vector2f> vector)
 {
 	unsigned int temp = vector.size();
 	packet << temp;
@@ -26,39 +25,52 @@ sf::Packet& operator <<(sf::Packet& packet, std::vector<T> vector)
     return packet;
 }
 
-template <class T>
-sf::Packet& operator >>(sf::Packet& packet, std::vector<T>& vector)
+sf::Packet& operator >>(sf::Packet& packet, std::vector<sf::Vector2f>& vector)
 {
     unsigned int size;
 	packet >> size;
+	vector.reserve(size);
 	for (unsigned int i = 0; i < size; i++) {
-		T temp;
+		sf::Vector2f temp;
 		packet >> temp;
 		vector.push_back(temp);
 	}
 	return packet;
 }
 
-// Send and receive snake_data struct
-sf::Packet& operator <<(sf::Packet& packet, snake_data data_snake)
-{
-    return packet << data_snake.id << data_snake.coordinates;
-}
-
-sf::Packet& operator >>(sf::Packet& packet, snake_data& data_snake)
-{
-    return packet >> data_snake.id >> data_snake.coordinates;
-}
-
 // Send and receive data struct
 sf::Packet& operator <<(sf::Packet& packet, data data)
 {
-    return packet << data.my_snake << data.snakes << data.food_vector;
+    packet << data.my_snake.id << data.my_snake.coordinates;
+
+	unsigned int snakes_length = data.snakes.size();
+	packet << snakes_length;
+	for (size_t i = 0; i < snakes_length; i++) {
+		packet << data.snakes[i].id << data.snakes[i].coordinates;
+	}
+
+	packet << data.food_vector;
+
+	return packet;
 }
 
 sf::Packet& operator >>(sf::Packet& packet, data& data)
 {
-    return packet >> data.my_snake >> data.snakes >> data.food_vector;
+	snake_data my_snake;
+    packet >> my_snake.id >> my_snake.coordinates;
+	std::cout << "ID: " << my_snake.id << "\n";
+	data.my_snake = my_snake;
+
+	unsigned int snakes_length;
+	packet >> snakes_length;
+	std::cout << "HELLLLLLLOOOOOO" << snakes_length << '\n';
+	for (size_t i = 0; i < snakes_length; i++) {
+		packet >> data.snakes[i].id >> data.snakes[i].coordinates;
+	}
+
+	packet >> data.food_vector;
+
+	return packet;
 }
 
 void serverData::package(sf::Packet& packet) {

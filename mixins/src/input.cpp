@@ -17,5 +17,4 @@ void clientInput::extract(sf::Packet& packet) {
 	input temp;
 	packet >> temp;
 	setData(temp);
-	std::cout << "RECEIVED " << getData().speed << '\n';
 }

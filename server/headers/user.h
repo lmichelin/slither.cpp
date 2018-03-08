@@ -47,8 +47,13 @@ class User {
 		/////////////
 		// Getters //
 		/////////////
+
 		Snake& getSnake() {
 			return _snake;
+		}
+
+		unsigned int getId() const {
+			return _id;
 		}
 
 		std::list<User>& getUsers() const {
@@ -92,7 +97,7 @@ class User {
 		// Constructor //
 		/////////////////
 		
-		User(std::shared_ptr<sf::TcpSocket> socket, std::list<User>* users): _communication(socket), _is_playing(false), _is_connected(true), _users(users) {
+		User(std::shared_ptr<sf::TcpSocket> socket, std::list<User>* users, unsigned int id): _communication(socket), _id(id), _has_received_data(false), _is_playing(false), _is_connected(true), _users(users) {
 			addToUserCount(1);
 		}
 		~User() {
@@ -101,9 +106,11 @@ class User {
 
 	private: 
 		ServerCommunication _communication;
-		Snake _snake;
+		unsigned int _id;
+		bool _has_received_data;
 		bool _is_playing;
 		bool _is_connected;
+		Snake _snake;
 		static int _user_count;
 		static int _user_playing_count;
 		static std::mutex _m;
@@ -121,13 +128,11 @@ class User {
 
 		void sendServerData();
 
-		void computePosition();
-
-		void updateOtherUserPositions();
-
 		void generateRandomInitialPosition();
 
 		void updateUserPosition();
+
+		void packageServerData();
 
 		float getSpeed() const {
 			return _input.getData().speed;

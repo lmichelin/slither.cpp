@@ -6,6 +6,10 @@ SnakeBody::SnakeBody (sf::Vector2f init_pos) {
 	addTail(INIT_LENGTH -1);
 }
 
+SnakeBody::SnakeBody (coord_vect parts) {
+	_parts = parts;
+}
+
 SnakeBody::SnakeBody () {
 	sf::Vector2f init_pos(0,0);
 	_parts.push_back(init_pos);

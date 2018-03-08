@@ -1,32 +1,25 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-#include <SFML/Graphics.hpp>
-#include <SFML/Network.hpp>
+#include "input.h"
 
 class Controller {
 private:
-	float _speed;
-	bool _rotating_right;
-	bool _rotating_left;
-
-	sf::Vector2f _aim;
+	input _input;
 
 public:
-	void rotateLeft (bool);
-	void rotateRight (bool);
-	void setSpeed (float);
-	float getSpeed ();
+	void rotateLeft(bool);
+	void rotateRight(bool);
+	void setSpeed(float);
+	float getSpeed();
 
-	void updateAim ();
-	sf::Vector2f getAim ();
+	input getInput() const;
+
 	bool getRotatingLeft();
 	bool getRotatingRight();
 
-	friend sf::Packet &operator<<(sf::Packet &packet, const Controller &controller);
-
-	Controller ();
-	~Controller () {}
+	Controller() {};
+	~Controller() {}
 };
 
 #endif

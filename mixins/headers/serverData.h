@@ -5,20 +5,27 @@
 #include <SFML/Graphics.hpp>
 #include "data.h"
 
+struct snake_data {
+	unsigned int id;
+	std::vector<sf::Vector2f> coordinates;
+};
+
+sf::Packet& operator <<(sf::Packet& packet, snake_data data_snake);
+sf::Packet& operator >>(sf::Packet& packet, snake_data& data_snake);
+
 struct data {
-	std::vector<sf::Vector2f> my_snake_coord;
-	std::vector<std::vector<sf::Vector2f> > snakes_coord_vector;
+	snake_data my_snake;
+	std::vector<snake_data> snakes;
 	std::vector<sf::Vector2f> food_vector;
 };
+
+sf::Packet& operator <<(sf::Packet& packet, data data);
+sf::Packet& operator >>(sf::Packet& packet, data& data);
 
 class serverData: public networkData<data> {
 	public:
 		void package(sf::Packet& packet);
 		void extract(sf::Packet& packet);
-
-		// Send and receive data struct
-		friend sf::Packet& operator <<(sf::Packet& packet, const data& data);
-		friend sf::Packet& operator >>(sf::Packet& packet, data& data);
 
 		serverData() {};
 		~serverData() {};

@@ -8,12 +8,26 @@
 void User::init() {
 	// Generate initial position
 	generateRandomInitialPosition();
+
+	// Send Snake data
+	_has_received_data = true;
+	packageServerData();
+	sendServerData();
 }
 
 void User::run() {
 	std::cout << "User with socket " << _communication.getRemoteAddress() << " now running" << std::endl;
 
 	while (_is_connected) {
+
+		///////////////////////////////
+		// AWAIT SERVER NOTIFICATION //
+		///////////////////////////////
+
+		std::unique_lock<std::mutex> lk_compute(m_compute);
+		std::cout << "User waiting\n"; // THREAD DEBUGGING
+		cv_compute.wait(lk_compute);
+		play();
 
 		/////////////////////////////
 		// HANDLE SOCKET RECEPTION //
@@ -25,41 +39,29 @@ void User::run() {
 		// POSITIONS AND INTERSECTIONS AWAIT //
 		///////////////////////////////////////
 
-		std::unique_lock<std::mutex> lk_compute(m_compute);
-		// std::cout << "User waiting\n"; // THREAD DEBUGGING
-		cv_compute.wait(lk_compute);
-		play();
-
 		// computeIntersection();
-		computePosition();
+		updateUserPosition();
 		
-		done_users_count++;
-		if (done_users_count >= getUserPlayingCount()) { // IMPORTANT SO THAT NO USER CAN DODGE WITH DISCONNECTION
-			// std::cout << "User notifying\n"; // THREAD DEBUGGING
-			cv_ready_compute.notify_one();
-		}
-
 		/////////////////////////////
 		// SEND NEW DATA TO CLIENT //
 		/////////////////////////////
 
+		// packageServerData();
 		sendServerData();
+
+		/////////////////////////
+		// NOTIFY MAIN PROGRAM //
+		/////////////////////////
+
+		done_users_count++;
+		if (done_users_count >= getUserPlayingCount()) { // IMPORTANT SO THAT NO USER CAN DODGE WITH DISCONNECTION
+			std::cout << "User notifying\n"; // THREAD DEBUGGING
+			cv_ready_compute.notify_one();
+		}
 	}
 	std::cout << "Not playing anymore\n";
 	_is_playing = false;
 	addToUserPlayingCount(-1);
-}
-
-void User::computePosition() {
-	std::cout << "POSITION\n";
-
-	// Refresh snake position and put it into data to be sent to client
-	updateUserPosition();
-
-	// Refresh other user positions and put it into data to be sent to client
-	updateOtherUserPositions();
-
-	// std::cout << "Position: " << _snake.getBody().getHead().x << " " << _snake.getBody().getHead().y << "\n";
 }
 
 void User::computeIntersection() {
@@ -85,14 +87,17 @@ void User::processClientInput() {
 	sf::Packet input_packet;
 	sf::Socket::Status status;
 	int header;
-	_communication.receive(header, input_packet, status);
+	_communication.receivePacket(header, input_packet, status);
+	_has_received_data = true;
 
 	if (status == sf::Socket::Done) {
 		_elapsed_disconnect_time = std::chrono::milliseconds::zero();
+
 		switch (header) {
 		
 		case OK:
 			_input.extract(input_packet);
+			std::cout << "RECEIVING STUFF WITH HEADER 200" << '\n';
 			break;
 		
 		case DISCONNECT:
@@ -123,7 +128,6 @@ void User::processClientInput() {
 
 void User::generateRandomInitialPosition() {
 	sf::Vector2f position(std::rand()*(float)GAME_SIZE_X/RAND_MAX, std::rand()*(float)GAME_SIZE_Y/RAND_MAX);
-	std::cout << "RANDOM: " << position.x << " y: " << position.y << "\n";
 	if (position.x == (GAME_SIZE_X-1)/2 && position.y == (GAME_SIZE_Y-1)/2)
 		return generateRandomInitialPosition();
 
@@ -133,16 +137,13 @@ void User::generateRandomInitialPosition() {
 	sf::Vector2f aim = diff/dist;
 	std::cout << "Lauching snake\n";
 	_snake = Snake(position, aim);
-	std::cout << "Lauching snake ok\n";
 
 	bool flag = false;
 	std::list<User>::iterator it_user;
 	// std::cout << "Setting initial position\n";
 	for (it_user = getUsers().begin(); it_user != getUsers().end(); it_user++) {
-		std::cout << "Name: " << it_user->getSnake().getName();
 		if (&(*(it_user)) != this && it_user->isConnected() && it_user->isPlaying()) {
 			flag = _snake.getBody().checkIntersection(it_user->_snake.getBody(), 2*SNAKE_CIRCLE_RADIUS);	
-			std::cout << "Flag: " << flag << "\n";
 			if (flag)
 				break;
 		}
@@ -156,26 +157,41 @@ void User::generateRandomInitialPosition() {
 	std::cout << "Aim set with: x: " << aim.x << " y: " << aim.y << "\n"; 	
 }
 
-void User::updateOtherUserPositions() {
-	std::vector<std::vector<sf::Vector2f> > result;
-	std::list<User>::iterator it_user;
-	for (it_user = getUsers().begin(); it_user != getUsers().end(); it_user++) {
-		if (&(*it_user) != this && it_user->isConnected() && it_user->isPlaying()) {
-			result.push_back(it_user->getSnake().getBody().getParts());	
-		}
-	}
-	_serverData.getData().snakes_coord_vector = result;
-}
-
 void User::updateUserPosition() {
 	_snake.updateAim(_input.getData());
 	_snake.interpolate(getSpeed());
-	data sent_data;
-	sent_data.my_snake_coord = _snake.getBody().getParts();
-	_serverData.setData(sent_data);
 }
 
 void User::sendServerData() {
-	
+	if (_has_received_data) {
+		_communication.send(OK, _serverData.getData());
+		_has_received_data = false;
+		std::cout << "HELLLLLOOO SENDING STUFF FROM SERVER" << '\n';
+	}
+}
+
+void User::packageServerData() {
+	data send_data;
+
+	snake_data my_snake;
+	my_snake.id = _id;
+	my_snake.coordinates = _snake.getBody().getParts();
+
+	send_data.my_snake = my_snake;
+
+	std::list<User>::iterator it_user;
+	for (it_user = getUsers().begin(); it_user != getUsers().end(); it_user++) {
+		if (&(*it_user) != this && it_user->isConnected() && it_user->isPlaying()) {
+			snake_data snake_element;
+			snake_element.id = it_user->getId();
+			snake_element.coordinates = it_user->getSnake().getBody().getParts();
+			send_data.snakes.push_back(snake_element);	
+		}
+	}
+
+	// TODO ADD FOODS
+
+	// Package
+	_serverData.setData(send_data);
 }
 

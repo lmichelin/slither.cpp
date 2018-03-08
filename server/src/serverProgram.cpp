@@ -8,6 +8,7 @@ int User::_user_playing_count = 0;
 std::mutex User::_m;
 std::mutex m_compute;
 std::mutex m_ready_compute;
+unsigned int Program::_user_id_counter = 0;
 
 // Initialize condition variables (Useful to wait for many threads)
 std::condition_variable cv_compute;
@@ -38,7 +39,7 @@ void Program::run () {
 		if (_socket_queue.pop(socket)) {
 			// Add the user in the users array
 			// User new_user(socket);
-			_users.push_back(User(socket, &_users));
+			_users.push_back(User(socket, &_users, generateId()));
 
 			// Initialize user
 			_users.back().init();
@@ -71,14 +72,14 @@ void Program::run () {
 		///////////////////////////////
 
 		done_users_count = 0;
-		// std::cout << "Prgram notifying\n"; // THREAD DEBUGGING
+		std::cout << "Prgram notifying\n"; // THREAD DEBUGGING
 		cv_compute.notify_all(); // Notify all users threads that they may compute their positions and intersections
-		// std::cout << "Program waiting\n"; // THREAD DEBUGGING
 
 		// Wait for the users threads to finish computation of postitions and intersections ... If it takes too much time, break after 100ms
 		std::unique_lock<std::mutex> lk_compute(m_compute);
+		// std::cout << "Program waiting\n"; // THREAD DEBUGGING
 		cv_ready_compute.wait_for(lk_compute, std::chrono::milliseconds(1000));
 
-		// std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		// std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	}
 }

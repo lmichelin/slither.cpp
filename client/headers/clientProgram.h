@@ -8,33 +8,11 @@
 #include "parameters.h"
 #include "snake.h"
 #include "food.h"
+#include "serverData.h"
 #include "clientCommunication.h"
 
 class Program {
-	private:
-		bool _is_running;
 
-		sf::RenderWindow _window;
-
-		unsigned int _window_height;
-		unsigned int _window_width;
-		sf::Vector2f _window_center;
-
-		sf::Texture _texture;
-
-		Controller _controller;
-
-		ClientCommunication _communication;
-
-		Snake _snake;
-		std::vector<Snake> _snakes;
-		std::list<Food> _foods;
-
-		void update ();
-		void disconnect();
-		void display ();
-		void handleEvents ();
-		void getServerData();
 	public:
 		void init ();
 		void run ();
@@ -43,6 +21,35 @@ class Program {
 
 		Program ();
 		~Program () {}
+
+	private:
+		bool _is_running;
+
+		sf::RenderWindow _window;
+		ClientCommunication _communication;
+
+		unsigned int _window_height;
+		unsigned int _window_width;
+		sf::Vector2f _window_center;
+		bool _has_received_data;
+
+		serverData _serverData;
+
+		sf::Texture _texture;
+
+		Controller _controller;
+
+
+		Snake _snake;
+		std::map<unsigned int, Snake> _snakes;
+		std::list<Food> _foods;
+
+		void update ();
+		void disconnect();
+		void display ();
+		void handleEvents ();
+		void getServerData();
+		void sendClientInput();
 };
 
 #endif
