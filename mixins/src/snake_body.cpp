@@ -18,7 +18,6 @@ void SnakeBody::addTail(int n) {
 void SnakeBody::interpolate(const float speed, sf::Vector2f aim) {
 	// Head
 	_parts[0].setCoordinates(_parts[0].getCoordinates() + aim * speed);
-	std::cout << "AIM: " << aim.x << '\n';
 
 	// Rest of the body
 	for (unsigned int i = 1; i < _parts.size(); i++) {
