@@ -14,6 +14,35 @@ sf::Packet& operator >>(sf::Packet& packet, sf::Vector2f& vector)
     return packet >> vector.x >> vector.y;
 }
 
+// Send and receive Color types
+sf::Packet& operator <<(sf::Packet& packet, sf::Color color)
+{
+    return packet << color.r << color.g << color.b;
+}
+
+sf::Packet& operator >>(sf::Packet& packet, sf::Color& color)
+{
+    return packet >> color.r >> color.g >> color.b;
+}
+
+// Send and receive ShapePart types
+sf::Packet& operator <<(sf::Packet& packet, ShapePart part)
+{
+    return packet << part.getCoordinates() << part.getColor() << part.getRadius();
+}
+
+sf::Packet& operator >>(sf::Packet& packet, ShapePart& part)
+{
+	sf::Vector2f coordinates;
+	sf::Color color;
+	float radius;
+    packet >> coordinates >> color >> radius;
+	part.setColor(color);
+	part.setCoordinates(coordinates);
+	part.setRadius(radius);
+	return packet;
+}
+
 // Send and receive vector types
 template <class T>
 sf::Packet& operator <<(sf::Packet& packet, std::vector<T> vector)
@@ -42,14 +71,12 @@ sf::Packet& operator >>(sf::Packet& packet, std::vector<T>& vector)
 // Send and receive snake_data struct
 sf::Packet& operator <<(sf::Packet& packet, snake_data data_snake)
 {
-    return packet << data_snake.id << data_snake.coordinates;
+    return packet << data_snake.id << data_snake.parts;
 }
 
 sf::Packet& operator >>(sf::Packet& packet, snake_data& data_snake)
 {
-    packet >> data_snake.id >> data_snake.coordinates;
-	// std::cout << "OPERATOR ID " << data_snake.coordinates[0].x << '\n';
-	return packet;
+    return packet >> data_snake.id >> data_snake.parts;
 }
 
 // Send and receive data struct

@@ -2,25 +2,25 @@
 #include "snake_body.h"
 #include "food.h"
 
+void drawShapePart(sf::RenderWindow& window, const sf::Vector2f& origin, const ShapePart& part) {
+	sf::CircleShape shape(part.getRadius());
+	shape.setFillColor(sf::Color::Red);
+	shape.setOrigin(part.getRadius() + origin.x - WINDOW_SIZE_X / 2, SNAKE_CIRCLE_RADIUS + origin.y - WINDOW_SIZE_Y / 2);
+	shape.setPosition(part.getCoordinates());
+	window.draw(shape);
+}
+
 void drawSnakeBody(sf::RenderWindow &window, const sf::Vector2f &origin, const SnakeBody &snake_body)
 {
 	auto parts = snake_body.getParts();
-	for (coord_vect::const_iterator it = parts.begin(); it != parts.end(); it++) {
-		sf::CircleShape shape(SNAKE_CIRCLE_RADIUS);
-		shape.setFillColor(sf::Color::Red);
-		shape.setOrigin(SNAKE_CIRCLE_RADIUS + origin.x - WINDOW_SIZE_X / 2, SNAKE_CIRCLE_RADIUS + origin.y - WINDOW_SIZE_Y / 2);
-		shape.setPosition(*it);
-		window.draw(shape);
+	for (snake_part_vect::const_iterator it = parts.begin(); it != parts.end(); it++) {
+		drawShapePart(window, origin, *it);
 	}
 }
 
 void drawFoods(sf::RenderWindow &window, const sf::Vector2f &origin, const Food &food)
 {
-	sf::CircleShape shape(FOOD_CIRCLE_RADIUS);
-	shape.setFillColor(sf::Color::White);
-	shape.setOrigin(FOOD_CIRCLE_RADIUS + origin.x - WINDOW_SIZE_X / 2, FOOD_CIRCLE_RADIUS + origin.y - WINDOW_SIZE_Y / 2);
-	shape.setPosition(food.getPosition());
-	window.draw(shape);
+	drawShapePart(window, origin, food.getPart());
 }
 
 void drawTexture(sf::RenderWindow &window, const sf::Vector2f &origin, const sf::Texture &texture)
@@ -55,12 +55,12 @@ void drawSnakeBodyMinimap(sf::RenderWindow &window, const SnakeBody &snake_body)
 	float factor = (float)MINIMAP_HEIGHT / WINDOW_SIZE_Y / GAME_SIZE_Y;
 
 	auto parts = snake_body.getParts();
-	for (coord_vect::const_iterator it = parts.begin(); it != parts.end(); it++)
+	for (snake_part_vect::const_iterator it = parts.begin(); it != parts.end(); it++)
 	{
 		sf::CircleShape shape(SNAKE_CIRCLE_RADIUS_MINIMAP);
 		shape.setFillColor(sf::Color::Red);
 		shape.setOrigin(minimap_origin);
-		shape.setPosition(it->x * factor, it->y * factor);
+		shape.setPosition(it->getCoordinates().x * factor, it->getCoordinates().y * factor);
 		window.draw(shape);
 	}
 }

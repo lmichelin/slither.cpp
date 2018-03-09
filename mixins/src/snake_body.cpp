@@ -1,26 +1,11 @@
 #include "snake_body.h"
 #include <cmath>
 
-SnakeBody::SnakeBody (sf::Vector2f init_pos) {
-	_parts.push_back(init_pos);
-	addTail(INIT_LENGTH -1);
-}
-
-SnakeBody::SnakeBody (coord_vect parts) {
-	_parts = parts;
-}
-
-SnakeBody::SnakeBody () {
-	sf::Vector2f init_pos(0,0);
-	_parts.push_back(init_pos);
-	addTail(INIT_LENGTH -1);
-}
-
 int SnakeBody::getLength() const {
 	return _parts.size();
 }
 
-coord_vect SnakeBody::getParts() const {
+snake_part_vect SnakeBody::getParts() const {
 	return _parts;
 }
 
@@ -32,40 +17,39 @@ void SnakeBody::addTail(int n) {
 
 void SnakeBody::interpolate(const float speed, sf::Vector2f aim) {
 	// Head
-	_parts[0] += aim * speed;
+	_parts[0].setCoordinates(_parts[0].getCoordinates() + aim * speed);
 
 	// Rest of the body
 	for (unsigned int i = 1; i < _parts.size(); i++) {
-		aim = (_parts[i] - _parts[i-1]);
+		aim = (_parts[i] - _parts[i-1]).getCoordinates();
 
 		float norm = sqrt(aim.x * aim.x + aim.y * aim.y);
-		if (norm < EPSILON) {
+		if (norm < EPSILON)
 			norm = 1;
-		}
 
-		aim = aim * std::min((float)SNAKE_CIRCLE_RADIUS, norm) / norm;
-		_parts[i] = _parts[i-1] + aim;
+		aim = aim * std::min(_parts[i].getRadius(), norm) / norm;
+		_parts[i].setCoordinates(_parts[i-1].getCoordinates() + aim);
 	}
 }
 
-bool SnakeBody::checkFoodIntersection (const Food& p) {
-	sf::Vector2f diff = p.getPosition() - _parts[0];
-	float dist = sqrt(diff.x*diff.x+diff.y*diff.y);
-	return (dist < FOOD_CIRCLE_RADIUS + SNAKE_CIRCLE_RADIUS);
+bool SnakeBody::checkFoodIntersection (const Food& food) {
+	return _parts[0].checkIntersection(food.getPart());
 }
 
-bool SnakeBody::checkIntersection(const SnakeBody& S, int radius) {
-	coord_vect parts = S.getParts();
+bool SnakeBody::checkIntersection(const SnakeBody& S, float radius) {
+	snake_part_vect parts = S.getParts();
 	for (unsigned int i = 0; i < parts.size(); i++) {
-		sf::Vector2f diff = getHead() - parts[i];
-		float dist = sqrt(diff.x*diff.x+diff.y*diff.y);
-		if (dist < 2 * radius) {
+		if (getHead().checkIntersection(parts[i], radius))
 			return true;
-		}
 	}
 	return false;
 }
 
 bool SnakeBody::checkIntersection(const SnakeBody& S) {
-	return checkIntersection(S, SNAKE_CIRCLE_RADIUS);
+	snake_part_vect parts = S.getParts();
+	for (unsigned int i = 0; i < parts.size(); i++) {
+		if (getHead().checkIntersection(parts[i]))
+			return true;
+	}
+	return false;
 }

@@ -8,6 +8,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include "parts.h"
 #include "food.h"
 
 //////////////////////
@@ -15,6 +16,7 @@
 //////////////////////
 
 typedef std::vector<sf::Vector2f> coord_vect;
+typedef std::vector<SnakePart> snake_part_vect;
 
 class SnakeBody {
 	public:
@@ -24,8 +26,8 @@ class SnakeBody {
 		//////////////////
 
 		void interpolate (const float speed, sf::Vector2f aim);
-		bool checkIntersection (const SnakeBody& S, int radius);
 		bool checkIntersection (const SnakeBody& S);
+		bool checkIntersection (const SnakeBody& S, float radius);
 		bool checkFoodIntersection (const Food& p);
 		void addTail (int);
 
@@ -33,19 +35,19 @@ class SnakeBody {
 		//   Getters   //
 		/////////////////
 
-		sf::Vector2f getHead() const {
+		SnakePart getHead() const {
 			return _parts[0];
 		}
 
 		int getLength () const;
 
-		coord_vect getParts() const;
+		snake_part_vect getParts() const;
 
-		void setParts(coord_vect parts) {
+		void setParts(snake_part_vect parts) {
 			_parts = parts;
 		}
 
-		void addPart(sf::Vector2f new_part) {
+		void addPart(SnakePart new_part) {
 			_parts.push_back(new_part);
 		}
 
@@ -53,12 +55,21 @@ class SnakeBody {
 		// Constructor //
 		/////////////////
 
-		SnakeBody (sf::Vector2f);
-		SnakeBody (coord_vect);
-		SnakeBody ();
+		SnakeBody (SnakePart init_part) {
+			_parts.push_back(init_part);
+			addTail(INIT_LENGTH -1);
+		}
+		SnakeBody (snake_part_vect parts) {
+			_parts = parts;
+		}
+		SnakeBody () {
+			SnakePart init_pos(sf::Vector2f(0,0));
+			_parts.push_back(init_pos);
+			addTail(INIT_LENGTH -1);
+		}
 
 	private:
-		coord_vect _parts;
+		snake_part_vect _parts;
 };
 
 #endif

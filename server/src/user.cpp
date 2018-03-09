@@ -67,7 +67,7 @@ void User::computeIntersection() {
 	std::list<User>::iterator it_user;
 	for (it_user = getUsers().begin(); it_user != getUsers().end(); it_user++) {
 		if (&(*(it_user)) != this && it_user->isConnected() && it_user->isPlaying()) {
-			flag = _snake.getBody().checkIntersection(it_user->_snake.getBody(), SNAKE_CIRCLE_RADIUS);	
+			flag = _snake.getBody().checkIntersection(it_user->_snake.getBody());	
 			if (flag) {
 				break;
 			}
@@ -121,19 +121,23 @@ void User::processClientInput() {
 }
 
 void User::generateRandomInitialPosition() {
-	sf::Vector2f position(std::rand()*(float)(GAME_SIZE_X*BACKGROUND_SIZE_X)/RAND_MAX, std::rand()*(float)(GAME_SIZE_Y*BACKGROUND_SIZE_Y)/RAND_MAX);
-	if (position.x == ((GAME_SIZE_X*BACKGROUND_SIZE_X)-1)/2 && position.y == ((GAME_SIZE_Y*BACKGROUND_SIZE_Y)-1)/2)
+
+	// Generate a random position
+	SnakePart position(sf::Vector2f(std::rand()*(float)(GAME_SIZE_X*BACKGROUND_SIZE_X)/RAND_MAX, std::rand()*(float)(GAME_SIZE_Y*BACKGROUND_SIZE_Y)/RAND_MAX));
+
+	// Get Map Center
+	ShapePart center(sf::Vector2f(((GAME_SIZE_X*BACKGROUND_SIZE_X)-1)/2, ((GAME_SIZE_Y*BACKGROUND_SIZE_Y)-1)/2));
+	
+	// Try again if position is the center of the map
+	if (position.getCoordinates() == center.getCoordinates())
 		return generateRandomInitialPosition();
 
-	sf::Vector2f center(((GAME_SIZE_X*BACKGROUND_SIZE_X)-1)/2, ((GAME_SIZE_Y*BACKGROUND_SIZE_Y)-1)/2);
-	sf::Vector2f diff = center - position;
-	float dist = sqrt(diff.x*diff.x+diff.y*diff.y);
-	sf::Vector2f aim = diff/dist;
-	_snake = Snake(position, aim);
+	// Create our snake
+	_snake = Snake(position, position.computeAim(center));
 
+	// Test if no other snakes are present near the position
 	bool flag = false;
 	std::list<User>::iterator it_user;
-	// std::cout << "Setting initial position\n";
 	for (it_user = getUsers().begin(); it_user != getUsers().end(); it_user++) {
 		if (&(*(it_user)) != this && it_user->isConnected() && it_user->isPlaying()) {
 			flag = _snake.getBody().checkIntersection(it_user->_snake.getBody(), 2*SNAKE_CIRCLE_RADIUS);	
@@ -164,7 +168,7 @@ void User::packageServerData() {
 
 	snake_data my_snake;
 	my_snake.id = _id;
-	my_snake.coordinates = _snake.getBody().getParts();
+	my_snake.parts = _snake.getBody().getParts();
 
 	send_data.my_snake = my_snake;
 
@@ -173,7 +177,7 @@ void User::packageServerData() {
 		if (&(*it_user) != this && it_user->isConnected() && it_user->isPlaying()) {
 			snake_data snake_element;
 			snake_element.id = it_user->getId();
-			snake_element.coordinates = it_user->getSnake().getBody().getParts();
+			snake_element.parts = it_user->getSnake().getBody().getParts();
 			send_data.snakes.push_back(snake_element);	
 		}
 	}

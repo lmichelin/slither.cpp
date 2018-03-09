@@ -11,6 +11,7 @@
 #include "serverData.h"
 #include "clientCommunication.h"
 #include "stateManager.h"
+#include "draw.h"
 
 class Program {
 

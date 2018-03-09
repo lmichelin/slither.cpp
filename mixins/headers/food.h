@@ -2,20 +2,27 @@
 #define FOOD_H_
 
 #include <SFML/Graphics.hpp>
+#include "parts.h"
 
 class Food {
-public:
-	sf::Vector2f getPosition() const {
-		return _position;
-	}
+	public:
 
-	friend void drawFoods (sf::RenderWindow& _window, const Food&);
+		/////////////////
+		//   Getters   //
+		/////////////////
 
-	Food(sf::Vector2f p) : _position(p) {}
+		FoodPart getPart() const {
+			return _part;
+		}
 
-private:
-	sf::Vector2f _position;
+		/////////////////
+		// Constructor //
+		/////////////////
 
+		Food(FoodPart part) : _part(part) {}
+
+	private:
+		FoodPart _part;
 };
 
 #endif
