@@ -4,7 +4,7 @@
 
 void drawShapePart(sf::RenderWindow& window, const sf::Vector2f& origin, const ShapePart& part) {
 	sf::CircleShape shape(part.getRadius());
-	shape.setFillColor(sf::Color::Red);
+	shape.setFillColor(part.getColor());
 	shape.setOrigin(part.getRadius() + origin.x - WINDOW_SIZE_X / 2, SNAKE_CIRCLE_RADIUS + origin.y - WINDOW_SIZE_Y / 2);
 	shape.setPosition(part.getCoordinates());
 	window.draw(shape);

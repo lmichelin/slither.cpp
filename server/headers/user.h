@@ -61,6 +61,11 @@ class User {
 			return *_users;
 		}
 
+		std::list<Food>& getFoods() const {
+			std::lock_guard<std::mutex> lock(_m);
+			return *_foods;
+		}
+
 		bool isPlaying() const {
 			return _is_playing;
 		}
@@ -97,7 +102,7 @@ class User {
 		// Constructor //
 		/////////////////
 		
-		User(sf::TcpSocket* socket, std::list<User>* users, unsigned int id): _communication(socket), _id(id), _has_received_data(true), _is_playing(false), _is_connected(true), _users(users) {
+		User(sf::TcpSocket* socket, std::list<User>* users, std::list<Food>* foods, unsigned int id): _communication(socket), _id(id), _has_received_data(true), _is_playing(false), _is_connected(true), _users(users), _foods(foods) {
 			addToUserCount(1);
 			_elapsed_disconnect_time = std::chrono::milliseconds::zero();
 			std::cout << "SOCKET USER " << socket->getRemotePort() << "\n";
@@ -126,6 +131,9 @@ class User {
 		// List the users
 		std::list<User>* _users;
 
+		// List the foods
+		std::list<Food>* _foods;
+
 		void processClientInput();
 
 		void generateRandomInitialPosition();
@@ -141,6 +149,10 @@ class User {
 		}
 
 		void computeIntersection();
+
+		void computeUsersIntersection();
+
+		void computeFoodsIntersection();
 
 		void play() {
 			if (!_is_playing) {

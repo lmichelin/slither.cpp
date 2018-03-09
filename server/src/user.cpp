@@ -63,6 +63,11 @@ void User::run() {
 }
 
 void User::computeIntersection() {
+	computeUsersIntersection();
+	computeFoodsIntersection();
+}
+
+void User::computeUsersIntersection() {
 	bool flag = false;
 	std::list<User>::iterator it_user;
 	for (it_user = getUsers().begin(); it_user != getUsers().end(); it_user++) {
@@ -76,6 +81,19 @@ void User::computeIntersection() {
 	if (flag) {
 		_snake.die();
 		_is_connected = false;
+	}
+}
+
+void User::computeFoodsIntersection() {
+	std::list<Food>::iterator it_food;
+	std::list<Food> foods_array = getFoods();
+	for (it_food = getFoods().begin(); it_food != getFoods().end();) {
+		if (_snake.checkFoodIntersection(*it_food)) {
+			_snake.addTail(1);
+			getFoods().erase(it_food++);
+		} else {
+			it_food++;
+		}
 	}
 }
 
@@ -122,7 +140,7 @@ void User::processClientInput() {
 void User::generateRandomInitialPosition() {
 
 	// Generate a random position
-	SnakePart position(sf::Vector2f(std::rand()*(float)(GAME_SIZE_X*BACKGROUND_SIZE_X)/RAND_MAX, std::rand()*(float)(GAME_SIZE_Y*BACKGROUND_SIZE_Y)/RAND_MAX));
+	SnakePart position(sf::Vector2f(std::rand()*(float)(GAME_SIZE_X*BACKGROUND_SIZE_X)/RAND_MAX, std::rand()*(float)(GAME_SIZE_Y*BACKGROUND_SIZE_Y)/RAND_MAX), sf::Color::Red);
 
 	// Get Map Center
 	ShapePart center(sf::Vector2f(((GAME_SIZE_X*BACKGROUND_SIZE_X)-1)/2, ((GAME_SIZE_Y*BACKGROUND_SIZE_Y)-1)/2));
@@ -182,6 +200,10 @@ void User::packageServerData() {
 	}
 
 	// TODO ADD FOODS
+	std::list<Food>::iterator it_food;
+	for (it_food = getFoods().begin(); it_food != getFoods().end(); it_food++) {
+		send_data.food_vector.push_back(it_food->getPart());
+	}
 
 	// Package
 	_serverData.setData(send_data);

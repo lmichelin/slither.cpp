@@ -49,10 +49,14 @@ void Program::run () {
 
 void Program::update () {
 	if (_has_received_data) {
+
+		// Get server Data
 		auto data = _serverData.getData();
 
+		// Update client snake
 		_snake.updateBody(data.my_snake.parts);
 		
+		// Update all the other snakes
 		for (size_t i = 0; i < data.snakes.size(); i++) {
 			// If the user does not already exist ...
 			if (_snakes.find(data.snakes[i].id) == _snakes.end())
@@ -63,9 +67,10 @@ void Program::update () {
 				_snakes[data.snakes[i].id] = data.snakes[i].parts;
 		}
 
-		std::cout << "SIZE: " << data.my_snake.parts.size() << '\n';
-		std::cout << "MY SNAKE COORD : " << data.my_snake.parts[0].getCoordinates().x << ' ' << data.my_snake.parts[0].getCoordinates().y << '\n';
+		// std::cout << "SIZE: " << data.my_snake.parts.size() << '\n';
+		// std::cout << "MY SNAKE COORD : " << data.my_snake.parts[0].getCoordinates().x << ' ' << data.my_snake.parts[0].getCoordinates().y << '\n';
 
+		// Delete all the deleted snakes
 		std::map<unsigned int, Snake>::iterator it_snake;
 		for (it_snake = _snakes.begin(); it_snake != _snakes.end();) {
 			bool flag = false;
@@ -81,6 +86,12 @@ void Program::update () {
 				it_snake++;
 			}
 		}
+
+		// Update foods
+		_foods.clear();
+		for (size_t i = 0; i < data.food_vector.size(); i++) {
+			_foods.push_back(Food(data.food_vector[i]));
+		}
 	}
 }
 
@@ -93,6 +104,7 @@ void Program::display () {
 
 	drawMinimap(_window);
 
+	// Draw foods
 	for (std::list<Food>::iterator it = _foods.begin(); it != _foods.end(); it++) {
 		drawFoods(_window, origin, *it);
 	}

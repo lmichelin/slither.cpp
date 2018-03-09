@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include "serverProgram.h"
+#include "parts.h"
 
 // Initialize User external variables
 int User::_user_count = 0;
@@ -18,7 +19,11 @@ std::condition_variable cv_ready_compute;
 std::atomic<int> done_users_count;
 
 void Program::init () {
+	// Set is running state
 	_is_running = true;
+
+	// Generate the foods
+	initializeFoods();
 }
 
 void Program::run () {
@@ -40,7 +45,7 @@ void Program::run () {
 			// Add the user in the users array
 			// User new_user(socket);
 			std::cout << "NEW USER" << '\n';
-			_users.push_back(User(socket, &_users, generateId()));
+			_users.push_back(User(socket, &_users, &_foods, generateId()));
 
 			// Initialize user
 			_users.back().init();
@@ -82,5 +87,11 @@ void Program::run () {
 		cv_ready_compute.wait_for(lk_compute, std::chrono::milliseconds(20));
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	}
+}
+
+void Program::initializeFoods() {
+	for (size_t i = 0; i < FOOD_NUMBER - 1; i++) {
+		_foods.push_back(Food(FoodPart::generateRandom(sf::Color::White)));
 	}
 }

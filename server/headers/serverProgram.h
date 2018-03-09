@@ -35,6 +35,8 @@ class Program {
 			return _user_id_counter++;
 		}
 
+		void initializeFoods();
+
 		/////////////////
 		//   Getters   //
 		/////////////////

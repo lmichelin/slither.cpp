@@ -6,6 +6,7 @@
 #include "data.h"
 #include "parts.h"
 
+
 struct snake_data {
 	unsigned int id;
 	std::vector<SnakePart> parts;

@@ -18,6 +18,8 @@
 #define MINIMAP_HEIGHT 120
 #define SNAKE_CIRCLE_RADIUS_MINIMAP 2
 
+#define FOOD_NUMBER 500
+
 #define FOOD_PROBA 0.01
 #define ADD_TAIL 4
 

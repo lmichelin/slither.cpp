@@ -17,12 +17,12 @@ sf::Packet& operator >>(sf::Packet& packet, sf::Vector2f& vector)
 // Send and receive Color types
 sf::Packet& operator <<(sf::Packet& packet, sf::Color color)
 {
-    return packet << color.r << color.g << color.b;
+    return packet << color.r << color.g << color.b << color.a;
 }
 
 sf::Packet& operator >>(sf::Packet& packet, sf::Color& color)
 {
-    return packet >> color.r >> color.g >> color.b;
+    return packet >> color.r >> color.g >> color.b >> color.a;
 }
 
 // Send and receive ShapePart types
