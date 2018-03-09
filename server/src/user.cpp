@@ -120,11 +120,11 @@ void User::processClientInput() {
 }
 
 void User::generateRandomInitialPosition() {
-	sf::Vector2f position(std::rand()*(float)GAME_SIZE_X/RAND_MAX, std::rand()*(float)GAME_SIZE_Y/RAND_MAX);
-	if (position.x == (GAME_SIZE_X-1)/2 && position.y == (GAME_SIZE_Y-1)/2)
+	sf::Vector2f position(std::rand()*(float)(GAME_SIZE_X*BACKGROUND_SIZE_X)/RAND_MAX, std::rand()*(float)(GAME_SIZE_Y*BACKGROUND_SIZE_Y)/RAND_MAX);
+	if (position.x == ((GAME_SIZE_X*BACKGROUND_SIZE_X)-1)/2 && position.y == ((GAME_SIZE_Y*BACKGROUND_SIZE_Y)-1)/2)
 		return generateRandomInitialPosition();
 
-	sf::Vector2f center((GAME_SIZE_X-1)/2, (GAME_SIZE_Y-1)/2);
+	sf::Vector2f center(((GAME_SIZE_X*BACKGROUND_SIZE_X)-1)/2, ((GAME_SIZE_Y*BACKGROUND_SIZE_Y)-1)/2);
 	sf::Vector2f diff = center - position;
 	float dist = sqrt(diff.x*diff.x+diff.y*diff.y);
 	sf::Vector2f aim = diff/dist;

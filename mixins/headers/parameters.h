@@ -7,10 +7,13 @@
 #define SNAKE_CIRCLE_RADIUS 10
 #define FOOD_CIRCLE_RADIUS 5
 
-// INFO : background size = 599x519
+// EXACT background image size in pixels
+#define BACKGROUND_SIZE_X 599
+#define BACKGROUND_SIZE_Y 519
 
-#define GAME_SIZE_X 2995
-#define GAME_SIZE_Y 2595
+// GAME_SIZE = n times the background size
+#define GAME_SIZE_X 5
+#define GAME_SIZE_Y 5
 
 #define MINIMAP_HEIGHT 120
 #define SNAKE_CIRCLE_RADIUS_MINIMAP 2
@@ -36,7 +39,8 @@
 #define DISCONNECT 405
 #define GAME_FULL 406
 
-#define PORT 8001
+#define SERVER_ADDRESS "localhost"
+#define SERVER_PORT 8001
 #define MAX_CONNECTIONS 100
 
 #endif

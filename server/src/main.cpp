@@ -3,7 +3,7 @@
 
 int main() {
 	std::srand(time(NULL)); // use current time as seed for random generator
-	Program program(PORT);
+	Program program(SERVER_PORT);
 	program.init();
 	program.run();
 

@@ -27,14 +27,11 @@ void drawTexture(sf::RenderWindow &window, const sf::Vector2f &origin, const sf:
 {
 	sf::Sprite background(texture);
 
-	int bg_init_x = ((GAME_SIZE_X - 1) / (float)texture.getSize().x + 1) / 2;
-	int bg_init_y = ((GAME_SIZE_Y - 1) / (float)texture.getSize().y + 1) / 2;
-
-	for (int i = -bg_init_x; i <= bg_init_x; i++)
+	for (int i = 0; i <= GAME_SIZE_X; i++)
 	{
-		for (int j = -bg_init_y; j <= bg_init_y; j++)
+		for (int j = 0; j <= GAME_SIZE_Y; j++)
 		{
-			background.setOrigin((float)(texture.getSize().x) * i + texture.getSize().x / 2 + origin.x - WINDOW_SIZE_X / 2, (float)(texture.getSize().y) * j + texture.getSize().y / 2 + origin.y - WINDOW_SIZE_Y / 2);
+			background.setOrigin(origin.x - texture.getSize().x * i - (float)WINDOW_SIZE_X / 2, origin.y - texture.getSize().y * j - (float)WINDOW_SIZE_Y / 2);
 			window.draw(background);
 		}
 	}
@@ -53,9 +50,9 @@ void drawMinimap(sf::RenderWindow &window)
 void drawSnakeBodyMinimap(sf::RenderWindow &window, const SnakeBody &snake_body)
 {
 	float minimap_width = (float)MINIMAP_HEIGHT * GAME_SIZE_X / GAME_SIZE_Y;
-	sf::Vector2f minimap_origin(3 * SNAKE_CIRCLE_RADIUS_MINIMAP - WINDOW_SIZE_X + 10 + minimap_width / 2, 3 * SNAKE_CIRCLE_RADIUS_MINIMAP - WINDOW_SIZE_Y + 10 + MINIMAP_HEIGHT / 2);
+	sf::Vector2f minimap_origin(4 * SNAKE_CIRCLE_RADIUS_MINIMAP - WINDOW_SIZE_X + 10 + minimap_width, 4 * SNAKE_CIRCLE_RADIUS_MINIMAP - WINDOW_SIZE_Y + 10 + MINIMAP_HEIGHT);
 
-	float factor = (float)MINIMAP_HEIGHT / GAME_SIZE_Y;
+	float factor = (float)MINIMAP_HEIGHT / WINDOW_SIZE_Y / GAME_SIZE_Y;
 
 	auto parts = snake_body.getParts();
 	for (coord_vect::const_iterator it = parts.begin(); it != parts.end(); it++)
