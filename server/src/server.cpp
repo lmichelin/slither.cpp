@@ -22,6 +22,10 @@ void Server::run() {
 		{
 			if (socket_container[i].getRemoteAddress() == sf::IpAddress::None) {
 				if (_listener.accept(socket_container[i]) == sf::Socket::Done) {
+
+					// Set socket to non blocking
+					socket_container[i].setBlocking(false);
+
 					// A new client just connected!
 					std::cout << "New client connected: Socket number " << i << " Address: " << socket_container[i].getRemoteAddress() << ':' << socket_container[i].getRemotePort() << std::endl;
 

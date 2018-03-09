@@ -74,7 +74,6 @@ void Program::update () {
 				}
 			}
 			if (!flag) {
-				std::cout << "HELLLLOOO" << '\n';
 				_snakes.erase(it_snake++);
 			} else {
 				it_snake++;
