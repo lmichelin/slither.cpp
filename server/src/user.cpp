@@ -102,7 +102,7 @@ void User::processClientInput() {
 		default:
 			break;
 		}
-	} else if (status == sf::Socket::Disconnected) {
+	} else if (status == sf::Socket::Disconnected || (status == sf::Socket::NotReady && _is_playing)) {
 		if (_elapsed_disconnect_time == std::chrono::milliseconds::zero()) {
 			_elapsed_disconnect_time = ms(10);
 			_disconnect_time = Time::now();

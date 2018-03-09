@@ -99,6 +99,7 @@ class User {
 		
 		User(sf::TcpSocket* socket, std::list<User>* users, unsigned int id): _communication(socket), _id(id), _has_received_data(true), _is_playing(false), _is_connected(true), _users(users) {
 			addToUserCount(1);
+			_elapsed_disconnect_time = std::chrono::milliseconds::zero();
 			std::cout << "SOCKET USER " << socket->getRemotePort() << "\n";
 		}
 		~User() {
