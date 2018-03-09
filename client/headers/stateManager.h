@@ -3,24 +3,29 @@
 
 #include <map>
 #include "state.h"
+#include "clientCommunication.h"
 
 class StateManager
 {
 public:
 
 	void switchState(std::string state);
+	void addState(std::string name, std::unique_ptr<State>& state);
 
-	// Wrapping state methods
+	// Run current state
+	void init();
 	void getServerData();
 	void handleEvents();
 	void update();
+	void sendClientInput();
 	void display();
+	void quit();
 
-	StateManager();
-	~StateManager();
+	StateManager() {}
+	~StateManager() {}
 
 private:
-	std::map<std::string, State*> _states;
+	std::map<std::string, std::unique_ptr<State> > _states;
 	std::string _current_state;
 };
 

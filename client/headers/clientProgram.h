@@ -10,6 +10,7 @@
 #include "food.h"
 #include "serverData.h"
 #include "clientCommunication.h"
+#include "stateManager.h"
 #include "draw.h"
 
 class Program {
@@ -26,26 +27,9 @@ class Program {
 
 		sf::RenderWindow _window;
 		ClientCommunication _communication;
+		StateManager _state_manager;
 
-		bool _has_received_data;
-
-		serverData _serverData;
-
-		sf::Texture _texture;
-
-		Controller _controller;
-
-
-		Snake _snake;
-		std::map<unsigned int, Snake> _snakes;
-		std::list<Food> _foods;
-
-		void update ();
 		void disconnect();
-		void display ();
-		void handleEvents ();
-		void getServerData();
-		void sendClientInput();
 };
 
 #endif
