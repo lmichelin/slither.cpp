@@ -51,19 +51,20 @@ void Program::update () {
 	if (_has_received_data) {
 		auto data = _serverData.getData();
 
-		_snake.updateBody(data.my_snake.coordinates);
+		_snake.updateBody(data.my_snake.parts);
 		
 		for (size_t i = 0; i < data.snakes.size(); i++) {
 			// If the user does not already exist ...
 			if (_snakes.find(data.snakes[i].id) == _snakes.end())
-				_snakes[data.snakes[i].id] = Snake(data.snakes[i].coordinates);
+				_snakes[data.snakes[i].id] = Snake(data.snakes[i].parts);
 
 			// The user already exists --> Update his coordinates
 			else
-				_snakes[data.snakes[i].id] = data.snakes[i].coordinates;
+				_snakes[data.snakes[i].id] = data.snakes[i].parts;
 		}
 
-		std::cout << "MY SNAKE COORD : " << data.my_snake.coordinates[0].x << ' ' << data.my_snake.coordinates[0].y << '\n';
+		std::cout << "SIZE: " << data.my_snake.parts.size() << '\n';
+		std::cout << "MY SNAKE COORD : " << data.my_snake.parts[0].getCoordinates().x << ' ' << data.my_snake.parts[0].getCoordinates().y << '\n';
 
 		std::map<unsigned int, Snake>::iterator it_snake;
 		for (it_snake = _snakes.begin(); it_snake != _snakes.end();) {
@@ -84,7 +85,7 @@ void Program::update () {
 }
 
 void Program::display () {
-	sf::Vector2f origin = _snake.getBody().getHead();
+	sf::Vector2f origin = _snake.getBody().getHead().getCoordinates();
 
 	_window.clear();
 

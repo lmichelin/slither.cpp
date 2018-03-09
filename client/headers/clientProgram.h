@@ -10,18 +10,13 @@
 #include "food.h"
 #include "serverData.h"
 #include "clientCommunication.h"
+#include "draw.h"
 
 class Program {
 
 	public:
 		void init ();
 		void run ();
-
-		friend void drawTexture(sf::RenderWindow &_window, const sf::Vector2f &origin, const sf::Texture &);
-
-		friend void drawMinimap(sf::RenderWindow &window);
-
-		friend void drawSnakeBodyMinimap(sf::RenderWindow &window, const SnakeBody &snake_body);
 		
 		Program ();
 		~Program () {}

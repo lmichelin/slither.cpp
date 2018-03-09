@@ -3,6 +3,9 @@
 
 #include <SFML/Graphics.hpp>
 #include "snake_body.h"
+#include "parts.h"
+
+void drawShapePart(sf::RenderWindow&, const sf::Vector2f&, const ShapePart&);
 
 void drawTexture(sf::RenderWindow &, const sf::Vector2f &, const sf::Texture &);
 

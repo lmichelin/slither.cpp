@@ -10,7 +10,7 @@
 class Snake {
 public:
 
-	void updateBody(coord_vect parts) {
+	void updateBody(snake_part_vect parts) {
 		_body.setParts(parts);
 	}
 
@@ -64,12 +64,12 @@ public:
 		_speed = LOW_SPEED;
 	}
 
-	Snake(sf::Vector2f init_pos, sf::Vector2f aim) : _body(init_pos), _is_dead(false) {
+	Snake(SnakePart init_pos, sf::Vector2f aim) : _body(init_pos), _is_dead(false) {
 		_aim = aim;
 		_speed = LOW_SPEED;
 	}
 
-	Snake(coord_vect coordinates): _body(coordinates), _is_dead(false) {}
+	Snake(snake_part_vect coordinates): _body(coordinates), _is_dead(false) {}
 
 private:
 	// name
