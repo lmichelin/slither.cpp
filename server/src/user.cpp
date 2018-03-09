@@ -111,7 +111,8 @@ void User::processClientInput() {
 			_elapsed_disconnect_time = std::chrono::duration_cast<ms>(fs);
 			std::cout << "Elapsed time: " << _elapsed_disconnect_time.count() << "\n";
 
-			if (_elapsed_disconnect_time.count() > 1000) {
+			if (_elapsed_disconnect_time.count() > INACTIVITY_TIMEOUT)
+			{
 				_is_connected = false;
 				std::cout << "The client has disconnected\n";
 			}

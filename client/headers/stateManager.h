@@ -3,6 +3,7 @@
 
 #include <map>
 #include "state.h"
+#include "clientCommunication.h"
 
 class StateManager
 {
@@ -10,17 +11,17 @@ public:
 
 	void switchState(std::string state);
 
-	// Wrapping state methods
-	void getServerData();
-	void handleEvents();
-	void update();
-	void display();
+	// Run current state
+	void run();
 
-	StateManager();
+	StateManager(sf::RenderWindow* window, ClientCommunication* communication) : _current_state("home") {
+		_states["home"] = HomeState(window, communication);
+		_states["game"] = GameState(window, communication);
+	}
 	~StateManager();
 
 private:
-	std::map<std::string, State*> _states;
+	std::map<std::string, State> _states;
 	std::string _current_state;
 };
 

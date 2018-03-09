@@ -18,7 +18,7 @@
 #define MINIMAP_HEIGHT 120
 #define SNAKE_CIRCLE_RADIUS_MINIMAP 2
 
-#define FOOD_PROBA 0.01
+// #define FOOD_PROBA 0.01
 #define ADD_TAIL 4
 
 #define INIT_LENGTH 40
@@ -42,5 +42,6 @@
 #define SERVER_ADDRESS "localhost"
 #define SERVER_PORT 8001
 #define MAX_CONNECTIONS 100
+#define INACTIVITY_TIMEOUT 1000 // in ms
 
 #endif

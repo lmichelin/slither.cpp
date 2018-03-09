@@ -21,8 +21,8 @@ class ClientCommunication : public Communication {
 		void sendPacket(int header,  Packet packet, Status& status);
 		void receivePacket(int& header, Packet& packet, Status& status);
 
-		 void sendPacket(int header, Packet packet);
-		 void receivePacket(int& header, Packet& packet);
+		void sendPacket(int header, Packet packet);
+		void receivePacket(int& header, Packet& packet);
 
 		ClientCommunication(std::string addr, int port) : _addr(addr), _port(port) {}
 		~ClientCommunication() {}
