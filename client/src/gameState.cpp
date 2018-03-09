@@ -123,7 +123,7 @@ void GameState::sendClientInput() {
 void GameState::display() {
     sf::Vector2f origin = _snake.getBody().getHead().getCoordinates();
 
-	_window.clear();
+	_window->clear();
 
 	drawTexture(_window, origin, _texture);
 
@@ -135,7 +135,7 @@ void GameState::display() {
 
 	// Draw my snake
 	drawSnakeBody(_window, origin, _snake.getBody());
-	drawSnakeBodyMinimap(_window,  _snake.getBody());
+	drawSnakeBodyMinimap(_window, _snake.getBody());
 
 	// Draw all the other snakes
 	for (std::map<unsigned int, Snake>::iterator it = _snakes.begin(); it != _snakes.end(); it++) {

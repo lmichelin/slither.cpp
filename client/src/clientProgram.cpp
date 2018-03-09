@@ -9,7 +9,7 @@
 #include "serverData.h"
 #include "draw.h"
 
-Program::Program() : _window(sf::VideoMode(WINDOW_SIZE_X,WINDOW_SIZE_Y), "The IN204 Snake", sf::Style::Close), _communication(SERVER_ADDRESS, SERVER_PORT), _state_manager(StateManager(&_window, &_communication)) {
+Program::Program() : _window(sf::VideoMode(WINDOW_SIZE_X,WINDOW_SIZE_Y), "The IN204 Snake", sf::Style::Close), _communication(SERVER_ADDRESS, SERVER_PORT) {
 	_is_running = false;
 }
 
@@ -17,9 +17,19 @@ void Program::init () {
 	_window.setVerticalSyncEnabled(true);
 	// _window.setFramerateLimit(60);
 
+	std::unique_ptr<State> home(new HomeState(&_window, &_communication));
+	std::unique_ptr<State> game(new GameState(&_window, &_communication));
+
+	_state_manager.addState("home", home);
+	_state_manager.addState("game", game);
+
+	_state_manager.switchState("game");
+
 	_is_running = true;
 
 	std::cout << "Initialization\n";
+	_state_manager.init();
+	
 	std::srand(std::time(nullptr)); // use current time as seed for random generator
 }
 
@@ -27,7 +37,12 @@ void Program::run () {
 	while (_window.isOpen() && _is_running) {
 		// std::cout << "NEW LOOP\n";
 
-		_state_manager.run();
+		_state_manager.getServerData();
+		_state_manager.handleEvents();
+		_state_manager.update();
+		_state_manager.sendClientInput();
+		_state_manager.display();
+
 	}
 
 	_window.close();

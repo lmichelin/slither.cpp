@@ -24,15 +24,12 @@ public:
 	virtual void display() =0;
 
 
-	State(std::string name, sf::RenderWindow* window, ClientCommunication* communication): _name(name), _window(window), _communication(communication) {}
-	~State();
+	State(sf::RenderWindow* window, ClientCommunication* communication): _window(window), _communication(communication) {}
+	~State() {}
 
 protected:
-	ClientCommunication* _communication;
 	sf::RenderWindow* _window;
-
-private:
-	std::string _name;
+	ClientCommunication* _communication;
 };
 
 class HomeState : public State
@@ -47,8 +44,8 @@ public:
 	void sendClientInput();
 	void display();
 
-	HomeState(sf::RenderWindow* window, ClientCommunication* communication) : State("home", window, communication) {}
-	~HomeState();
+	HomeState(sf::RenderWindow* window, ClientCommunication* communication) : State(window, communication) {}
+	~HomeState() {}
 
 private:
 	
@@ -60,11 +57,11 @@ public:
 	void init();
 	void quit();
 
-	friend void drawTexture(sf::RenderWindow &_window, const sf::Vector2f &origin, const sf::Texture &);
+	friend void drawTexture(sf::RenderWindow* _window, const sf::Vector2f &origin, const sf::Texture &);
 
-	friend void drawMinimap(sf::RenderWindow &window);
+	friend void drawMinimap(sf::RenderWindow* window);
 
-	friend void drawSnakeBodyMinimap(sf::RenderWindow &window, const SnakeBody &snake_body);
+	friend void drawSnakeBodyMinimap(sf::RenderWindow* window, const SnakeBody &snake_body);
 
 	void getServerData();
 	void handleEvents();
@@ -72,8 +69,8 @@ public:
 	void sendClientInput();
 	void display();
 
-	GameState(sf::RenderWindow* window, ClientCommunication* communication) : State("game", window, communication) {}
-	~GameState();
+	GameState(sf::RenderWindow* window, ClientCommunication* communication) : State(window, communication), _has_received_data(false) {}
+	~GameState() {}
 
 private:
 	bool _has_received_data;

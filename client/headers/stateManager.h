@@ -10,18 +10,22 @@ class StateManager
 public:
 
 	void switchState(std::string state);
+	void addState(std::string name, std::unique_ptr<State>& state);
 
 	// Run current state
-	void run();
+	void init();
+	void getServerData();
+	void handleEvents();
+	void update();
+	void sendClientInput();
+	void display();
+	void quit();
 
-	StateManager(sf::RenderWindow* window, ClientCommunication* communication) : _current_state("home") {
-		_states["home"] = HomeState(window, communication);
-		_states["game"] = GameState(window, communication);
-	}
-	~StateManager();
+	StateManager() {}
+	~StateManager() {}
 
 private:
-	std::map<std::string, State> _states;
+	std::map<std::string, std::unique_ptr<State> > _states;
 	std::string _current_state;
 };
 
