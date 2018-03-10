@@ -10,6 +10,7 @@
 #include "communication.h"
 #include <string>
 
+
 class ClientCommunication : public Communication {
 	public:
 		void init();

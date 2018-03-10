@@ -12,7 +12,9 @@
 #include <memory>
 #include "parameters.h"
 #include "server.h"
+#include "player.h"
 #include "user.h"
+#include "IA.h"
 #include "food.h"
 #include "safequeue.h"
 #include <SFML/Network.hpp>
@@ -32,7 +34,7 @@ class Program {
 
 		// Generate user id
 		static unsigned int generateId () {
-			return _user_id_counter++;
+			return _player_id_counter++;
 		}
 
 		void initializeFoods();
@@ -45,8 +47,8 @@ class Program {
 			return _socket_queue;
 		}
 
-		std::list<User>& getUsers() {
-			return _users;
+		std::list<Player*>& getPlayers() {
+			return _players;
 		}
 
 		/////////////////
@@ -65,7 +67,7 @@ class Program {
 		bool _is_running; 
 
 		// Int to generate user id
-		static unsigned int _user_id_counter;
+		static unsigned int _player_id_counter;
 
 		// Server class of the server program
 		Server _server; 
@@ -73,11 +75,17 @@ class Program {
 		// Safequeue to see if a new user is trying to connect through a new socket (IMPORTANT FOR MULTITHREADING)
 		SafeQueue<sf::TcpSocket*> _socket_queue;
 
-		// List the users
-		std::list<User> _users;
+		// List the players
+		std::list<Player*> _players;
 
 		// List the food objects
 		std::list<Food> _foods;
+
+		// List the players
+		std::list<User> _users;
+
+		// List the food objects
+		// std::list<> _foods;
 };
 
 #endif
