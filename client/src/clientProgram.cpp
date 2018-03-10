@@ -14,6 +14,8 @@ Program::Program() : _window(sf::VideoMode(WINDOW_SIZE_X,WINDOW_SIZE_Y), "The IN
 }
 
 void Program::init () {
+	std::cout << "Initialization\n";
+
 	_window.setVerticalSyncEnabled(true);
 	// _window.setFramerateLimit(60);
 
@@ -23,13 +25,11 @@ void Program::init () {
 	_state_manager.addState("home", home);
 	_state_manager.addState("game", game);
 
-	_state_manager.switchState("game");
-
 	_is_running = true;
 
-	std::cout << "Initialization\n";
-	_state_manager.init();
-	
+	// set first state
+	_state_manager.initFirstState("game");
+
 	std::srand(std::time(nullptr)); // use current time as seed for random generator
 }
 
@@ -42,6 +42,8 @@ void Program::run () {
 		_state_manager.update();
 		_state_manager.sendClientInput();
 		_state_manager.display();
+
+		_state_manager.switchState();
 
 	}
 

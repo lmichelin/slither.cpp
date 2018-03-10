@@ -17,12 +17,19 @@ public:
 	virtual void init() =0;
 	virtual void quit() =0;
 
+	static std::string getNextState() {
+		return _next_state;
+	}
+
+	static void setNextState(std::string state) {
+		_next_state = state;
+	}
+	
 	virtual void getServerData() =0;
 	virtual void handleEvents() =0;
 	virtual void update() =0;
 	virtual void sendClientInput() =0;
 	virtual void display() =0;
-
 
 	State(sf::RenderWindow* window, ClientCommunication* communication): _window(window), _communication(communication) {}
 	~State() {}
@@ -30,6 +37,9 @@ public:
 protected:
 	sf::RenderWindow* _window;
 	ClientCommunication* _communication;
+
+private:
+	static std::string _next_state;
 };
 
 class HomeState : public State

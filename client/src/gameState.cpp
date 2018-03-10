@@ -23,6 +23,7 @@ void GameState::getServerData() {
 
 	case END: 
 		_snake.die();
+		State::setNextState("home");
 		break;
 
 	case GAME_FULL:

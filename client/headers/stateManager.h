@@ -8,8 +8,9 @@
 class StateManager
 {
 public:
+	void initFirstState(std::string first_state);
 
-	void switchState(std::string state);
+	void switchState();
 	void addState(std::string name, std::unique_ptr<State>& state);
 
 	// Run current state
