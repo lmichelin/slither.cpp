@@ -36,6 +36,11 @@ class Communication {
 			send(header, send_data, status);
 		}
 
+		void send(int header) {
+			Packet dummy;
+			sendPacket(header, dummy);
+		}
+
 		virtual void sendPacket(int header,  Packet packet, Status& status) =0;
 		virtual void receivePacket(int& header, Packet& packet, Status& status) =0;
 

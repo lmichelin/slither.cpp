@@ -1,4 +1,4 @@
-#include "input.h"
+#include "clientInput.h"
 #include <iostream> //DEBUG
 
 sf::Packet& operator <<(sf::Packet& packet, const input& input) {

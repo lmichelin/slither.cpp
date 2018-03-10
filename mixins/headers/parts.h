@@ -4,6 +4,8 @@
 #include <SFML/Graphics.hpp>
 #include "parameters.h"
 
+typedef sf::Vector2f coordinates;
+
 class ShapePart {
 
 	public:
@@ -97,7 +99,7 @@ class SnakePart: public ShapePart {
 		static SnakePart generateRandom(sf::Color color) {
 			return SnakePart(sf::Vector2f(std::rand()*(float)(GAME_SIZE_X*BACKGROUND_SIZE_X)/RAND_MAX, std::rand()*(float)(GAME_SIZE_Y*BACKGROUND_SIZE_Y)/RAND_MAX), color);
 		}
-
+		
 		SnakePart(): ShapePart(SNAKE_CIRCLE_RADIUS) {}
 		SnakePart(sf::Vector2f coordinates): ShapePart(coordinates, SNAKE_CIRCLE_RADIUS) {}
 		SnakePart(sf::Vector2f coordinates, sf::Color color): ShapePart(coordinates, color, SNAKE_CIRCLE_RADIUS) {} 
@@ -114,6 +116,7 @@ class FoodPart: public ShapePart {
 		static FoodPart generateRandom(sf::Color color) {
 			return FoodPart(sf::Vector2f(std::rand()*(float)(GAME_SIZE_X*BACKGROUND_SIZE_X)/RAND_MAX, std::rand()*(float)(GAME_SIZE_Y*BACKGROUND_SIZE_Y)/RAND_MAX), color);
 		}
+
 
 		FoodPart(): ShapePart(FOOD_CIRCLE_RADIUS) {}
 		FoodPart(sf::Vector2f coordinates): ShapePart(coordinates, FOOD_CIRCLE_RADIUS) {}

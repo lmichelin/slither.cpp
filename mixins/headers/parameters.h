@@ -20,13 +20,12 @@
 
 #define FOOD_NUMBER 500
 
-#define FOOD_PROBA 0.01
 #define ADD_TAIL 4
 
 #define INIT_LENGTH 40
 
-#define LOW_SPEED 2
-#define HIGH_SPEED 4
+#define LOW_SPEED 0.5
+#define HIGH_SPEED 1
 #define ROTATION_ANGLE 0.02
 
 #define EPSILON 0.01

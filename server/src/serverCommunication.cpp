@@ -21,7 +21,6 @@ void ServerCommunication::sendPacket(int header, Packet packet, Status& status) 
 	header_packet << header;
 	header_packet.append(packet.getData(), packet.getDataSize());
 	status = _socket->send(header_packet);
-	std::cout << "SOCKET " << _socket->getRemotePort() << '\n';
     if (status != sf::Socket::Done) {
 		// Error
 		std::cout << "Error when sending to server\n";
@@ -35,7 +34,7 @@ void ServerCommunication::receivePacket(int& header, Packet& packet, Status& sta
 		packet >> header;
 	} else if (status == sf::Socket::NotReady) {
 		// There is nothing to receive on server side
-		std::cout << "Nothing to receive\n";
+		// std::cout << "Nothing to receive\n";
 	} else {
 		// There was an error on receive
 		std::cout << "Error on receive\n";
