@@ -48,6 +48,8 @@ public:
 	void init();
 	void quit();
 
+	friend void drawTexture(sf::RenderWindow* _window, const sf::Vector2f &origin, const sf::Texture &);
+
 	void getServerData();
 	void handleEvents();
 	void update();
@@ -58,6 +60,7 @@ public:
 	~HomeState() {}
 
 private:
+	sf::Texture _texture;
 	
 };
 

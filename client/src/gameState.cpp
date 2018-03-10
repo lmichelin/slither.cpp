@@ -21,7 +21,7 @@ void GameState::getServerData() {
 	_communication->receivePacket(header, data);
 	switch (header) {
 
-	case END: 
+	case END:
 		_snake.die();
 		State::setNextState("home");
 		break;
@@ -97,8 +97,8 @@ void GameState::update() {
 				_snakes[data.snakes[i].id] = data.snakes[i].parts;
 		}
 
-		// std::cout << "SIZE: " << data.my_snake.parts.size() << '\n';
-		// std::cout << "MY SNAKE COORD : " << data.my_snake.parts[0].getCoordinates().x << ' ' << data.my_snake.parts[0].getCoordinates().y << '\n';
+		std::cout << "SIZE: " << data.my_snake.parts.size() << '\n';
+		std::cout << "MY SNAKE COORD : " << data.my_snake.parts[0].getCoordinates().x << ' ' << data.my_snake.parts[0].getCoordinates().y << '\n';
 
 		// Delete all the deleted snakes
 		std::map<unsigned int, Snake>::iterator it_snake;
