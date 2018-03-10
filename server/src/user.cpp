@@ -86,6 +86,6 @@ void User::disconnect() {
 }
 
 void User::endGame() {
-	_communication.send(500);
+	_communication.send(END);
 	_is_running = false;
 }
