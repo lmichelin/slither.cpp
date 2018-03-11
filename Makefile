@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -std=c++11 -Wall -Wextra -g
+CFLAGS = -std=c++11 -Wall -Wextra -O3
 INCLUDES_SERVER = -Iserver/headers -Imixins/headers
 INCLUDES_CLIENT = -Iclient/headers -Imixins/headers
 INCLUDES_MIXINS = -Imixins/headers

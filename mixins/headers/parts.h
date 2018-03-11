@@ -172,7 +172,7 @@ class FoodPart: public ShapePart {
 
 
 		FoodPart(): ShapePart(FOOD_CIRCLE_RADIUS) {}
-		FoodPart(sf::Vector2f coordinates): ShapePart(coordinates, FOOD_CIRCLE_RADIUS) {}
+		FoodPart(sf::Vector2f coordinates): ShapePart(coordinates, sf::Color::White, FOOD_CIRCLE_RADIUS) {}
 		FoodPart(sf::Vector2f coordinates, sf::Color color): ShapePart(coordinates, color, FOOD_CIRCLE_RADIUS) {} 
 		~FoodPart() {}
 };
