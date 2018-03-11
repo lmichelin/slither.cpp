@@ -27,9 +27,9 @@ void drawTexture(sf::RenderWindow* window, const sf::Vector2f &origin, const sf:
 {
 	sf::Sprite background(texture);
 
-	for (int i = 0; i <= GAME_SIZE_X; i++)
+	for (int i = 0; i < GAME_SIZE_X; i++)
 	{
-		for (int j = 0; j <= GAME_SIZE_Y; j++)
+		for (int j = 0; j < GAME_SIZE_Y; j++)
 		{
 			background.setOrigin(origin.x - texture.getSize().x * i - (float)WINDOW_SIZE_X / 2, origin.y - texture.getSize().y * j - (float)WINDOW_SIZE_Y / 2);
 			window->draw(background);
