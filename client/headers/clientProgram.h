@@ -31,7 +31,7 @@ class Program {
 		// Constructor //
 		/////////////////
 
-		Program ();
+		Program (std::string hostname);
 		~Program () {}
 
 	private:
