@@ -22,6 +22,18 @@
 class Program {
 	public:
 
+		///////////////
+		// SINGLETON //
+		///////////////
+
+		static Program& instance() {
+			return program;
+		}
+
+        Program(Program const&) = delete;
+
+        void operator=(Program const&) = delete;
+
 		//////////////////
 		// Main Methods //
 		//////////////////
@@ -55,6 +67,10 @@ class Program {
 			return _players;
 		}
 
+		~Program () {}
+
+	private:
+
 		/////////////////
 		// Constructor //
 		/////////////////
@@ -63,9 +79,9 @@ class Program {
 			// Initialize server on construction
 			_server.init();
 		};
-		virtual ~Program () {}
 
-	private:
+		// Static instance
+		static Program program;
 	
 		// Tells whether the program is running or not
 		bool _is_running; 
@@ -84,12 +100,6 @@ class Program {
 
 		// List the food objects
 		std::list<Food> _foods;
-
-		// List the players
-		std::list<User> _users;
-
-		// List the food objects
-		std::list<AI> _AIs;
 };
 
 #endif
