@@ -1,15 +1,14 @@
 #include "AI.h"
 
 void AI::processPlayerInput() {
-	// if (checkForMap() || checkForEnemy()) {
-	// 	avoid();
-	// } else if (checkFoodAimAndDistance()) {
-	// 	deccelerate();
-	// 	goStraight();
-	// } else {
-	// 	search();
-	// }
-	search();
+	if (checkForMap() || checkForEnemy()) {
+		avoid();
+	} else if (checkFoodAimAndDistance()) {
+		deccelerate();
+		goStraight();
+	} else {
+		search();
+	}
 }
 
 void AI::rotateRight() {
@@ -53,7 +52,7 @@ bool AI::checkForMap() {
 bool AI::checkForEnemy() {
 	// SnakePart part = _snake.getBody().getHead();
 	// SnakePart aim(_snake.getAim());
-	// for (float t = 1; t < 11; t++) {
+	// for (float t = 1; t < 1; t++) {
 	// 	part = part + aim * SNAKE_CIRCLE_RADIUS;
 	// 	std::list<Player*>::iterator it_player;
 	// 	for (it_player = getPlayers().begin(); it_player != getPlayers().end(); it_player++) {
@@ -99,14 +98,17 @@ void AI::search() {
 		_state = Feeding;
 		deccelerate();
 		randomTurn();
+		_is_turning = true;
 	} else {
 		_time.updateElapsedTime();
 		// Check for time to take new decision
 		if (_time.getElapsedTime().count() > 1000 && _is_turning) {
 			goStraight();
+			_is_turning = false;
 			_time.reset();
 		} else if (_time.getElapsedTime().count() > 1000 && !_is_turning) {
 			randomTurn();
+			_is_turning = true;
 			_time.reset();
 		}
 	}
