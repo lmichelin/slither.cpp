@@ -24,13 +24,23 @@ void Program::init () {
 
 	// Generate the foods
 	initializeFoods();
+
+	// Generate the AIs
+	initializeAIs();
 }
 
 void Program::run () {
 	// Run the server so that people can connect to the server in a new thread
 	std::thread server_thread(&Server::run, &_server);
 
-	std::list<std::thread> thread_container;
+	std::list<std::thread> user_thread_container;
+	std::list<std::thread> AI_thread_container;
+
+	// Launch the AIs in their threads
+	std::list<AI>::iterator it_AI; 
+	for (it_AI = _AIs.begin(); it_AI != _AIs.end(); it_AI++) {
+		AI_thread_container.push_back(std::thread(&Player::run, &(*it_AI)));
+	}
 
 	while (_is_running) {
 		// std::cout << "New main loop\n";
@@ -53,7 +63,7 @@ void Program::run () {
 			_users.back().init();
 
 			// Start the run routine in a thread
-			thread_container.push_back(std::thread(&Player::run, &_users.back()));
+			user_thread_container.push_back(std::thread(&Player::run, &_users.back()));
 		}
 
 		////////////////////////////////
@@ -61,14 +71,16 @@ void Program::run () {
 		////////////////////////////////
 
 		std::list<User>::iterator it_user = _users.begin();
-		std::list<std::thread>::iterator it_thread = thread_container.begin();
+		std::list<std::thread>::iterator it_thread = user_thread_container.begin();
 		for (;it_user != _users.end();) {
 			if (!it_user->isPlaying() && !it_user->isConnected()) {
 				if (it_thread->joinable()) {
 					it_thread->join();
 				}
+				std::cout << "ERASING USER" << '\n';
 				_users.erase(it_user++);
-				thread_container.erase(it_thread++);
+				std::cout << "ERASING THREAD" << '\n';
+				user_thread_container.erase(it_thread++);
 			} else {
 				it_user++;
 				it_thread++;
@@ -79,7 +91,44 @@ void Program::run () {
 		//  Erase disconnected AI  //
 		/////////////////////////////
 
+		std::list<AI>::iterator it_IA = _AIs.begin();
+		std::list<std::thread>::iterator AI_it_thread = AI_thread_container.begin();
+		for (;it_IA != _AIs.end();) {
+			if (!it_IA->isPlaying() && !it_IA->isRunning()) {
+				if (AI_it_thread->joinable()) {
+					AI_it_thread->join();
+				}
+				_AIs.erase(it_IA++);
+				AI_thread_container.erase(AI_it_thread++);
+			} else {
+				it_IA++;
+				AI_it_thread++;
+			}
+		}
 
+		//////////////////////////////////
+		//  Erase disconnected Players  //
+		//////////////////////////////////
+
+		_players.remove(NULL);
+		std::cout << "ERASED PLAYERS" << '\n';
+
+		////////////////////
+		//  POPULATE AIs  //
+		////////////////////
+
+		if (_AIs.size() < AI_NUMBER) {
+			// Create new AI in the AI list
+			_AIs.push_back(AI(&_players, &_foods, generateId()));
+
+			// Put the Ai in the player list as pointer
+			_players.push_back(&_AIs.back());
+
+			// Initialize AI
+			_AIs.back().init();
+
+			AI_thread_container.push_back(std::thread(&Player::run, &_AIs.back()));
+		}
 
 		///////////////////////////////
 		//        Update Game        //
@@ -101,5 +150,18 @@ void Program::run () {
 void Program::initializeFoods() {
 	for (size_t i = 0; i < FOOD_NUMBER - 1; i++) {
 		_foods.push_back(Food(FoodPart::generateRandom(sf::Color::White)));
+	}
+}
+
+void Program::initializeAIs() {
+	for (size_t i = 0; i < AI_NUMBER; i++) {
+		// Create new AI in the AI list
+		_AIs.push_back(AI(&_players, &_foods, generateId()));
+
+		// Put the Ai in the player list as pointer
+		_players.push_back(&_AIs.back());
+
+		// Initialize AI
+		_AIs.back().init();
 	}
 }

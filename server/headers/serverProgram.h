@@ -14,7 +14,7 @@
 #include "server.h"
 #include "player.h"
 #include "user.h"
-#include "IA.h"
+#include "AI.h"
 #include "food.h"
 #include "safequeue.h"
 #include <SFML/Network.hpp>
@@ -37,7 +37,11 @@ class Program {
 			return _player_id_counter++;
 		}
 
+		// Generate limited number of foods
 		void initializeFoods();
+
+		// Generate limited number of AIs
+		void initializeAIs();
 
 		/////////////////
 		//   Getters   //
@@ -85,7 +89,7 @@ class Program {
 		std::list<User> _users;
 
 		// List the food objects
-		// std::list<> _foods;
+		std::list<AI> _AIs;
 };
 
 #endif

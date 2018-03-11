@@ -65,9 +65,28 @@ class ShapePart {
 			shape_part.setCoordinates(this->_coordinates + other_part.getCoordinates());
 			return shape_part;
 		}
+
 		ShapePart operator-(const ShapePart& other_part) {
 			ShapePart shape_part(this->_coordinates, this->_color, this->_radius);
 			shape_part.setCoordinates(this->_coordinates - other_part.getCoordinates());
+			return shape_part;
+		}
+
+		ShapePart operator+(const coordinates value) {
+			ShapePart shape_part(this->_coordinates, this->_color, this->_radius);
+			shape_part.setCoordinates(this->_coordinates + value);
+			return shape_part;
+		}
+
+		ShapePart operator-(const coordinates value) {
+			ShapePart shape_part(this->_coordinates, this->_color, this->_radius);
+			shape_part.setCoordinates(this->_coordinates - value);
+			return shape_part;
+		}
+
+		ShapePart operator*(const float value) {
+			ShapePart shape_part(this->_coordinates, this->_color, this->_radius);
+			shape_part.setCoordinates(coordinates(this->_coordinates.x * value, this->_coordinates.y * value));
 			return shape_part;
 		}
 
@@ -82,7 +101,7 @@ class ShapePart {
 		ShapePart(sf::Vector2f coordinates, float radius): _coordinates(coordinates), _radius(radius) {}
 		~ShapePart() {}
 
-	private:
+	protected:
 
 		sf::Vector2f _coordinates;
 		sf::Color _color;
@@ -91,6 +110,40 @@ class ShapePart {
 
 class SnakePart: public ShapePart {
 	public:
+
+		///////////////
+		// OPERATORS //
+		///////////////
+
+		SnakePart operator+(const SnakePart& other_part) {
+			SnakePart shape_part(this->_coordinates, this->_color);
+			shape_part.setCoordinates(this->_coordinates + other_part.getCoordinates());
+			return shape_part;
+		}
+
+		SnakePart operator-(const SnakePart& other_part) {
+			SnakePart shape_part(this->_coordinates, this->_color);
+			shape_part.setCoordinates(this->_coordinates - other_part.getCoordinates());
+			return shape_part;
+		}
+
+		SnakePart operator+(const coordinates value) {
+			SnakePart shape_part(this->_coordinates, this->_color);
+			shape_part.setCoordinates(this->_coordinates + value);
+			return shape_part;
+		}
+
+		SnakePart operator-(const coordinates value) {
+			SnakePart shape_part(this->_coordinates, this->_color);
+			shape_part.setCoordinates(this->_coordinates - value);
+			return shape_part;
+		}
+
+		SnakePart operator*(const float value) {
+			SnakePart shape_part(this->_coordinates, this->_color);
+			shape_part.setCoordinates(coordinates(this->_coordinates.x * value, this->_coordinates.y * value));
+			return shape_part;
+		}
 
 		///////////////
 		//  BUILDER  //
