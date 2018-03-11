@@ -10,9 +10,11 @@
 		/////////////////////
 
 void Player::generateRandomInitialPosition() {
+	// generate a random color
+	sf::Color color(rand() % 100 + 100, rand() % 100 + 100, rand() % 100 + 100);
 
 	// Generate a random position
-	SnakePart position(sf::Vector2f(std::rand()*(float)(GAME_SIZE_X*BACKGROUND_SIZE_X)/RAND_MAX, std::rand()*(float)(GAME_SIZE_Y*BACKGROUND_SIZE_Y)/RAND_MAX), sf::Color::Red);
+	SnakePart position(sf::Vector2f(std::rand()*(float)(GAME_SIZE_X*BACKGROUND_SIZE_X)/RAND_MAX, std::rand()*(float)(GAME_SIZE_Y*BACKGROUND_SIZE_Y)/RAND_MAX), color);
 
 	// Get Map Center
 	ShapePart center(sf::Vector2f(((GAME_SIZE_X*BACKGROUND_SIZE_X)-1)/2, ((GAME_SIZE_Y*BACKGROUND_SIZE_Y)-1)/2));
@@ -115,16 +117,14 @@ void Player::computePlayersIntersection() {
 		}
 	}
 	if (flag) {
-		_snake.die();
-		_is_running = false;
+		endGame();
 	}
 }
 
 void Player::computeMapIntersection() {
 	coordinates head_coordinates = _snake.getBody().getHead().getCoordinates();
 	if (head_coordinates.x < 0 || head_coordinates.y < 0 || head_coordinates.x > GAME_SIZE_X * BACKGROUND_SIZE_X || head_coordinates.y > GAME_SIZE_Y * BACKGROUND_SIZE_Y) {
-		_snake.die();
-		_is_running = false;
+		endGame();
 	}
 }
 

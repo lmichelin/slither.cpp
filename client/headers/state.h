@@ -21,8 +21,13 @@ public:
 		return _next_state;
 	}
 
-	static void setNextState(std::string state) {
+	static std::string getMessage() {
+		return _message;
+	}
+
+	static void setNextState(std::string state, std::string message="") {
 		_next_state = state;
+		_message = message;
 	}
 	
 	virtual void getServerData() =0;
@@ -40,6 +45,7 @@ protected:
 
 private:
 	static std::string _next_state;
+	static std::string _message;
 };
 
 class HomeState : public State
@@ -49,6 +55,8 @@ public:
 	void quit();
 
 	friend void drawTexture(sf::RenderWindow* _window, const sf::Vector2f &origin, const sf::Texture &);
+
+	friend void drawHomeMessage(sf::RenderWindow* _window, const sf::Font& _font, std::string message);
 
 	void getServerData();
 	void handleEvents();
@@ -61,6 +69,8 @@ public:
 
 private:
 	sf::Texture _texture;
+
+	sf::Font _font;	
 	
 };
 
@@ -74,7 +84,9 @@ public:
 
 	friend void drawMinimap(sf::RenderWindow* window);
 
-	friend void drawSnakeBodyMinimap(sf::RenderWindow* window, const SnakeBody &snake_body);
+	friend void drawSnakeBodyMinimap(sf::RenderWindow* window, const SnakeBody &snake_body, bool is_my_snake);
+
+	friend void drawCurrentScore(sf::RenderWindow* window, const sf::Font& _font, int score);	
 
 	void getServerData();
 	void handleEvents();
@@ -89,6 +101,8 @@ private:
 	bool _has_received_data;
 
 	serverData _serverData;
+
+	sf::Font _font;
 
 	sf::Texture _texture;
 

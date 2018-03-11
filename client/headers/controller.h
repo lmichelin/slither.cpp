@@ -14,11 +14,14 @@ public:
 	float getSpeed();
 
 	input getInput() const;
+	void resetInput() {
+		_input = {LOW_SPEED, false, false};
+	}
 
 	bool getRotatingLeft();
 	bool getRotatingRight();
 
-	Controller() {};
+	Controller(): _input({LOW_SPEED, false, false}) {}
 	~Controller() {}
 };
 

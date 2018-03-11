@@ -1,6 +1,7 @@
 #include "stateManager.h"
 
 std::string State::_next_state = "";
+std::string State::_message = "";
 
 void StateManager::initFirstState(std::string first_state) {
 	State::setNextState(first_state);
