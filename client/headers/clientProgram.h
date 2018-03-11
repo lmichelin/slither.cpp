@@ -16,17 +16,36 @@
 class Program {
 
 	public:
+
+		//////////////////
+		// Main Methods //
+		//////////////////
+		
+		// Launch program
 		void init ();
+
+		// Run main routine
 		void run ();
 		
+		/////////////////
+		// Constructor //
+		/////////////////
+
 		Program ();
 		~Program () {}
 
 	private:
+
+		// CHeck if running
 		bool _is_running;
 
+		// Client window
 		sf::RenderWindow _window;
+
+		// Client communication module
 		ClientCommunication _communication;
+
+		// State manager module
 		StateManager _state_manager;
 
 		void disconnect();

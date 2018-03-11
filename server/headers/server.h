@@ -6,10 +6,9 @@
 #define SERVER_H
 
 #include <SFML/Network.hpp>
-#include "parameters.h"
 #include <string>
+#include "parameters.h"
 #include "safequeue.h"
-#include <memory>
 class Server {
 	public:
 

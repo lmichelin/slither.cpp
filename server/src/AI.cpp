@@ -1,7 +1,7 @@
 #include "AI.h"
 
 void AI::processPlayerInput() {
-	if (checkForMap() || checkForEnemy()) {
+	if (checkForMap()) {
 		avoid();
 	} else if (checkFoodAimAndDistance()) {
 		deccelerate();
@@ -46,25 +46,6 @@ bool AI::checkForMap() {
 	} else if (head.y < 10 * SNAKE_CIRCLE_RADIUS && aim.y < 0) {
 		return true;
 	}
-	return false;
-}
-
-bool AI::checkForEnemy() {
-// 	SnakePart part = _snake.getBody().getHead();
-// 	SnakePart aim(_snake.getAim());
-// 	for (float t = 1; t < 1; t+=3) {
-// 		part = part + aim * SNAKE_CIRCLE_RADIUS;
-// 		std::list<Player*>::iterator it_player;
-// 		for (it_player = getPlayers().begin(); it_player != getPlayers().end(); it_player++) {
-// 			if (*it_player != this && (*it_player)->isRunning() && (*it_player)->isPlaying()) {
-// 				for (size_t i = 0; i < (*it_player)->getSnake().getBody().getParts().size(); i++) {
-// 					if (part.checkIntersection((*it_player)->getSnake().getBody().getParts()[i])) {
-// 						return true;
-// 					}
-// 				}
-// 			}
-// 		}
-// 	}
 	return false;
 }
 

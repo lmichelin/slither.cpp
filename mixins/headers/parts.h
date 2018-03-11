@@ -1,3 +1,7 @@
+/*
+ * Class to model the the circles of the foods and the snakes
+*/
+
 #ifndef PARTSFACTORY_H
 #define PARTSFACTORY_H
 
@@ -14,9 +18,16 @@ class ShapePart {
 		// Main Methods //
 		//////////////////
 
+		// Compute the distance between two parts
 		float computeDistance(const ShapePart& other_part);
+
+		// Check if the intersection between two parts
 		bool checkIntersection(const ShapePart& other_part);
+
+		// Check the intersection between two parts with radius more
 		bool checkIntersection(const ShapePart& other_part, float radius);
+
+		// Get the aim between two parts
 		sf::Vector2f computeAim(const ShapePart& other_part);
 
 		/////////////
@@ -28,6 +39,7 @@ class ShapePart {
 			return _coordinates;
 		}
 
+		// Get the radius of the part
 		virtual float getRadius() const {
 			return _radius;
 		}
@@ -149,6 +161,7 @@ class SnakePart: public ShapePart {
 		//  BUILDER  //
 		///////////////
 
+		// Generate random part
 		static SnakePart generateRandom(sf::Color color) {
 			return SnakePart(sf::Vector2f(std::rand()*(float)(GAME_SIZE_X*BACKGROUND_SIZE_X)/RAND_MAX, std::rand()*(float)(GAME_SIZE_Y*BACKGROUND_SIZE_Y)/RAND_MAX), color);
 		}
@@ -166,6 +179,7 @@ class FoodPart: public ShapePart {
 		//  BUILDER  //
 		///////////////
 
+		// Generate random foodpart
 		static FoodPart generateRandom(sf::Color color) {
 			return FoodPart(sf::Vector2f(std::rand()*(float)(GAME_SIZE_X*BACKGROUND_SIZE_X)/RAND_MAX, std::rand()*(float)(GAME_SIZE_Y*BACKGROUND_SIZE_Y)/RAND_MAX), color);
 		}

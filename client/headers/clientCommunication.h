@@ -13,17 +13,34 @@
 
 class ClientCommunication : public Communication {
 	public:
+
+		//////////////////
+		// Main Methods //
+		//////////////////
+
+		// Init the communication
 		void init();
 
-		Address getRemoteAddress();
-		Socket& getSocket();
+		// Disconnect server
 		void disconnect();
+		
+		// Get remote address
+		Address getRemoteAddress();
 
+		// Get the socket
+		Socket& getSocket();
+
+		// Send and receive packets with status
 		void sendPacket(int header,  Packet packet, Status& status);
 		void receivePacket(int& header, Packet& packet, Status& status);
 
+		// Send and receive packets without status (TO BE DONE BY SUBCLASS CLIENT AND SERVER)
 		void sendPacket(int header, Packet packet);
 		void receivePacket(int& header, Packet& packet);
+
+		/////////////////
+		// Constructor //
+		/////////////////
 
 		ClientCommunication(std::string addr, int port) : _addr(addr), _port(port) {}
 		~ClientCommunication() {}

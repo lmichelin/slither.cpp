@@ -15,12 +15,12 @@ void User::processPlayerInput() {
 		// Reset disconnect timer
 		_disconnectTimeHandler.reset();
 
+		// Switch on the status code received
 		switch (header) {
 		
 		case OK:
 			_client_input.extract(input_packet);
 			_input = _client_input.getData();
-			// std::cout << "INPUT " << _input.rotating_left << ' ' << _input.rotating_right << ' ' << _input.speed << '\n';
 			_has_received_data = true;	
 			break;
 		
@@ -45,6 +45,7 @@ void User::processPlayerInput() {
 }
 
 void User::processOutput() {
+	// Check if we have received data (FOR PING PONG communication between client and server)
 	if (_has_received_data) {
 		packageServerData();
 		_communication.send(OK, _serverData.getData());
@@ -53,14 +54,17 @@ void User::processOutput() {
 }
 
 void User::packageServerData() {
+	// Initialize data to be sent
 	data send_data;
 
+	// Put my snake data in the data to be sent
 	snake_data my_snake;
 	my_snake.id = _id;
 	my_snake.parts = _snake.getBody().getParts();
 
 	send_data.my_snake = my_snake;
 
+	// Add the players data in the data to  be sent
 	std::list<Player*>::iterator it_player;
 	for (it_player = getPlayers().begin(); it_player != getPlayers().end(); it_player++) {
 		if (*it_player != this && (*it_player)->isRunning() && (*it_player)->isPlaying()) {
@@ -71,18 +75,18 @@ void User::packageServerData() {
 		}
 	}
 
-	// ADD FOODS
+	// ADD FOODS to the data to be sent
 	std::list<Food>::iterator it_food;
 	for (it_food = getFoods().begin(); it_food != getFoods().end(); it_food++) {
 		send_data.food_vector.push_back(it_food->getPart());
 	}
 
-	// Package
+	// Package the entire data
 	_serverData.setData(send_data);
 }
 
 void User::endGame() {
 	_snake.die();
-	_communication.send(END);
+	_communication.send(END); // Send status END header to client
 	_is_running = false;
 }

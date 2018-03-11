@@ -17,6 +17,7 @@
 #include "timeModule.h"
 #include "player.h"
 
+// States of the AI
 enum state {Avoiding, Feeding};
 
 class AI: public Player {
@@ -79,9 +80,6 @@ class AI: public Player {
 
 		// Check if any foods are on snake's aim
 		bool checkFoodAimAndDistance();
-
-		// Check if there are enemies in front
-		bool checkForEnemy();
 
 		// Check if we are leaving the map
 		bool checkForMap();

@@ -68,6 +68,7 @@ class User: public Player {
 		// Variable that tells if server has received client data (USEFUL FOR PING PONG)
 		bool _has_received_data;
 
+		// Put the data to be sent in serverData
 		void packageServerData();
 };
 

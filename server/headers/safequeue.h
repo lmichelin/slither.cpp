@@ -1,3 +1,7 @@
+/*
+ * Class to communicate between threads and send objects between them
+ * This is useful when the erver finds new players who want to connect and needs to send the sockets to the main program
+*/ 
 #ifndef SAFE_QUEUE
 #define SAFE_QUEUE
 

@@ -3,7 +3,7 @@
 
 #define SERVER_ADDRESS "localhost"
 #define SERVER_PORT 8001
-#define MAX_CONNECTIONS 100
+#define MAX_CONNECTIONS 20
 #define INACTIVITY_TIMEOUT 1000 // in ms
 
 #define WINDOW_SIZE_X 1200

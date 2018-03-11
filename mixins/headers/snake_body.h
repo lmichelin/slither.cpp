@@ -1,13 +1,15 @@
+/*
+ * Class to model the body of a snake with its positions, coordinates, circles ...
+*/
 #ifndef SNAKE_BODY_H
 #define SNAKE_BODY_H
 
-#include "parameters.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
-#include "input.h"
-#include <string>
-#include <iostream>
 #include <vector>
+
+#include "parameters.h"
+#include "input.h"
 #include "parts.h"
 #include "food.h"
 
@@ -25,9 +27,16 @@ class SnakeBody {
 		// Main Methods //
 		//////////////////
 
+		// Get new position of the head with speed and aim in argument
 		void interpolate (const float speed, sf::Vector2f aim);
+
+		// Check intersection between head and other snake body
 		bool checkIntersection (const SnakeBody& S);
+
+		// Check intersection between head and another snakebody with a radius more
 		bool checkIntersection (const SnakeBody& S, float radius);
+
+		// Check intersection between head and food
 		bool checkFoodIntersection (const Food& p);
 		void addTail (int);
 
@@ -69,6 +78,8 @@ class SnakeBody {
 		}
 
 	private:
+
+		// Parts of the snake with coordinates and colors
 		snake_part_vect _parts;
 };
 

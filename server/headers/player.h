@@ -111,7 +111,6 @@ class Player {
 		/////////////////
 		
 		Player(std::list<Player*>* players, std::list<Food>* foods, unsigned int id): _id(id), _is_running(true), _is_playing(false), _players(players), _foods(foods) {
-			std::cout << "PLAYER CREATED" << '\n';
 			addToPlayerCount(1); // Update User count
 		}
 		virtual ~Player() {};
@@ -150,18 +149,25 @@ class Player {
 		// List the foods
 		std::list<Food>* _foods;
 
+		// Generate random coordinates and random parts
 		void generateRandomInitialPosition();
 
+		// Update the player position by checking input and update the positions accordingly
 		void updatePlayerPosition();
 
+		// Compute the intersections with every object in the game
 		void computeIntersection();
 
+		// Compute the intersections with the players
 		void computePlayersIntersection();
 
+		// Compute intersections with foods
 		void computeFoodsIntersection();
 
+		// COmpute intersections with map edges
 		void computeMapIntersection();
 
+		// Set _is_playing to true if not the case and modify playerplayingcount accordingly
 		void play();
 };
 

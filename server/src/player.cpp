@@ -92,7 +92,6 @@ void Player::run() {
 	}
 	_is_playing = false;
 	addToPlayerPlayingCount(-1);
-	std::cout << "PLAYERS PLAYING: " << getPlayerPlayingCount() << '\n';
 }
 
 		///////////////////////////
@@ -100,8 +99,13 @@ void Player::run() {
 		///////////////////////////
 
 void Player::computeIntersection() {
+	// Intersect with players
 	computePlayersIntersection();
+
+	// Intersect with the foods
 	computeFoodsIntersection();
+
+	// Intersect with the map
 	computeMapIntersection();
 }
 
@@ -135,7 +139,6 @@ void Player::computeFoodsIntersection() {
 		if (_snake.checkFoodIntersection(*it_food)) {
 			_snake.addTail(1);
 			getFoods().erase(it_food++);
-			getFoods().push_back(Food(FoodPart::generateRandom(sf::Color::White)));
 		} else {
 			it_food++;
 		}
@@ -147,11 +150,14 @@ void Player::computeFoodsIntersection() {
 		////////////////
 
 void Player::updatePlayerPosition() {
-	_snake.updateAim(_input);
-	_snake.interpolate(_input.speed);
+	// Update aim and speed
+	_snake.updateAimAndSpeed(_input);
+	// Renew the head part of the snake
+	_snake.interpolate();
 }
 
 void Player::play() {
+	// If not playing set play to true
 	if (!_is_playing) {
 		_is_playing = true;
 		addToPlayerPlayingCount(1);

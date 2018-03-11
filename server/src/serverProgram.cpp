@@ -74,14 +74,11 @@ void Program::run () {
 				if (it_thread->joinable()) {
 					it_thread->join();
 				}
-				std::cout << "REPLACING WITH FOODS" << '\n';
 				for (size_t i = 0; i < (*it_player)->getSnake().getBody().getParts().size(); i+=2) {
 					_foods.push_back(Food(FoodPart((*it_player)->getSnake().getBody().getParts()[i].getCoordinates())));
 				}
-				std::cout << "ERASING USER" << '\n';
 				delete *it_player;
 				it_player = _players.erase(it_player);
-				std::cout << "ERASING THREAD" << '\n';
 				thread_container.erase(it_thread++);
 			} else {
 				++it_player;
@@ -89,12 +86,19 @@ void Program::run () {
 			}
 		}
 
+		//////////////////////
+		//  POPULATE FOODS  //
+		//////////////////////
+
+		if (_foods.size() < FOOD_NUMBER) {
+			_foods.push_back(Food(FoodPart::generateRandom(sf::Color::White)));
+		}
+
 		////////////////////
 		//  POPULATE AIs  //
 		////////////////////
+
 		if (AI::getAICounter() < AI_NUMBER) {
-			std::cout << AI::getAICounter() << '\n';
-			std::cout << thread_container.size() << '\n';
 			// Create new AI in the _players list
 			_players.push_back(new AI(&_players, &_foods, generateId()));
 

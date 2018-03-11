@@ -8,8 +8,9 @@
 #include <vector>
 #include <list>
 #include <thread>
+#include <SFML/Network.hpp>
 #include <mutex>
-#include <memory>
+
 #include "parameters.h"
 #include "server.h"
 #include "player.h"
@@ -17,7 +18,6 @@
 #include "AI.h"
 #include "food.h"
 #include "safequeue.h"
-#include <SFML/Network.hpp>
 
 class Program {
 	public:

@@ -11,41 +11,59 @@
 #include "serverData.h"
 #include "clientCommunication.h"
 
-class State
-{
-public:
-	virtual void init() =0;
-	virtual void quit() =0;
+class State {
+	public:
 
-	static std::string getNextState() {
-		return _next_state;
-	}
+		//////////////////
+		// Main Methods //
+		//////////////////
 
-	static std::string getMessage() {
-		return _message;
-	}
+		virtual void init() =0;
+		virtual void quit() =0;
+		virtual void getServerData() =0;
+		virtual void handleEvents() =0;
+		virtual void update() =0;
+		virtual void sendClientInput() =0;
+		virtual void display() =0;
 
-	static void setNextState(std::string state, std::string message="") {
-		_next_state = state;
-		_message = message;
-	}
-	
-	virtual void getServerData() =0;
-	virtual void handleEvents() =0;
-	virtual void update() =0;
-	virtual void sendClientInput() =0;
-	virtual void display() =0;
 
-	State(sf::RenderWindow* window, ClientCommunication* communication): _window(window), _communication(communication) {}
-	~State() {}
+		/////////////
+		// Getters //
+		/////////////
 
-protected:
-	sf::RenderWindow* _window;
-	ClientCommunication* _communication;
+		static std::string getNextState() {
+			return _next_state;
+		}
 
-private:
-	static std::string _next_state;
-	static std::string _message;
+		static std::string getMessage() {
+			return _message;
+		}
+
+		static void setNextState(std::string state, std::string message="") {
+			_next_state = state;
+			_message = message;
+		}
+
+		
+
+		/////////////////
+		// Constructor //
+		/////////////////
+
+		State(sf::RenderWindow* window, ClientCommunication* communication): _window(window), _communication(communication) {}
+		~State() {}
+
+	protected:
+
+		// Client window 
+		sf::RenderWindow* _window;
+
+		// Communication module
+		ClientCommunication* _communication;
+
+	private:
+		static std::string _next_state;
+		static std::string _message;
 };
 
 class HomeState : public State

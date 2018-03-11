@@ -4,25 +4,43 @@
 #include "clientInput.h"
 
 class Controller {
-private:
-	input _input;
 
-public:
-	void rotateLeft(bool);
-	void rotateRight(bool);
-	void setSpeed(float);
-	float getSpeed();
+	public:
 
-	input getInput() const;
-	void resetInput() {
-		_input = {LOW_SPEED, false, false};
-	}
+		//////////////////
+		// Main Methods //
+		//////////////////
 
-	bool getRotatingLeft();
-	bool getRotatingRight();
+		void rotateLeft(bool);
+		void rotateRight(bool);
+		void setSpeed(float);
 
-	Controller(): _input({LOW_SPEED, false, false}) {}
-	~Controller() {}
+		/////////////
+		// Getters //
+		/////////////
+
+		float getSpeed();
+
+		input getInput() const;
+
+		void resetInput() {
+			_input = {LOW_SPEED, false, false};
+		}
+
+		bool getRotatingLeft();
+		bool getRotatingRight();
+
+		/////////////////
+		// Constructor //
+		/////////////////
+
+		Controller(): _input({LOW_SPEED, false, false}) {}
+		~Controller() {}
+
+	private:
+
+		// Input struct
+		input _input;
 };
 
 #endif
