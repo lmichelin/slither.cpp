@@ -1,3 +1,8 @@
+#define SERVER_ADDRESS "localhost"
+#define SERVER_PORT 8001
+#define MAX_CONNECTIONS 100
+#define INACTIVITY_TIMEOUT 1000 // in ms
+
 #ifndef PARAMETERS_H
 #define PARAMETERS_H
 
@@ -22,7 +27,7 @@
 
 #define ADD_TAIL 4
 
-#define INIT_LENGTH 40
+#define INIT_LENGTH 4
 
 #define LOW_SPEED 0.5
 #define HIGH_SPEED 1
@@ -41,10 +46,5 @@
 
 #define DISCONNECT 405
 #define GAME_FULL 406
-
-#define SERVER_ADDRESS "localhost"
-#define SERVER_PORT 8001
-#define MAX_CONNECTIONS 100
-#define INACTIVITY_TIMEOUT 1000 // in ms
 
 #endif

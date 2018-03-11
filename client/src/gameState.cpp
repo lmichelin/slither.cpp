@@ -38,6 +38,7 @@ void GameState::getServerData() {
 		break;
 
 	default:
+		State::setNextState("home");
 		break;
 	}
 }

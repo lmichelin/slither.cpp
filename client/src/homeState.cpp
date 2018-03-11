@@ -3,7 +3,7 @@
 #include "draw.h"
 
 void HomeState::init() {
-    if (!_texture.loadFromFile("build/static/bg45.jpg")) {
+    if (!_texture.loadFromFile("build/static/home.png")) {
 		// error when load file
 		exit(1);
 	}
@@ -41,7 +41,7 @@ void HomeState::sendClientInput() {
 
 void HomeState::display() {
 
-    sf::Vector2f origin(WINDOW_SIZE_X / 2,WINDOW_SIZE_Y / 2);
+    sf::Vector2f origin(_texture.getSize().x / 2 ,_texture.getSize().y / 2);
 
 	_window->clear();
 
