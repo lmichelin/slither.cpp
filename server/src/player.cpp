@@ -89,8 +89,8 @@ void Player::run() {
 		}
 	}
 	_is_playing = false;
-	disconnect();
 	addToPlayerPlayingCount(-1);
+	std::cout << "PLAYERS PLAYING: " << getPlayerPlayingCount() << '\n';
 }
 
 		///////////////////////////

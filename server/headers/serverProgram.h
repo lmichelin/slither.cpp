@@ -63,7 +63,7 @@ class Program {
 			// Initialize server on construction
 			_server.init();
 		};
-		~Program () {}
+		virtual ~Program () {}
 
 	private:
 	

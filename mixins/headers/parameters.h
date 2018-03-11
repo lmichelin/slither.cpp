@@ -30,7 +30,7 @@
 
 #define EPSILON 0.01
 
-#define AI_NUMBER 10
+#define AI_NUMBER 5
 
 // Network Status Codes
 #define OK 200

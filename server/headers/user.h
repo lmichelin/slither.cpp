@@ -33,9 +33,6 @@ class User: public Player {
 
 		void endGame();
 
-		// Disconnect the user from the server
-		void disconnect();
-
 		/////////////
 		// Getters //
 		/////////////

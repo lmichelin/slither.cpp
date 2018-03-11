@@ -4,6 +4,7 @@
 #include "parts.h"
 
 // Initialize User external variables
+int AI::_AI_counter = 0;
 int Player::_player_count = 0;
 int Player::_player_playing_count = 0;
 std::mutex Player::_m;
@@ -33,13 +34,12 @@ void Program::run () {
 	// Run the server so that people can connect to the server in a new thread
 	std::thread server_thread(&Server::run, &_server);
 
-	std::list<std::thread> user_thread_container;
-	std::list<std::thread> AI_thread_container;
+	std::list<std::thread> thread_container;
 
 	// Launch the AIs in their threads
-	std::list<AI>::iterator it_AI; 
-	for (it_AI = _AIs.begin(); it_AI != _AIs.end(); it_AI++) {
-		AI_thread_container.push_back(std::thread(&Player::run, &(*it_AI)));
+	std::list<Player*>::iterator it_AI; 
+	for (it_AI = _players.begin(); it_AI != _players.end(); it_AI++) {
+		thread_container.push_back(std::thread(&Player::run, *it_AI));
 	}
 
 	while (_is_running) {
@@ -52,82 +52,52 @@ void Program::run () {
 		// When a new user connects, create a user object in a new thread with his socket in it
 		sf::TcpSocket* socket;
 		if (_socket_queue.pop(socket)) {
-			// Add the user in the users array
+			// Add the user in the players array
 			// User new_user(socket);
-			_users.push_back(User(socket, &_players, &_foods, generateId()));
-
-			// Put the user in the player array
-			_players.push_back(&_users.back());
+			_players.push_back(new User(socket, &_players, &_foods, generateId()));
 
 			// Initialize user
-			_users.back().init();
+			_players.back()->init();
 
 			// Start the run routine in a thread
-			user_thread_container.push_back(std::thread(&Player::run, &_users.back()));
+			thread_container.push_back(std::thread(&Player::run, _players.back()));
 		}
 
-		////////////////////////////////
-		//  Erase disconnected users  //
-		////////////////////////////////
+		//////////////////////////////////
+		//  Erase disconnected players  //
+		//////////////////////////////////
 
-		std::list<User>::iterator it_user = _users.begin();
-		std::list<std::thread>::iterator it_thread = user_thread_container.begin();
-		for (;it_user != _users.end();) {
-			if (!it_user->isPlaying() && !it_user->isConnected()) {
+		std::list<Player*>::iterator it_player = _players.begin();
+		std::list<std::thread>::iterator it_thread = thread_container.begin();
+		for (;it_player != _players.end();) {
+			if (!(*it_player)->isPlaying() && !(*it_player)->isRunning()) {
 				if (it_thread->joinable()) {
 					it_thread->join();
 				}
 				std::cout << "ERASING USER" << '\n';
-				_users.erase(it_user++);
+				delete *it_player;
+				_players.erase(it_player++);
 				std::cout << "ERASING THREAD" << '\n';
-				user_thread_container.erase(it_thread++);
+				thread_container.erase(it_thread++);
 			} else {
-				it_user++;
+				it_player++;
 				it_thread++;
 			}
 		}
 
-		/////////////////////////////
-		//  Erase disconnected AI  //
-		/////////////////////////////
-
-		std::list<AI>::iterator it_IA = _AIs.begin();
-		std::list<std::thread>::iterator AI_it_thread = AI_thread_container.begin();
-		for (;it_IA != _AIs.end();) {
-			if (!it_IA->isPlaying() && !it_IA->isRunning()) {
-				if (AI_it_thread->joinable()) {
-					AI_it_thread->join();
-				}
-				_AIs.erase(it_IA++);
-				AI_thread_container.erase(AI_it_thread++);
-			} else {
-				it_IA++;
-				AI_it_thread++;
-			}
-		}
-
-		//////////////////////////////////
-		//  Erase disconnected Players  //
-		//////////////////////////////////
-
-		_players.remove(NULL);
-		std::cout << "ERASED PLAYERS" << '\n';
-
 		////////////////////
 		//  POPULATE AIs  //
 		////////////////////
-
-		if (_AIs.size() < AI_NUMBER) {
-			// Create new AI in the AI list
-			_AIs.push_back(AI(&_players, &_foods, generateId()));
-
-			// Put the Ai in the player list as pointer
-			_players.push_back(&_AIs.back());
+		if (AI::getAICounter() < AI_NUMBER) {
+			std::cout << AI::getAICounter() << '\n';
+			std::cout << thread_container.size() << '\n';
+			// Create new AI in the _players list
+			_players.push_back(new AI(&_players, &_foods, generateId()));
 
 			// Initialize AI
-			_AIs.back().init();
+			_players.back()->init();
 
-			AI_thread_container.push_back(std::thread(&Player::run, &_AIs.back()));
+			thread_container.push_back(std::thread(&Player::run, _players.back()));
 		}
 
 		///////////////////////////////
@@ -155,13 +125,10 @@ void Program::initializeFoods() {
 
 void Program::initializeAIs() {
 	for (size_t i = 0; i < AI_NUMBER; i++) {
-		// Create new AI in the AI list
-		_AIs.push_back(AI(&_players, &_foods, generateId()));
-
-		// Put the Ai in the player list as pointer
-		_players.push_back(&_AIs.back());
+		// Create new AI in the _players list
+		_players.push_back(new AI(&_players, &_foods, generateId()));
 
 		// Initialize AI
-		_AIs.back().init();
+		_players.back()->init();
 	}
 }

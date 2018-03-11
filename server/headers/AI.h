@@ -35,9 +35,6 @@ class AI: public Player {
 		// End the game
 		void endGame();
 
-		// Disconnect the user from the server
-		void disconnect() {};
-
 		/////////////
 		// Getters //
 		/////////////
@@ -46,14 +43,33 @@ class AI: public Player {
 			return _state;
 		}
 
+		static int getAICounter() {
+			return _AI_counter;
+		}
+
+		/////////////
+		// Setters //
+		/////////////
+
+		void addToAICounter(int n) {
+			_AI_counter += n;
+		}
+
 		/////////////////
 		// Constructor //
 		/////////////////
 		
-		AI(std::list<Player*>* players, std::list<Food>* foods, unsigned int id): Player(players, foods, id) {}
-		~AI() {}
+		AI(std::list<Player*>* players, std::list<Food>* foods, unsigned int id): Player(players, foods, id) {
+			addToAICounter(1);
+		}
+		~AI() {
+			addToAICounter(-1);
+		}
 
 	private:
+
+		// AI counter
+		static int _AI_counter;
 
 		// State variable for the state machine
 		state _state;

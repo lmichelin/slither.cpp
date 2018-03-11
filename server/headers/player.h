@@ -52,9 +52,6 @@ class Player {
 		// Process the input (DEPENDS IF AI OR HUMAN)
 		virtual void processPlayerInput() =0;
 
-		// Disconnect the player from the program (DEPENDS IF AI OR HUMAN)
-		virtual void disconnect() =0;
-
 		/////////////
 		// Getters //
 		/////////////
@@ -117,9 +114,7 @@ class Player {
 			std::cout << "PLAYER CREATED" << '\n';
 			addToPlayerCount(1); // Update User count
 		}
-		~Player() {
-			addToPlayerCount(-1);
-		}
+		virtual ~Player() {};
 
 	protected:
 

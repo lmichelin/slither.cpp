@@ -80,11 +80,6 @@ void User::packageServerData() {
 	_serverData.setData(send_data);
 }
 
-void User::disconnect() {
-	_is_connected = false;
-	std::cout << "The client has disconnected\n";
-}
-
 void User::endGame() {
 	_communication.send(END);
 	_is_running = false;
