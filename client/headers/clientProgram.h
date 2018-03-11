@@ -19,7 +19,7 @@ class Program {
 		void init ();
 		void run ();
 		
-		Program ();
+		Program (std::string hostname);
 		~Program () {}
 
 	private:
