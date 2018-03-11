@@ -63,9 +63,9 @@ void Program::run () {
 			thread_container.push_back(std::thread(&Player::run, _players.back()));
 		}
 
-		//////////////////////////////////
-		//  Erase disconnected players  //
-		//////////////////////////////////
+		/////////////////////////////////////////////////////////
+		//  Erase disconnected players AND REPLACE WITH FOODS  //
+		/////////////////////////////////////////////////////////
 
 		std::list<Player*>::iterator it_player = _players.begin();
 		std::list<std::thread>::iterator it_thread = thread_container.begin();
@@ -74,14 +74,18 @@ void Program::run () {
 				if (it_thread->joinable()) {
 					it_thread->join();
 				}
+				std::cout << "REPLACING WITH FOODS" << '\n';
+				for (size_t i = 0; i < (*it_player)->getSnake().getBody().getParts().size(); i+=2) {
+					_foods.push_back(Food(FoodPart((*it_player)->getSnake().getBody().getParts()[i].getCoordinates())));
+				}
 				std::cout << "ERASING USER" << '\n';
 				delete *it_player;
-				_players.erase(it_player++);
+				it_player = _players.erase(it_player);
 				std::cout << "ERASING THREAD" << '\n';
 				thread_container.erase(it_thread++);
 			} else {
-				it_player++;
-				it_thread++;
+				++it_player;
+				++it_thread;
 			}
 		}
 
@@ -111,9 +115,9 @@ void Program::run () {
 		// Wait for the users threads to finish computation of postitions and intersections ... If it takes too much time, break after 100ms
 		std::unique_lock<std::mutex> lk_compute(m_compute);
 		// std::cout << "Program waiting\n"; // THREAD DEBUGGING
-		cv_ready_compute.wait_for(lk_compute, std::chrono::milliseconds(4));
+		cv_ready_compute.wait_for(lk_compute, std::chrono::milliseconds(8));
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(4));
+		std::this_thread::sleep_for(std::chrono::milliseconds(8));
 	}
 }
 

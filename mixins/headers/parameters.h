@@ -29,8 +29,8 @@
 
 #define INIT_LENGTH 4
 
-#define LOW_SPEED 0.5
-#define HIGH_SPEED 1
+#define LOW_SPEED 1
+#define HIGH_SPEED 2
 #define ROTATION_ANGLE 0.02
 
 #define EPSILON 0.01
