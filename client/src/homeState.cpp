@@ -7,6 +7,11 @@ void HomeState::init() {
 		// error when load file
 		exit(1);
 	}
+
+	if (!_font.loadFromFile("build/static/Dosis-Regular.ttf")) {
+		// error when load file
+		exit(1);
+	}
 }
 
 void HomeState::getServerData() {
@@ -17,13 +22,14 @@ void HomeState::handleEvents() {
     sf::Event event;
 	while (_window->pollEvent(event)) {
         if (event.type == sf::Event::Closed) {
-			// Disconnect from server
-			_communication->disconnect();
 			// Close window
 			_window->close();
 		}
-
         if (event.type == sf::Event::KeyPressed) {
+			if (event.key.code == sf::Keyboard::Escape) {
+				// Close window
+				_window->close();
+			}
 			if (event.key.code == sf::Keyboard::Return) {
 				State::setNextState("game");
 			}
@@ -47,13 +53,13 @@ void HomeState::display() {
 
 	drawTexture(_window, origin, _texture);
 
+	drawHomeMessage(_window, _font, State::getMessage());
+    
 	// Display Result
 	_window->display();
-
-    // _window->draw(text);
 
 }
 
 void HomeState::quit() {
-    
+
 }

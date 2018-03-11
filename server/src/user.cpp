@@ -20,6 +20,7 @@ void User::processPlayerInput() {
 		case OK:
 			_client_input.extract(input_packet);
 			_input = _client_input.getData();
+			// std::cout << "INPUT " << _input.rotating_left << ' ' << _input.rotating_right << ' ' << _input.speed << '\n';
 			_has_received_data = true;	
 			break;
 		
@@ -81,6 +82,7 @@ void User::packageServerData() {
 }
 
 void User::endGame() {
+	_snake.die();
 	_communication.send(END);
 	_is_running = false;
 }

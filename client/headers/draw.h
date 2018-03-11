@@ -15,6 +15,10 @@ void drawFoods(sf::RenderWindow* , const sf::Vector2f &, const Food &);
 
 void drawMinimap(sf::RenderWindow* window);
 
-void drawSnakeBodyMinimap(sf::RenderWindow* window, const SnakeBody &snake_body);
+void drawSnakeBodyMinimap(sf::RenderWindow* window, const SnakeBody &snake_body, bool is_my_snake=false);
+
+void drawCurrentScore(sf::RenderWindow* window, const sf::Font& _font, int score);
+
+void drawHomeMessage(sf::RenderWindow* _window, const sf::Font& _font, std::string message);
 
 #endif

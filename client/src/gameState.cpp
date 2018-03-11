@@ -7,8 +7,15 @@
 
 void GameState::init() {
 	_communication->init();
+
+	_controller.resetInput();
     
     if (!_texture.loadFromFile("build/static/bg45.jpg")) {
+		// error when load file
+		exit(1);
+	}
+
+	if (!_font.loadFromFile("build/static/Dosis-Regular.ttf")) {
 		// error when load file
 		exit(1);
 	}
@@ -17,29 +24,35 @@ void GameState::init() {
 void GameState::getServerData() {
     // Receive Data from server
 	sf::Packet data;
+	sf::Socket::Status status;
 	int header;
-	_communication->receivePacket(header, data);
-	switch (header) {
+	_communication->receivePacket(header, data, status);
 
-	case END:
-		_snake.die();
-		State::setNextState("home");
-		break;
+	if (status == sf::Socket::Done || status == sf::Socket::NotReady) {
+		switch (header) {
+		case END:
+			_snake.die();
+			std::cout << "END : " << header << '\n';
+			State::setNextState("home", "Your score : " + std::to_string(_snake.getBody().getLength()));
+			break;
 
-	case GAME_FULL:
-		_communication->disconnect();
-		std::cout << "GAME FULL !!!!!" << '\n';
-		exit(1);
-		break;
+		case GAME_FULL:
+			_communication->disconnect();
+			std::cout << "GAME FULL !!!!!" << '\n';
+			exit(1);
+			break;
 
-	case OK:
-		_has_received_data = true;
-		_serverData.extract(data);
-		break;
+		case OK:
+			_has_received_data = true;
+			_serverData.extract(data);
+			break;
 
-	default:
-		State::setNextState("home");
-		break;
+		default:
+			break;
+		}
+	} else {
+		// std::cout << "STATUT : " << status << '\n';
+		State::setNextState("home", "Error ! Unable to connect to the server.");
 	}
 }
 
@@ -48,12 +61,15 @@ void GameState::handleEvents() {
 	while (_window->pollEvent(event)) {
 		if (event.type == sf::Event::Closed) {
 			// Disconnect from server
-			_communication->disconnect();
+			quit();
 			// Close window
 			_window->close();
 		}
-
 		if (event.type == sf::Event::KeyPressed) {
+			if (event.key.code == sf::Keyboard::Escape) {
+				State::setNextState("home");
+			}
+
 			if (event.key.code == sf::Keyboard::Space || event.key.code == sf::Keyboard::Up) {
 				_controller.setSpeed(HIGH_SPEED);
 			}
@@ -98,8 +114,12 @@ void GameState::update() {
 				_snakes[data.snakes[i].id] = data.snakes[i].parts;
 		}
 
-		std::cout << "SIZE: " << data.my_snake.parts.size() << '\n';
-		std::cout << "MY SNAKE COORD : " << data.my_snake.parts[0].getCoordinates().x << ' ' << data.my_snake.parts[0].getCoordinates().y << '\n';
+		// std::cout << "SIZE: " << data.my_snake.parts.size() << '\n';
+		// std::cout << "MY SNAKE COORD : " << data.my_snake.parts[0].getCoordinates().x << ' ' << data.my_snake.parts[0].getCoordinates().y << '\n';
+
+		if (data.my_snake.parts[0].getCoordinates().x != data.my_snake.parts[0].getCoordinates().x) { // NaN
+			State::setNextState("home", "Server error, please retry");
+		}
 
 		// Delete all the deleted snakes
 		std::map<unsigned int, Snake>::iterator it_snake;
@@ -140,27 +160,34 @@ void GameState::display() {
 
 	drawTexture(_window, origin, _texture);
 
-	drawMinimap(_window);
-
 	// Draw foods
 	for (std::list<Food>::iterator it = _foods.begin(); it != _foods.end(); it++) {
 		drawFoods(_window, origin, *it);
 	}
-
+	
 	// Draw my snake
 	drawSnakeBody(_window, origin, _snake.getBody());
-	drawSnakeBodyMinimap(_window,  _snake.getBody());
 
 	// Draw all the other snakes
 	for (std::map<unsigned int, Snake>::iterator it = _snakes.begin(); it != _snakes.end(); it++) {
 		drawSnakeBody(_window, origin, it->second.getBody());
+	}
+
+	// draw minimap
+	drawMinimap(_window);
+	for (std::map<unsigned int, Snake>::iterator it = _snakes.begin(); it != _snakes.end(); it++) {
 		drawSnakeBodyMinimap(_window, it->second.getBody());
 	}
+	drawSnakeBodyMinimap(_window, _snake.getBody(), true); // true to draw my snake head in Yellow
+
+	drawCurrentScore(_window, _font, _snake.getBody().getLength());
 
 	// Display Result
 	_window->display();
 }
 
 void GameState::quit() {
-
+	// Disconnect from server
+	_communication->send(DISCONNECT);
+	_communication->disconnect();
 }

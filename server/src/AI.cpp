@@ -65,7 +65,7 @@ bool AI::checkForEnemy() {
 // 			}
 // 		}
 // 	}
-// 	return false;
+	return false;
 }
 
 bool AI::checkFoodAimAndDistance() {
