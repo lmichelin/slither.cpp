@@ -39,7 +39,7 @@ void GameState::getServerData() {
 		case GAME_FULL:
 			_communication->disconnect();
 			std::cout << "GAME FULL !!!!!" << '\n';
-			exit(1);
+			State::setNextState("home", "Game full ! Please try again later.");
 			break;
 
 		case OK:
