@@ -88,5 +88,6 @@ void User::packageServerData() {
 void User::endGame() {
 	_snake.die();
 	_communication.send(END); // Send status END header to client
+	_communication.disconnect();
 	_is_running = false;
 }
