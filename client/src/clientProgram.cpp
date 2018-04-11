@@ -9,7 +9,14 @@
 #include "serverData.h"
 #include "draw.h"
 
-Program::Program(std::string hostname) : _window(sf::VideoMode(WINDOW_SIZE_X,WINDOW_SIZE_Y), "The IN204 Snake", sf::Style::Close), _communication(hostname, SERVER_PORT) {
+// SFML settings
+sf::ContextSettings settings;
+
+void initSettings () {
+	settings.antialiasingLevel = 8;
+}
+
+Program::Program(std::string hostname) : _window(sf::VideoMode(WINDOW_SIZE_X,WINDOW_SIZE_Y), "The IN204 Snake", sf::Style::Close, settings), _communication(hostname, SERVER_PORT) {
 	_is_running = false;
 }
 

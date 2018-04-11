@@ -16,6 +16,7 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
+	initSettings();
 	Program program(server_hostname);
 	program.init();
 	program.run();

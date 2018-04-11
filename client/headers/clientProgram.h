@@ -13,6 +13,9 @@
 #include "stateManager.h"
 #include "draw.h"
 
+// init SFML settings
+void initSettings ();
+
 class Program {
 
 	public:
@@ -20,13 +23,13 @@ class Program {
 		//////////////////
 		// Main Methods //
 		//////////////////
-		
+
 		// Launch program
 		void init ();
 
 		// Run main routine
 		void run ();
-		
+
 		/////////////////
 		// Constructor //
 		/////////////////
